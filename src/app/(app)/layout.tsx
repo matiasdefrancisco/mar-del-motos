@@ -10,7 +10,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute>
       <SidebarProvider>
-        <div className="flex min-h-screen bg-secondary">
+        <div className="flex min-h-screen bg-secondary"> {/* Contenedor A */}
           <DashboardSidebar />
           {/* Contenedor B: Columna Header Móvil + Main. overflow-hidden aquí es CLAVE. */}
           <div className="flex flex-1 flex-col w-full min-w-0 overflow-hidden">
@@ -25,12 +25,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <UserNav />
               </div>
             </header>
-            {/* Main ahora es relativo y flex-1 para tomar altura. No gestiona overflow ni padding directamente. */}
-            <main className="relative flex-1 w-full bg-background">
-              {/* Este div interno se encarga del scroll y el padding */}
-              <div className="absolute inset-0 overflow-auto p-4 md:p-6 lg:p-8">
-                {children}
-              </div>
+            {/* Main es ahora un flex item que maneja su propio scroll y padding */}
+            <main className="flex-1 w-full bg-background overflow-auto p-4 md:p-6 lg:p-8">
+              {children}
             </main>
           </div>
         </div>
