@@ -3,6 +3,71 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-body;
+    overflow-x: hidden;
+    max-width: 100vw;
+    position: relative;
+  }
+}
+
+@layer components {
+  .scrollable-content {
+    @apply relative w-full; /* w-full para que tome el ancho del padre */
+    overflow-x: auto;
+    overflow-y: hidden; /* Evitar scroll vertical en este contenedor específico */
+    max-width: 100%; /* Asegura que no exceda el contenedor padre */
+    -webkit-overflow-scrolling: touch; /* Para scroll suave en iOS */
+  }
+  
+  .scrollable-content::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 4px;
+  }
+
+  /* Manteniendo la clase table-container por si se usa en otro lugar, 
+     pero la nueva scrollable-content es la preferida para tablas ahora.
+     Si table-container ya no es necesaria, se podría eliminar.
+  */
+  .table-container {
+    @apply relative w-full overflow-x-auto;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+  
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 4px;
+  }
+}
+
+
 :root {
   /* Inverted: Defaulting to a dark theme */
   --background: 150 6% 13%; /* Dark Gray/Near Black */
@@ -90,36 +155,6 @@
   --sidebar-ring: 40 100% 60%;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground font-body;
-    /* Removed max-width, overflow-x, and position to allow layout-reset.css to take precedence */
-  }
-}
-
-@layer components {
-  .table-container {
-    @apply relative w-full overflow-x-auto;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-  }
-  
-  .table-container::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .table-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .table-container::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 4px;
-  }
-}
 
 /* NAVBAR METALLIC CHROME EFFECT - Verde Oscuro y Negro Sutil */
 .navbar {
