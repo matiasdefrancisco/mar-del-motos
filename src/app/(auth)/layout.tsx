@@ -3,7 +3,7 @@ import AppLogo from '@/components/layout/AppLogo';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-secondary p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4"> {/* Changed bg-secondary to bg-background */}
       <div className="mb-4 flex w-full justify-center"> {/* Reduced margin-bottom */}
         {/* Reduced iconSize and hiding text */}
         <AppLogo className="text-primary" iconSize={100} showText={false} />

@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Card className="shadow-xl">
+    <Card className="shadow-xl bg-secondary"> {/* Added bg-secondary */}
       <CardHeader className="text-center">
         <CardTitle className="text-2xl font-bold text-foreground">Iniciar Sesión</CardTitle>
         <CardDescription>Ingresa tus credenciales para acceder a tu cuenta.</CardDescription>
