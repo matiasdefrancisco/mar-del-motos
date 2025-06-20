@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -35,7 +36,8 @@ import {
   FileText,
   AreaChart,
   CreditCard,
-  TestTube, // Importado TestTube
+  TestTube,
+  History, // Importado History
 } from 'lucide-react';
 
 interface NavItem {
@@ -55,7 +57,7 @@ const navItems: NavItem[] = [
     icon: ClipboardList, 
     roles: ['admin', 'operator', 'local'],
   },
-  { href: '/dashboard/riders', label: 'Riders', icon: Bike, roles: ['admin', 'operator'] },
+  { href: '/dashboard/riders', label: 'Repartidores', icon: Bike, roles: ['admin', 'operator'] },
   { href: '/dashboard/locals', label: 'Locales', icon: Building, roles: ['admin', 'operator'] },
   { 
     href: '/dashboard/debts', 
@@ -65,10 +67,11 @@ const navItems: NavItem[] = [
     badge: 'Nuevo'
   },
   { href: '/dashboard/operator/ai-payment-plan', label: 'Plan de Pago IA', icon: Bot, roles: ['operator'] },
+  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] }, // Nuevo item de historial
   { href: '/dashboard/reports', label: 'Reportes', icon: AreaChart, roles: ['admin'] },
   { href: '/dashboard/user-management', label: 'Usuarios', icon: Users, roles: ['admin'] },
   { href: '/dashboard/settings', label: 'Configuración', icon: Settings, roles: ['admin', 'operator', 'rider', 'local'] },
-  { href: '/dashboard/test', label: 'Dashboard Prueba', icon: TestTube, roles: ['admin', 'operator', 'rider', 'local'] }, // Nueva página de prueba
+  { href: '/dashboard/test', label: 'Dashboard Prueba', icon: TestTube, roles: ['admin', 'operator', 'rider', 'local'] },
 ];
 
 
