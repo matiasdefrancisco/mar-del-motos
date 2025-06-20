@@ -7,10 +7,10 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="scrollable-content"> {/* Aplicar la clase .scrollable-content aquí */}
+  <div className="relative w-full overflow-auto"> {/* Contenedor estándar ShadCN para scroll */}
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm min-w-[600px]", className)} // Asegurar min-width para la tabla
+      className={cn("w-full caption-bottom text-sm", className)} /* Tabla ocupa todo el ancho del contenedor */
       {...props}
     />
   </div>

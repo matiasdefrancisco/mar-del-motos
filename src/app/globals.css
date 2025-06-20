@@ -2,144 +2,221 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-  ==========================================================================
-  CSS Global y Variables de Tema
-  --------------------------------------------------------------------------
-  Esta sección contiene las variables HSL para el tema (oscuro por defecto)
-  y la configuración base para html y body para controlar el overflow.
-  Es CRÍTICO para el layout general de la aplicación.
-  NO MODIFICAR sin una evaluación completa del impacto.
-  ==========================================================================
-*/
+:root {
+  --background: 150 6% 13%; 
+  --foreground: 0 0% 95%;
+  --card: 150 6% 15%; /* Ajustado según indicación */
+  --card-foreground: 0 0% 95%;
+  --popover: 150 6% 15%; /* Ajustado según indicación */
+  --popover-foreground: 0 0% 95%;
+  --primary: 142 76% 36%; /* Ajustado según indicación */
+  --primary-foreground: 0 0% 98%;
+  --secondary: 150 6% 18%; /* Ajustado según indicación */
+  --secondary-foreground: 0 0% 95%; /* Ajustado para contraste */
+  --muted: 150 6% 18%; /* Ajustado según indicación */
+  --muted-foreground: 0 0% 65%; /* Ajustado según indicación */
+  --accent: 150 6% 18%; /* Ajustado según indicación, considerar un color más distintivo si es para énfasis */
+  --accent-foreground: 0 0% 95%; /* Ajustado para contraste */
+  --destructive: 0 62% 30%; /* Ajustado según indicación */
+  --destructive-foreground: 0 0% 98%;
+  --border: 150 6% 20%; /* Ajustado según indicación */
+  --input: 150 6% 20%; /* Ajustado según indicación */
+  --ring: 142 76% 36%; /* Ajustado según indicación, igual a primary */
+  --radius: 0.75rem; /* Ajustado según indicación */
+  --chart-1: 142 76% 36%;
+  --chart-2: 47 96% 89%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+
+  /* Colores de sidebar (manteniendo consistencia con el tema oscuro) */
+  --sidebar-background: 150 6% 10%; /* Ligeramente más oscuro que el fondo principal para destacar */
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 142 76% 40%; /* Ligeramente más brillante que el primario para elementos activos */
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 150 6% 22%; /* Un acento sutil para hover/focus en sidebar */
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 150 6% 18%;
+  --sidebar-ring: 142 76% 40%;
+
+  /* Sección destacada (si se usa) */
+  --highlighted-section: 142 76% 15%; /* Un verde muy oscuro y sutil para secciones destacadas */
+}
+
+/* Si se quiere mantener un modo .dark explícito, se duplican las variables aquí.
+   Dado que :root ya define un tema oscuro, esta sección puede ser redundante
+   a menos que se planee introducir un tema claro más adelante. */
+.dark {
+  --background: 150 6% 13%; 
+  --foreground: 0 0% 95%;
+  --card: 150 6% 15%;
+  --card-foreground: 0 0% 95%;
+  --popover: 150 6% 15%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 142 76% 36%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 150 6% 18%;
+  --secondary-foreground: 0 0% 95%;
+  --muted: 150 6% 18%;
+  --muted-foreground: 0 0% 65%;
+  --accent: 150 6% 18%;
+  --accent-foreground: 0 0% 95%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 150 6% 20%;
+  --input: 150 6% 20%;
+  --ring: 142 76% 36%;
+  
+  --sidebar-background: 150 6% 10%;
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 142 76% 40%;
+  --sidebar-primary-foreground: 0 0% 98%;
+  --sidebar-accent: 150 6% 22%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 150 6% 18%;
+  --sidebar-ring: 142 76% 40%;
+
+  --highlighted-section: 142 76% 15%;
+}
+
+
 @layer base {
   * {
     @apply border-border;
   }
-
+  /* Configuración base para html y body para prevenir scroll horizontal global
+     y permitir que contenedores internos manejen su propio scroll. */
   html {
-    /* Previene el scroll horizontal a nivel de página */
-    overflow-x: hidden;
-    max-width: 100vw;
+    overflow-x: hidden; /* Previene el scroll horizontal a nivel de la página */
+    max-width: 100vw;   /* Asegura que html no exceda el ancho del viewport */
   }
-
   body {
     @apply bg-background text-foreground font-body;
-    /* Previene el scroll horizontal a nivel de página */
-    overflow-x: hidden;
-    max-width: 100vw;
-    position: relative; /* Necesario para algunos posicionamientos absolutos internos */
+    overflow-x: hidden; /* Redundante si html ya lo tiene, pero asegura el comportamiento */
+    max-width: 100vw;   /* Asegura que body no exceda el ancho del viewport */
+    position: relative; /* Puede ser útil para algunos posicionamientos absolutos internos */
   }
 }
 
-/* 
-  ==========================================================================
-  Variables de Color del Tema (ShadCN UI)
-  --------------------------------------------------------------------------
-  Definición de las variables HSL para los colores del tema.
-  Asegura una consistencia visual en toda la aplicación.
-  ==========================================================================
-*/
-:root {
-  /* Inverted: Defaulting to a dark theme */
-  --background: 150 6% 13%; /* Dark Gray/Near Black */
-  --foreground: 0 0% 95%; /* Light Gray/White */
+/* Estilos para navbar y sidebar (efectos metálicos) - Mantenidos según diseño original */
+.navbar {
+  background: linear-gradient(135deg,
+    #000000 0%,
+    #0a1a0f 20%, /* Verde muy oscuro casi negro, ajustado a la nueva paleta si es necesario */
+    #0c2415 35%, /* Un verde oscuro basado en el nuevo primario (142 76% 36%) */
+    hsl(var(--primary)) 45%, /* Verde primario del tema */
+    hsl(142, 76%, 40%) 50%, /* Verde un poco más claro como reflejo principal */
+    hsl(var(--primary)) 55%, /* Verde primario */
+    #0c2415 65%,
+    #0a1a0f 80%,
+    #000000 100%
+  );
+  background-size: 400% 100%;
+  animation: metallic-shimmer 7s ease-in-out infinite;
 
-  --card: 150 6% 10%; /* Darker Card Background */
-  --card-foreground: 0 0% 95%;
-  
-  --popover: 150 6% 8%; /* Darker Popover */
-  --popover-foreground: 0 0% 95%;
-  
-  --primary: 148 51% 45%; /* Adjusted Dark Green for dark mode */
-  --primary-foreground: 0 0% 98%;
-  
-  --secondary: 150 5% 20%; /* Darker Secondary Background */
-  --secondary-foreground: 0 0% 98%;
-  
-  --muted: 150 5% 20%;
-  --muted-foreground: 150 4% 65%; /* Lighter Muted Foreground */
-  
-  --accent: 40 100% 60%; /* Adjusted Gold/Yellow for dark mode */
-  --accent-foreground: 150 6% 10%; /* Dark text on brighter yellow */
-  
-  --destructive: 0 72.2% 50.6%; /* Adjusted Destructive for dark mode */
-  --destructive-foreground: 0 0% 98%;
-  
-  --border: 150 5% 25%; /* Darker Border */
-  --input: 150 5% 25%;  /* Darker Input Background */
-  --ring: 148 51% 45%; /* Ring to match adjusted primary */
-  
-  --radius: 0.5rem;
+  box-shadow:
+    0 3px 15px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 hsla(var(--primary), 0.2), /* Tinte verdoso oscuro para el inset */
+    0 0 20px hsla(var(--primary), 0.15); /* Sombra sutil con tinte verdoso */
 
-  --highlighted-section: 148 51% 20%; /* Darker subtle green highlight for dark mode */
+  border-bottom: 1px solid hsla(var(--primary), 0.4); /* Borde inferior más integrado */
 
-  /* Sidebar specific colors (already dark-themed, values from original .dark block) */
-  --sidebar-background: 148 51% 10%; 
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 40 100% 60%;
-  --sidebar-primary-foreground: 150 6% 8%;
-  --sidebar-accent: 148 51% 20%;
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-border: 0 0% 15%; 
-  --sidebar-ring: 40 100% 60%;
+  position: relative; 
+  overflow: hidden;
 }
 
-.dark {
-  /* This block now largely duplicates :root, can be adjusted if a separate light theme is re-introduced */
-  --background: 150 6% 13%; 
-  --foreground: 0 0% 95%; 
+.navbar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsla(var(--primary-foreground), 0.05) 20%, 
+    hsla(var(--primary-foreground), 0.15) 50%, 
+    hsla(var(--primary-foreground), 0.05) 80%,
+    transparent 100%
+  );
+  animation: sweep-light 5s ease-in-out infinite;
+  pointer-events: none;
+}
 
-  --card: 150 6% 10%; 
-  --card-foreground: 0 0% 95%;
-  
-  --popover: 150 6% 8%; 
-  --popover-foreground: 0 0% 95%;
-  
-  --primary: 148 51% 45%; 
-  --primary-foreground: 0 0% 98%;
-  
-  --secondary: 150 5% 20%; 
-  --secondary-foreground: 0 0% 98%;
-  
-  --muted: 150 5% 20%;
-  --muted-foreground: 150 4% 65%; 
-  
-  --accent: 40 100% 60%; 
-  --accent-foreground: 150 6% 10%;
-  
-  --destructive: 0 72.2% 50.6%; 
-  --destructive-foreground: 0 0% 98%;
-  
-  --border: 150 5% 25%; 
-  --input: 150 5% 25%;  
-  --ring: 148 51% 45%;
+.sidebar-metallic-effect {
+  background: linear-gradient(135deg,
+    #000000 0%,
+    #0a1a0f 20%,
+    #0c2415 35%,
+    hsl(var(--sidebar-background)) 45%, 
+    hsl(142, 50%, 25%) 50%, /* Reflejo para el color de sidebar */
+    hsl(var(--sidebar-background)) 55%,
+    #0c2415 65%,
+    #0a1a0f 80%,
+    #000000 100%
+  );
+  background-size: 400% 100%;
+  animation: metallic-shimmer 7s ease-in-out infinite;
+  box-shadow:
+    3px 0 15px rgba(0, 0, 0, 0.4), 
+    inset 1px 0 0 hsla(var(--primary), 0.2), 
+    0 0 20px hsla(var(--primary), 0.15); 
+  overflow: hidden;
+}
 
-  --highlighted-section: 148 51% 20%;
+.sidebar-metallic-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%; 
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    hsla(var(--sidebar-foreground), 0.05) 20%, 
+    hsla(var(--sidebar-foreground), 0.15) 50%, 
+    hsla(var(--sidebar-foreground), 0.05) 80%,
+    transparent 100%
+  );
+  animation: sweep-light 5s ease-in-out infinite;
+  pointer-events: none;
+}
 
-  --sidebar-background: 148 51% 10%; 
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 40 100% 60%;
-  --sidebar-primary-foreground: 150 6% 8%;
-  --sidebar-accent: 148 51% 20%;
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-border: 0 0% 15%; 
-  --sidebar-ring: 40 100% 60%;
+@keyframes metallic-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes sweep-light {
+  0% { left: -100%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+@media (max-width: 768px) { /* md breakpoint */
+  .navbar { animation-duration: 9s; }
+  .navbar::after { animation-duration: 7s; }
+  .sidebar-metallic-effect { animation-duration: 9s; }
+  .sidebar-metallic-effect::after { animation-duration: 7s; }
+}
+
+.navbar:hover {
+  box-shadow: 0 5px 25px rgba(0,0,0,0.5), inset 0 1px 0 hsla(var(--primary),0.3), 0 0 30px hsla(var(--primary),0.25);
+  transition: box-shadow 0.3s ease;
+}
+
+.sidebar-metallic-effect:hover {
+   box-shadow: 5px 0 25px rgba(0,0,0,0.5), inset 1px 0 0 hsla(var(--primary),0.3), 0 0 30px hsla(var(--primary),0.25);
+   transition: box-shadow 0.3s ease;
 }
 
 /* 
-  ==========================================================================
-  Componentes de UI Personalizados y Utilidades de Layout
-  --------------------------------------------------------------------------
-  Clases para componentes específicos y manejo de scroll.
-  ==========================================================================
+  Clase para contenedores con contenido extenso que requieren scroll horizontal.
+  Ej: Tablas, listas anchas.
+  Asegura que el scroll sea solo horizontal y que la barra de scroll sea discreta.
 */
 @layer components {
-  /* 
-    Clase para contenedores con contenido extenso que requieren scroll horizontal.
-    Ej: Tablas, listas anchas.
-    Asegura que el scroll sea solo horizontal y que la barra de scroll sea discreta.
-  */
   .scrollable-content {
     @apply relative w-full; /* Necesario para que el max-width funcione correctamente */
     overflow-x: auto; /* Permite scroll horizontal */
@@ -162,179 +239,11 @@
   }
 
   /* 
-    Clase .table-container: Mantenida por si es usada en algún lugar, 
-    pero .scrollable-content es la clase principal preferida para scroll horizontal.
+    Clase .table-container: Puede ser usada como alias de .scrollable-content 
+    o para estilos específicos de contenedores de tablas si es necesario.
+    Por ahora, .scrollable-content es la preferida.
   */
   .table-container {
-    @apply relative w-full overflow-x-auto;
-    scrollbar-width: thin; /* Para Firefox */
-    scrollbar-color: hsl(var(--border)) transparent; /* Para Firefox */
+    @apply scrollable-content; /* Hereda de scrollable-content */
   }
-  
-  .table-container::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .table-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .table-container::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 4px;
-  }
-}
-
-/* 
-  ==========================================================================
-  Efectos Visuales Personalizados (Navbar, Sidebar)
-  --------------------------------------------------------------------------
-  Estilos para efectos metálicos y animaciones.
-  ==========================================================================
-*/
-/* NAVBAR METALLIC CHROME EFFECT - Verde Oscuro y Negro Sutil */
-.navbar {
-  background: linear-gradient(135deg,
-    #000000 0%,  /* Negro */
-    #0a1a0f 20%, /* Verde muy oscuro casi negro */
-    #102a1a 35%, /* Verde oscuro */
-    #1B4332 45%, /* Verde primario del tema (HSL: 148, 51%, 31%) */
-    #2c5e3a 50%, /* Verde un poco más claro como reflejo principal */
-    #1B4332 55%, /* Verde primario */
-    #102a1a 65%, /* Verde oscuro */
-    #0a1a0f 80%, /* Verde muy oscuro casi negro */
-    #000000 100% /* Negro */
-  );
-  background-size: 400% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite;
-
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.4), /* Sombra principal más oscura */
-    inset 0 1px 0 rgba(45, 90, 39, 0.2), /* Tinte verdoso oscuro para el inset */
-    0 0 20px rgba(27, 67, 50, 0.15); /* Sombra sutil con tinte verdoso */
-
-  border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde inferior más integrado */
-
-  position: relative; 
-  overflow: hidden; /* Necesario para que el ::after no se desborde visualmente */
-}
-
-.navbar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(128, 150, 128, 0.05) 20%, 
-    rgba(173, 216, 173, 0.15) 50%, 
-    rgba(128, 150, 128, 0.05) 80%,
-    transparent 100%
-  );
-  animation: sweep-light 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-/* METALLIC EFFECT FOR SIDEBAR (DESKTOP & MOBILE SHEET) */
-.sidebar-metallic-effect {
-  background: linear-gradient(135deg,
-    #000000 0%,
-    #0a1a0f 20%,
-    #102a1a 35%,
-    #1B4332 45%, /* primary-green */
-    #2c5e3a 50%, /* lighter green for reflection */
-    #1B4332 55%,
-    #102a1a 65%,
-    #0a1a0f 80%,
-    #000000 100%
-  );
-  background-size: 400% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite;
-
-  box-shadow:
-    3px 0 15px rgba(0, 0, 0, 0.4), 
-    inset 1px 0 0 rgba(45, 90, 39, 0.2), 
-    0 0 20px rgba(27, 67, 50, 0.15); 
-
-  overflow: hidden; /* Necesario para que el ::after no se desborde visualmente */
-}
-
-.sidebar-metallic-effect::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%; 
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(128, 150, 128, 0.05) 20%, 
-    rgba(173, 216, 173, 0.15) 50%, 
-    rgba(128, 150, 128, 0.05) 80%,
-    transparent 100%
-  );
-  animation: sweep-light 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-
-/* Keyframe animations (reused by .navbar and .sidebar-metallic-effect) */
-@keyframes metallic-shimmer {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-@keyframes sweep-light {
-  0% {
-    left: -100%;
-    opacity: 0;
-  }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
-  100% {
-    left: 100%;
-    opacity: 0;
-  }
-}
-
-@media (max-width: 768px) { /* md breakpoint */
-  .navbar {
-    animation-duration: 9s; /* Slower on mobile */
-  }
-  .navbar::after {
-    animation-duration: 7s; /* Slower on mobile */
-  }
-  .sidebar-metallic-effect {
-    animation-duration: 9s; /* Slower on mobile */
-  }
-  .sidebar-metallic-effect::after {
-    animation-duration: 7s; /* Slower on mobile */
-  }
-}
-
-/* Optional Hover effects */
-.navbar:hover {
-  box-shadow:
-    0 5px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(45, 90, 39, 0.3),
-    0 0 30px rgba(27, 67, 50, 0.25);
-  transition: box-shadow 0.3s ease;
-}
-
-.sidebar-metallic-effect:hover {
-   box-shadow:
-    5px 0 25px rgba(0, 0, 0, 0.5), 
-    inset 1px 0 0 rgba(45, 90, 39, 0.3), 
-    0 0 30px rgba(27, 67, 50, 0.25);
-   transition: box-shadow 0.3s ease;
 }
