@@ -12,8 +12,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          {/* Added overflow-x-hidden to prevent horizontal scroll of the main content area */}
-          <div className="flex flex-1 flex-col min-w-0 overflow-x-hidden">
+          {/* min-w-0 es importante para que el flex child pueda encogerse */}
+          <div className="flex flex-1 flex-col min-w-0">
             {/* Mobile Header */}
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
               <div className="flex items-center gap-3">
@@ -22,7 +22,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </div>
               <UserNav />
             </header>
-            <main className="flex-1 bg-background pt-20 px-4 pb-4 md:p-6 lg:p-8">
+            {/* Se aplica overflow-x-hidden directamente al main */}
+            <main className="flex-1 bg-background pt-20 px-4 pb-4 md:p-6 lg:p-8 overflow-x-hidden">
               {children}
             </main>
           </div>
