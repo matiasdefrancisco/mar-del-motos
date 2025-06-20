@@ -4,73 +4,64 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Skeleton } from '@/components/ui/skeleton';
-import PageTitle from '@/components/shared/PageTitle';
-import { LayoutDashboard } from 'lucide-react';
+import Image from 'next/image';
+import logoSrc from '@/app/image.png'; // Asegúrate que la ruta sea correcta desde esta ubicación
 
 export default function DashboardRedirectPage() {
-  const { userRole, loading } = useAuth();
+  const { userRole, loading: authLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Only attempt to redirect once the authentication state is resolved
-    if (!loading) {
+    // Esta página es ahora principalmente un fallback.
+    // La lógica principal de redirección está en HomePage.
+    if (!authLoading) {
       if (userRole) {
+        let targetPath = '/login';
         switch (userRole) {
           case 'admin':
-            router.replace('/dashboard/admin');
+            targetPath = '/dashboard/admin';
             break;
           case 'operator':
-            router.replace('/dashboard/operator');
+            targetPath = '/dashboard/operator';
             break;
           case 'rider':
-            router.replace('/dashboard/rider');
+            targetPath = '/dashboard/rider';
             break;
           case 'local':
-            router.replace('/dashboard/local');
+            targetPath = '/dashboard/local';
             break;
           default:
-            // Fallback for unrecognized role or if role is null but user is somehow considered authenticated
-            router.replace('/login'); 
+            // Si alguien llega a /dashboard y el rol no es claro, login es un fallback seguro.
+            targetPath = '/login';
         }
+        router.replace(targetPath);
       } else {
-        // If not loading and no userRole (implies not logged in or role not yet determined)
         router.replace('/login');
       }
     }
-  }, [userRole, loading, router]);
+  }, [userRole, authLoading, router]);
 
-  // If AuthContext is still loading, ProtectedRoute is likely showing a full-page skeleton.
-  // This UI might be shown briefly or be superseded.
-  if (loading) {
-    return (
-      <div>
-        <PageTitle title="Cargando Dashboard..." icon={LayoutDashboard} subtitle="Preparando tu espacio de trabajo." />
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <Skeleton className="h-36 w-full rounded-lg" />
-          <Skeleton className="h-36 w-full rounded-lg" />
-          <Skeleton className="h-36 w-full rounded-lg hidden md:block" />
-          <Skeleton className="h-36 w-full rounded-lg hidden xl:block" />
-        </div>
-        <div className="mt-6">
-          <Skeleton className="h-64 w-full rounded-lg" />
-        </div>
-      </div>
-    );
-  }
-
-  // If AuthContext is loaded (!loading), ProtectedRoute has passed.
-  // We are now waiting for the useEffect above to redirect.
-  // Show a more minimal skeleton within the AppLayout's content area.
-  // No PageTitle here to avoid the "otra pantalla" feeling.
+  // Siempre muestra un cargador de página completa, similar a HomePage,
+  // porque esta página no debería ser visible por mucho tiempo.
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8"> {/* Added padding here to match content pages */}
-      <Skeleton className="h-10 w-1/3 rounded-lg" /> {/* Placeholder for a title-like element */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        <Skeleton className="h-32 w-full rounded-lg" />
-        <Skeleton className="h-32 w-full rounded-lg" />
-        <Skeleton className="h-32 w-full rounded-lg hidden md:block" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+      <div className="w-full max-w-md p-8 space-y-8">
+        <div className="text-center">
+           <Image
+            src={logoSrc}
+            alt="Mar del Motos Logo"
+            width={48}
+            height={48}
+            priority
+            className="mx-auto"
+           />
+          <h1 className="mt-6 text-3xl font-extrabold text-foreground">Mar del Motos</h1>
+          <p className="mt-2 text-muted-foreground">Cargando panel...</p>
+        </div>
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-full" />
+        <Skeleton className="h-10 w-1/2 mx-auto" />
       </div>
-      <Skeleton className="h-48 w-full rounded-lg" />
     </div>
   );
 }
