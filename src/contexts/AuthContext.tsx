@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User as FirebaseUser, AuthError } from 'firebase/auth';
-import { onAuthStateChanged, signOut as firebaseSignOut, signInWithEmailAndPassword } from 'firebase/auth';
+import { onAuthStateChanged, signOut as firebaseSignOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
 import type { UserProfile, UserRole, AppUser } from '@/lib/types';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -14,6 +14,7 @@ interface AuthContextType {
   loading: boolean;
   error: AuthError | null;
   login: (email: string, pass: string) => Promise<void>;
+  register: (email: string, pass: string, displayName: string, role: UserRole) => Promise<void>;
   logout: () => Promise<void>;
   userRole: UserRole;
 }
@@ -21,15 +22,23 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Mock function to get user role. Replace with actual Firestore call.
-const fetchUserRole = async (uid: string): Promise<UserRole> => {
-  // This is a mock. In a real app, you'd fetch this from your database.
+const fetchUserRole = async (uid: string, email?: string | null): Promise<UserRole> => {
+  // This is a mock. In a real app, you'd fetch this from your database (e.g., Firestore).
   // For testing, we can assign roles based on email or a fixed logic.
-  if (uid === 'admin@example.com') return 'admin';
-  if (uid === 'operator@example.com') return 'operator';
-  if (uid === 'rider@example.com') return 'rider';
-  if (uid === 'local@example.com') return 'local';
-  // Default to a basic role or null if not found
-  return 'rider'; 
+  // Note: In a real scenario, after user creation, you'd store their chosen role in Firestore.
+  // For this mock, we'll try to infer based on email for existing test users,
+  // or default to 'rider' for newly registered ones if no specific logic is hit.
+  if (email === 'admin@example.com') return 'admin';
+  if (email === 'operator@example.com') return 'operator';
+  if (email === 'rider@example.com') return 'rider';
+  if (email === 'local@example.com') return 'local';
+  
+  // If it's a new user not matching the above, their role would have been passed during registration.
+  // For onAuthStateChanged, if it's a newly registered user, the role might not be in their Firebase profile directly.
+  // This mock needs to be smarter or rely on a "database" call.
+  // For now, if a role was passed and stored during registration (e.g. in a mock DB), use that.
+  // Otherwise, default.
+  return 'rider'; // Default for this mock if no other rule applies
 };
 
 
@@ -43,12 +52,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user: FirebaseUser | null) => {
       if (user) {
-        const role = await fetchUserRole(user.uid); // Or user.email if UID is not stable for mock
+        // In a real app, `user.role` would come from your DB (e.g. Firestore claims or a document)
+        // For this mock, we'll try to fetch it. If it's a newly registered user,
+        // the displayName might not be set yet if updateProfile hasn't finished.
+        const role = await fetchUserRole(user.uid, user.email); 
         const profile: UserProfile = {
           uid: user.uid,
           email: user.email,
           displayName: user.displayName || user.email?.split('@')[0] || 'Usuario',
-          photoURL: user.photoURL || `https://placehold.co/100x100.png?text=${(user.email?.charAt(0).toUpperCase() || 'U')}`,
+          photoURL: user.photoURL || `https://placehold.co/100x100.png?text=${(user.displayName?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || 'U')}`,
           role: role,
         };
         setCurrentUser({ ...user, profile });
@@ -74,6 +86,42 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       throw err;
     }
   };
+  
+  const register = async (email: string, pass: string, displayName: string, role: UserRole) => {
+    setLoading(true);
+    setError(null);
+    try {
+      // This is a MOCK registration. In a real app, you would use:
+      // const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+      // await updateProfile(userCredential.user, { displayName });
+      // Then, you would save the user's role (and other profile info) to your database (e.g., Firestore).
+      console.log('Mock Register:', { email, displayName, role });
+      // Simulate a delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // For the purpose of this UI task, we don't actually create a Firebase user here.
+      // We just simulate success. The user would then log in with mock credentials.
+      // Or, if we were actually creating, onAuthStateChanged would pick it up.
+      // To make the flow somewhat realistic for UI testing, let's throw an error if it's not a test email format.
+      if (!email.endsWith('@example.com')) {
+        // Simulate user creation for a "real" looking email
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(userCredential.user, { displayName });
+        // Here you would save the role to Firestore
+        console.log('Mock: User role ' + role + ' would be saved to DB for ' + userCredential.user.uid);
+        // onAuthStateChanged will pick up the new user.
+      } else {
+         // For existing @example.com users, we just pretend success
+         console.log("Simulating registration success for @example.com user (no actual creation). Please log in with test credentials.");
+      }
+
+    } catch (err) {
+      setError(err as AuthError);
+      setLoading(false);
+      throw err;
+    }
+    // setLoading(false) is handled by onAuthStateChanged or error
+  };
+
 
   const logout = async () => {
     setLoading(true);
@@ -90,7 +138,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  if (loading && typeof window !== 'undefined' && window.location.pathname !== '/login') {
+  if (loading && typeof window !== 'undefined' && window.location.pathname !== '/login' && window.location.pathname !== '/register') {
      return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
         <div className="w-full max-w-md p-8 space-y-8">
@@ -109,7 +157,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, error, login, logout, userRole }}>
+    <AuthContext.Provider value={{ currentUser, loading, error, login, register, logout, userRole }}>
       {children}
     </AuthContext.Provider>
   );

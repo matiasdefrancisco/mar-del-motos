@@ -34,7 +34,8 @@ import {
   MapPin,
   FileText,
   AreaChart,
-  CreditCard
+  CreditCard,
+  TestTube, // Importado TestTube
 } from 'lucide-react';
 
 interface NavItem {
@@ -53,10 +54,6 @@ const navItems: NavItem[] = [
     label: 'Pedidos', 
     icon: ClipboardList, 
     roles: ['admin', 'operator', 'local'],
-    // subItems: [
-    //   { href: '/dashboard/orders/new', label: 'Nuevo Pedido', icon: PlusCircle, roles: ['local'] },
-    //   { href: '/dashboard/orders/active', label: 'Pedidos Activos', icon: ListChecks, roles: ['admin', 'operator'] },
-    // ]
   },
   { href: '/dashboard/riders', label: 'Riders', icon: Bike, roles: ['admin', 'operator'] },
   { href: '/dashboard/locals', label: 'Locales', icon: Building, roles: ['admin', 'operator'] },
@@ -71,6 +68,7 @@ const navItems: NavItem[] = [
   { href: '/dashboard/reports', label: 'Reportes', icon: AreaChart, roles: ['admin'] },
   { href: '/dashboard/user-management', label: 'Usuarios', icon: Users, roles: ['admin'] },
   { href: '/dashboard/settings', label: 'Configuración', icon: Settings, roles: ['admin', 'operator', 'rider', 'local'] },
+  { href: '/dashboard/test', label: 'Dashboard Prueba', icon: TestTube, roles: ['admin', 'operator', 'rider', 'local'] }, // Nueva página de prueba
 ];
 
 
