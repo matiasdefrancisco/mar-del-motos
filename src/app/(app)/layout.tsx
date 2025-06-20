@@ -12,7 +12,8 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          <div className="flex flex-1 flex-col w-full min-w-0">
+          {/* Contenedor B: Se añade overflow-hidden aquí */}
+          <div className="flex flex-1 flex-col w-full min-w-0 overflow-hidden">
             {/* Mobile Header */}
             <header className="navbar sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden">
               {/* Left: Hamburger Menu */}
@@ -24,10 +25,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <UserNav />
               </div>
             </header>
-            <main className="flex-1 bg-background w-full"> {/* flex-1 para ocupar el espacio, sin overflow aquí */}
-              <div className="h-full w-full overflow-auto p-4 md:p-6 lg:p-8"> {/* Div interno para scroll y padding */}
-                {children}
-              </div>
+            {/* Main ahora gestiona su propio overflow y padding */}
+            <main className="flex-1 bg-background w-full overflow-auto p-4 md:p-6 lg:p-8">
+              {children}
             </main>
           </div>
         </div>
