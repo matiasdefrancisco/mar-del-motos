@@ -15,7 +15,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           {/* min-w-0 es importante para que el flex child pueda encogerse. Se añade overflow-x-hidden aquí. */}
           <div className="flex flex-1 flex-col w-full min-w-0 overflow-x-hidden"> {/* Asegurado w-full y mantenido overflow-x-hidden */}
             {/* Mobile Header */}
-            <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
+            <header className="navbar sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden">
+              {/* bg-background class is removed as .navbar provides its own background */}
+              {/* position: relative and overflow: hidden are implicitly handled by .navbar class or sticky positioning */}
               <div className="flex items-center gap-3">
                 <SidebarTrigger />
                 <AppLogo iconSize={32} textSize="text-lg" />
