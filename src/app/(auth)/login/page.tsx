@@ -1,4 +1,5 @@
 import LoginForm from '@/components/auth/LoginForm';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -9,17 +10,25 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div>
-      <h2 className="text-2xl font-bold text-center text-foreground mb-6">Iniciar Sesión</h2>
-      <LoginForm />
-      <div className="mt-6 text-sm text-center">
-        <p className="text-muted-foreground">
+    <Card className="shadow-xl">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold text-foreground">Iniciar Sesión</CardTitle>
+        <CardDescription>Ingresa tus credenciales para acceder a tu cuenta.</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <LoginForm />
+      </CardContent>
+      <CardFooter className="flex flex-col items-center space-y-2">
+        <Link href="#" className="text-sm text-primary hover:underline">
+          ¿Olvidaste tu contraseña?
+        </Link>
+        <p className="text-sm text-muted-foreground">
           ¿No tienes una cuenta?{' '}
           <Link href="/register" className="font-medium text-primary hover:underline">
-            Regístrate aquí
+            Regístrate
           </Link>
         </p>
-      </div>
-    </div>
+      </CardFooter>
+    </Card>
   );
 }
