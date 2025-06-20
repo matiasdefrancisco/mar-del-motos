@@ -47,25 +47,25 @@ const MOCK_LOCALS: Local[] = [
 ];
 
 
-const getStatusBadgeInfo = (status: OrderStatus): { variant: "default" | "secondary" | "destructive" | "outline"; className?: string; label: string } => {
+const getStatusBadgeInfo = (status: OrderStatus): { variant: "outline"; className?: string; label: string } => {
   switch (status) {
     case 'entregado_cliente':
-      return { variant: 'default', className: 'bg-green-500 hover:bg-green-600 text-white', label: 'Entregado' };
+      return { variant: 'outline', className: 'text-green-500 border-green-500/50', label: 'Entregado' };
     case 'en_camino_retiro':
     case 'retirado_local':
     case 'en_camino_entrega':
-      return { variant: 'default', className: 'bg-yellow-500 hover:bg-yellow-600 text-black', label: 'En Proceso' };
+      return { variant: 'outline', className: 'text-yellow-500 border-yellow-500/50', label: 'En Proceso' };
     case 'pendiente_asignacion':
-      return { variant: 'secondary', className: 'bg-gray-500 hover:bg-gray-600 text-white', label: 'Sin Asignar' };
+      return { variant: 'outline', className: 'text-gray-500 border-gray-500/50', label: 'Sin Asignar' };
     case 'asignado_rider':
-      return {variant: 'default', className: 'bg-blue-500 hover:bg-blue-600 text-white', label: 'Asignado' };
+      return { variant: 'outline', className: 'text-blue-500 border-blue-500/50', label: 'Asignado' };
     case 'pendiente_aceptacion_op':
-      return { variant: 'outline', className: 'border-orange-500 text-orange-500', label: 'Nuevo Pedido' };
+      return { variant: 'outline', className: 'text-orange-500 border-orange-500/50', label: 'Nuevo Pedido' };
     case 'cancelado':
-      return { variant: 'destructive', label: 'Cancelado' };
+      return { variant: 'outline', className: 'text-red-500 border-red-500/50', label: 'Cancelado' };
     default:
       const defaultLabel = status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      return { variant: 'outline', label: defaultLabel };
+      return { variant: 'outline', className: 'text-muted-foreground border-border/50', label: defaultLabel };
   }
 };
 
@@ -301,7 +301,7 @@ export default function OperatorDashboardPage() {
                         {statusInfo.label}
                       </Badge>
                       {order.paymentStatus === 'deuda_rider' && (
-                        <Badge variant="destructive" className="ml-2 cursor-default">Deuda</Badge>
+                        <Badge variant="outline" className="ml-2 cursor-default text-red-500 border-red-500/50">Deuda</Badge>
                       )}
                     </TableCell>
                     <TableCell>{order.duration}</TableCell>
@@ -439,7 +439,7 @@ export default function OperatorDashboardPage() {
               
               <div>
                 <strong>Estado Actual:</strong> <Badge variant={getStatusBadgeInfo(selectedOrder.status).variant} className={cn(getStatusBadgeInfo(selectedOrder.status).className, 'ml-1')}>{getStatusBadgeInfo(selectedOrder.status).label}</Badge>
-                 {selectedOrder.paymentStatus === 'deuda_rider' && <Badge variant="destructive" className="ml-2">Deuda Rider</Badge>}
+                 {selectedOrder.paymentStatus === 'deuda_rider' && <Badge variant="outline" className="ml-2 text-red-500 border-red-500/50">Deuda Rider</Badge>}
               </div>
 
               {selectedOrder.items && selectedOrder.items.length > 0 && (
@@ -522,3 +522,4 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
+
