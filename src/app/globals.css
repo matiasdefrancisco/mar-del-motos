@@ -30,7 +30,7 @@
   
   --border: 150 6% 22%; /* Gris para bordes */
   --input: 150 6% 22%; /* Gris para fondos de input */
-  --ring: 43 91% 40.1%; /* Dorado (ligeramente más brillante) para anillos de foco, o verde primario */
+  --ring: 43 91% 40.1%; /* Dorado (ligeramente más brillante) para anillos de foco */
   
   --radius: 0.75rem;
   
@@ -93,19 +93,20 @@
     @apply border-border;
   }
   html {
-    overflow-x: hidden; 
-    max-width: 100vw;   
+    overflow-x: hidden; /* Previene el scroll horizontal global */
+    max-width: 100vw;   /* Asegura que no exceda el ancho del viewport */
+    /* Asegurar que no haya otras reglas de overflow-x o max-width conflictivas */
   }
   body {
     @apply bg-background text-foreground font-body;
-    overflow-x: hidden; 
-    max-width: 100vw;   
-    position: relative; 
+    overflow-x: hidden; /* Previene el scroll horizontal global en body también */
+    max-width: 100vw;   /* Asegura que no exceda el ancho del viewport */
+    position: relative; /* Ayuda con el posicionamiento de elementos hijos y ciertos comportamientos de overflow */
+    /* Asegurar que no haya otras reglas de overflow-x o max-width conflictivas */
   }
 }
 
 /* Estilos para navbar y sidebar (efectos metálicos) - Mantenidos según diseño original */
-/* Estos usan hsl(var(--primary)) y hsl(var(--sidebar-background)) que ahora reflejan los nuevos colores */
 .navbar {
   background: linear-gradient(135deg,
     #000000 0%, /* Negro puro */
@@ -129,7 +130,7 @@
   border-bottom: 1px solid hsla(var(--primary), 0.4); 
 
   position: relative; 
-  overflow: hidden;
+  overflow: hidden; /* Importante para contener el ::after y asegurar que no cause overflow */
 }
 
 .navbar::after {
@@ -168,7 +169,7 @@
     3px 0 15px rgba(0, 0, 0, 0.4), 
     inset 1px 0 0 hsla(var(--primary), 0.15), 
     0 0 20px hsla(var(--primary), 0.1); 
-  overflow: hidden;
+  overflow: hidden; /* Importante para contener el ::after y asegurar que no cause overflow */
 }
 
 .sidebar-metallic-effect::after {
@@ -219,25 +220,27 @@
 }
 
 @layer components {
+  /* Clase para contenedores que necesitan scroll horizontal */
   .scrollable-content {
-    @apply relative w-full;
-    overflow-x: auto;
-    overflow-y: hidden; /* Evitar scroll vertical en este contenedor específico */
-    max-width: 100%;
-    -webkit-overflow-scrolling: touch; 
+    @apply relative w-full; /* Necesario para que los hijos puedan tener min-width */
+    overflow-x: auto; /* Habilita scroll horizontal si el contenido es más ancho */
+    overflow-y: hidden; /* Evita scroll vertical en este contenedor específico */
+    /* max-width: 100%; No es estrictamente necesario aquí si el padre lo controla, pero puede ser una salvaguarda */
+    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
   }
   
+  /* Estilos para la barra de scroll en .scrollable-content */
   .scrollable-content::-webkit-scrollbar {
-    height: 8px; 
+    height: 8px; /* Altura de la barra de scroll horizontal */
   }
   
   .scrollable-content::-webkit-scrollbar-track {
-    background: transparent; 
+    background: transparent; /* Fondo del track de la barra de scroll */
   }
   
   .scrollable-content::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border)); 
-    border-radius: 4px; 
+    background-color: hsl(var(--border)); /* Color del thumb de la barra de scroll */
+    border-radius: 4px; /* Bordes redondeados para el thumb */
   }
 }
 

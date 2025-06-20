@@ -49,21 +49,19 @@ const MOCK_LOCALS: Local[] = [
 
 const getStatusBadgeInfo = (status: OrderStatus): { variant: BadgeProps["variant"]; className?: string; label: string } => {
   switch (status) {
-    case 'entregado_cliente':
-      return { variant: 'default', className: 'bg-primary text-primary-foreground', label: 'Entregado' };
-    case 'en_camino_retiro':
-      return { variant: 'default', className: 'bg-yellow-500 hover:bg-yellow-500/80 text-yellow-950', label: 'En Camino Retiro' };
+    case 'entregado_cliente': // Verde (primary)
+      return { variant: 'default', label: 'Entregado' };
+    case 'en_camino_retiro': // Amarillo/Dorado (accent)
     case 'retirado_local':
-      return { variant: 'default', className: 'bg-yellow-500 hover:bg-yellow-500/80 text-yellow-950', label: 'Retirado Local' };
     case 'en_camino_entrega':
-      return { variant: 'default', className: 'bg-yellow-500 hover:bg-yellow-500/80 text-yellow-950', label: 'En Camino Entrega' };
-    case 'pendiente_asignacion':
+      return { variant: 'default', className: 'bg-accent text-accent-foreground hover:bg-accent/90', label: status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
+    case 'pendiente_asignacion': // Gris/Outline (secondary o muted)
       return { variant: 'outline', className: 'text-muted-foreground border-muted', label: 'Sin Asignar' };
-    case 'asignado_rider':
-      return { variant: 'default', className: 'bg-blue-500 hover:bg-blue-500/80 text-blue-50', label: 'Asignado' };
-    case 'pendiente_aceptacion_op':
-      return { variant: 'default', className: 'bg-accent hover:bg-accent/90 text-accent-foreground', label: 'Nuevo Pedido' };
-    case 'cancelado':
+    case 'asignado_rider': // Azul (podríamos usar secondary o un color específico si el tema lo permite)
+      return { variant: 'secondary', label: 'Asignado' };
+    case 'pendiente_aceptacion_op': // Dorado Fuerte (accent)
+      return { variant: 'default', className: 'bg-accent text-accent-foreground hover:bg-accent/90 font-semibold', label: 'Nuevo Pedido' };
+    case 'cancelado': // Rojo (destructive)
       return { variant: 'destructive', label: 'Cancelado' };
     default:
       const defaultLabel = status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -97,16 +95,13 @@ export default function OperatorDashboardPage() {
   const [orderToAssign, setOrderToAssign] = useState<Order | null>(null);
   const [selectedRiderForAssignment, setSelectedRiderForAssignment] = useState<string | null>(null);
 
-  // Placeholder for Firestore listener effect
-  // useEffect(() => { /* Firestore onSnapshot logic for orders, riders, locals */ }, []);
-
  useEffect(() => {
     const interval = setInterval(() => {
       setOrders(prevOrders => prevOrders.map(o => ({
         ...o,
         duration: calculateDuration(o.operatorAcceptedAt || o.createdAt)
       })));
-    }, 60000); // Update every minute
+    }, 60000); 
     return () => clearInterval(interval);
   }, []);
   
@@ -139,7 +134,6 @@ export default function OperatorDashboardPage() {
 
   const handleAssignRider = () => {
     if (!orderToAssign || !selectedRiderForAssignment) return;
-    // Firestore update logic here
     console.log(`Asignar pedido ${orderToAssign.id} al rider ${selectedRiderForAssignment}`);
     const riderName = riders.find(r => r.id === selectedRiderForAssignment)?.name || 'Desconocido';
     setOrders(prev => prev.map(o => 
@@ -159,7 +153,7 @@ export default function OperatorDashboardPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6"> 
+    <div className="flex flex-col gap-6 w-full max-w-full overflow-x-hidden"> 
       <PageTitle 
         title="Panel de Operador" 
         icon={Users} 
@@ -174,7 +168,6 @@ export default function OperatorDashboardPage() {
         }
       />
 
-      {/* Resumen de Métricas */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -224,13 +217,12 @@ export default function OperatorDashboardPage() {
         </Card>
       </div>
       
-      {/* Sección Gestión de Pedidos */}
       <Card>
         <CardHeader>
           <CardTitle>Gestión de Pedidos Pendientes</CardTitle>
           <CardDescription>Visualiza y gestiona los pedidos en tiempo real. Filtra y busca para encontrar pedidos específicos.</CardDescription>
           <div className="mt-4 flex flex-col gap-4 md:flex-row md:flex-wrap md:items-center">
-            <div className="relative w-full md:w-auto md:max-w-[300px] lg:max-w-[400px]">
+            <div className="relative w-full md:w-auto md:flex-grow md:max-w-[300px] lg:max-w-[400px]">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input 
                 type="search" 
@@ -241,7 +233,7 @@ export default function OperatorDashboardPage() {
               />
             </div>
             <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as OrderStatus | 'todos')}>
-              <SelectTrigger className="w-full md:w-[180px] bg-input">
+              <SelectTrigger className="w-full md:w-auto md:flex-grow md:min-w-[180px] bg-input">
                 <SelectValue placeholder="Estado" />
               </SelectTrigger>
               <SelectContent>
@@ -253,7 +245,7 @@ export default function OperatorDashboardPage() {
               </SelectContent>
             </Select>
             <Select value={localFilter} onValueChange={(value) => setLocalFilter(value as string)}>
-              <SelectTrigger className="w-full md:w-[180px] bg-input">
+              <SelectTrigger className="w-full md:w-auto md:flex-grow md:min-w-[180px] bg-input">
                 <SelectValue placeholder="Local" />
               </SelectTrigger>
               <SelectContent>
@@ -264,7 +256,7 @@ export default function OperatorDashboardPage() {
               </SelectContent>
             </Select>
             <Select value={riderFilter} onValueChange={(value) => setRiderFilter(value as string)}>
-              <SelectTrigger className="w-full md:w-[180px] bg-input">
+              <SelectTrigger className="w-full md:w-auto md:flex-grow md:min-w-[180px] bg-input">
                 <SelectValue placeholder="Repartidor" />
               </SelectTrigger>
               <SelectContent>
@@ -279,7 +271,7 @@ export default function OperatorDashboardPage() {
         </CardHeader>
         <CardContent>
           <div className="scrollable-content">
-            <Table className="min-w-[600px]">
+            <Table className="min-w-[600px]"> {/* min-w asegura que la tabla pueda ser más ancha que el viewport */}
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px]">ID</TableHead>
@@ -342,7 +334,6 @@ export default function OperatorDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Sección de Asignación de Pedidos */}
       <Card>
         <CardHeader>
           <CardTitle>Asignación Rápida de Pedidos</CardTitle>
@@ -352,7 +343,7 @@ export default function OperatorDashboardPage() {
           <div className="md:col-span-1">
             <Label htmlFor="rider-select-assignment">Seleccionar Repartidor</Label>
             <Select>
-              <SelectTrigger id="rider-select-assignment" className="mt-1 bg-input">
+              <SelectTrigger id="rider-select-assignment" className="mt-1 bg-input w-full">
                 <SelectValue placeholder="Elige un repartidor online" />
               </SelectTrigger>
               <SelectContent>
@@ -399,7 +390,6 @@ export default function OperatorDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Vista Resumen de Deudas */}
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
@@ -415,7 +405,6 @@ export default function OperatorDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Modal Detalles del Pedido */}
       {selectedOrder && (
         <Dialog open={isDetailsModalOpen} onOpenChange={setIsDetailsModalOpen}>
           <DialogContent className="sm:max-w-lg">
@@ -482,7 +471,6 @@ export default function OperatorDashboardPage() {
         </Dialog>
       )}
 
-      {/* Modal Asignar Repartidor */}
       {orderToAssign && (
         <Dialog open={isAssignModalOpen} onOpenChange={setIsAssignModalOpen}>
           <DialogContent className="sm:max-w-md">
@@ -520,5 +508,3 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
-
-    
