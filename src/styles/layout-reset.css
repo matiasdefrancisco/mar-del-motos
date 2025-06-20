@@ -1,0 +1,16 @@
+/* src/styles/layout-reset.css */
+/* Reset box-sizing to a more predictable model.
+   Tailwind's preflight already includes a comprehensive reset,
+   so this file is often for very specific overrides or project-wide defaults
+   that need to come after Tailwind's base styles but before component styles.
+*/
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/* Add any other general reset rules here if needed by the user,
+   but avoid overly broad overflow rules unless specifically targeted.
+*/
