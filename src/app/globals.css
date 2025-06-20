@@ -6,10 +6,16 @@
   * {
     @apply border-border;
   }
+
+  html {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+
   body {
     @apply bg-background text-foreground font-body;
+    overflow-x: hidden;
     max-width: 100vw;
-    overflow-x: auto;
     position: relative;
   }
 }
@@ -260,20 +266,9 @@
    transition: box-shadow 0.3s ease;
 }
 
-/* Agregado para mantener la prevención de scroll horizontal a nivel de HTML
-   y la definición de .scrollable-content que podría ser necesaria.
-   Si la instrucción de "reemplazada completamente" para el body se toma literalmente
-   para todo el archivo, estas partes podrían ser eliminadas, pero es más seguro mantenerlas.
-*/
-@layer base {
-  html {
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
-}
 
 @layer components {
-  .scrollable-content { /* Esta clase fue solicitada anteriormente y es útil */
+  .scrollable-content {
     @apply relative w-full; 
     overflow-x: auto;
     overflow-y: hidden; 
@@ -294,7 +289,8 @@
     border-radius: 4px;
   }
 
-  .table-container { /* Esta clase también estaba presente, se mantiene por si acaso */
+  /* .table-container se mantiene por si es usado, pero .scrollable-content es la clase principal ahora */
+  .table-container {
     @apply relative w-full overflow-x-auto;
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--border)) transparent;
