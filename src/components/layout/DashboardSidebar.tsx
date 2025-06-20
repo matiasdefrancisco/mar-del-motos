@@ -37,7 +37,7 @@ import {
   AreaChart,
   CreditCard,
   TestTube,
-  History, 
+  History,
 } from 'lucide-react';
 
 interface NavItem {
@@ -51,23 +51,23 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'operator', 'rider', 'local'] },
-  { 
-    href: '/dashboard/orders', 
-    label: 'Pedidos', 
-    icon: ClipboardList, 
+  {
+    href: '/dashboard/orders',
+    label: 'Pedidos',
+    icon: ClipboardList,
     roles: ['admin', 'operator', 'local'],
   },
   { href: '/dashboard/riders', label: 'Repartidores', icon: Bike, roles: ['admin', 'operator'] },
   { href: '/dashboard/locals', label: 'Locales', icon: Building, roles: ['admin', 'operator'] },
-  { 
-    href: '/dashboard/debts', 
-    label: 'Deudas', 
-    icon: CreditCard, 
+  {
+    href: '/dashboard/debts',
+    label: 'Deudas',
+    icon: CreditCard,
     roles: ['admin', 'operator', 'rider'],
     badge: 'Nuevo'
   },
   { href: '/dashboard/operator/ai-payment-plan', label: 'Plan de Pago IA', icon: Bot, roles: ['operator'] },
-  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] }, 
+  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] },
   { href: '/dashboard/reports', label: 'Reportes', icon: AreaChart, roles: ['admin'] },
   { href: '/dashboard/user-management', label: 'Usuarios', icon: Users, roles: ['admin'] },
   { href: '/dashboard/settings', label: 'Configuración', icon: Settings, roles: ['admin', 'operator', 'rider', 'local'] },
@@ -88,7 +88,7 @@ export default function DashboardSidebar() {
 
   return (
     <Sidebar collapsible="icon" variant="sidebar" side="left">
-      <SidebarHeader className="p-4 border-b border-sidebar-border">
+      <SidebarHeader className="p-4 border-b-2 border-sidebar-border">
         {/* AppLogo eliminado de aquí */}
       </SidebarHeader>
       <SidebarContent className="flex-1 p-2">
@@ -124,7 +124,7 @@ export default function DashboardSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="p-4 border-t border-sidebar-border">
+      <SidebarFooter className="p-4 border-t-2 border-sidebar-border">
         <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={logout}>
           <LogOut size={16} /> Salir
         </Button>
