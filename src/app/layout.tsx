@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import '../styles/layout-reset.css'; // Import reset styles after globals
+// import '../styles/layout-reset.css'; // Eliminada la importación de layout-reset.css
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from '@/contexts/AuthContext';
 

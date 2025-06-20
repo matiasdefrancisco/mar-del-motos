@@ -2,35 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 
+  ==========================================================================
+  CSS Global y Variables de Tema
+  --------------------------------------------------------------------------
+  Esta sección contiene las variables HSL para el tema (oscuro por defecto)
+  y la configuración base para html y body para controlar el overflow.
+  Es CRÍTICO para el layout general de la aplicación.
+  NO MODIFICAR sin una evaluación completa del impacto.
+  ==========================================================================
+*/
 @layer base {
   * {
     @apply border-border;
   }
 
   html {
+    /* Previene el scroll horizontal a nivel de página */
     overflow-x: hidden;
     max-width: 100vw;
   }
 
   body {
     @apply bg-background text-foreground font-body;
+    /* Previene el scroll horizontal a nivel de página */
     overflow-x: hidden;
     max-width: 100vw;
-    position: relative;
+    position: relative; /* Necesario para algunos posicionamientos absolutos internos */
   }
 }
 
-/* Estilos para scrollbars, efectos metálicos y otras definiciones de :root/.dark que estaban aquí
-   se omiten si la instrucción es reemplazar *completamente* globals.css solo con el @layer base proporcionado.
-   Si se deben mantener, necesitaría confirmación. Por ahora, sigo la instrucción de reemplazo
-   para la estructura del body.
-
-   Considerando la necesidad de que el sistema funcione, y que el CSS de :root y .dark define las variables de color,
-   y los efectos metálicos son parte del estilo, es probable que "reemplazada completamente por esta estructura específica"
-   se refiriera al bloque `@layer base { body { ... } }` y no a todo el archivo.
-   Voy a mantener el resto de globals.css (variables, etc.) y solo modificar el bloque body.
+/* 
+  ==========================================================================
+  Variables de Color del Tema (ShadCN UI)
+  --------------------------------------------------------------------------
+  Definición de las variables HSL para los colores del tema.
+  Asegura una consistencia visual en toda la aplicación.
+  ==========================================================================
 */
-
 :root {
   /* Inverted: Defaulting to a dark theme */
   --background: 150 6% 13%; /* Dark Gray/Near Black */
@@ -118,7 +127,71 @@
   --sidebar-ring: 40 100% 60%;
 }
 
+/* 
+  ==========================================================================
+  Componentes de UI Personalizados y Utilidades de Layout
+  --------------------------------------------------------------------------
+  Clases para componentes específicos y manejo de scroll.
+  ==========================================================================
+*/
+@layer components {
+  /* 
+    Clase para contenedores con contenido extenso que requieren scroll horizontal.
+    Ej: Tablas, listas anchas.
+    Asegura que el scroll sea solo horizontal y que la barra de scroll sea discreta.
+  */
+  .scrollable-content {
+    @apply relative w-full; /* Necesario para que el max-width funcione correctamente */
+    overflow-x: auto; /* Permite scroll horizontal */
+    overflow-y: hidden; /* Previene scroll vertical dentro de este contenedor */
+    max-width: 100%; /* Asegura que no exceda el contenedor padre */
+    -webkit-overflow-scrolling: touch; /* Mejora la experiencia de scroll en iOS */
+  }
+  
+  .scrollable-content::-webkit-scrollbar {
+    height: 8px; /* Altura de la barra de scroll */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: transparent; /* Fondo de la pista de scroll */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border)); /* Color del pulgar de la barra de scroll */
+    border-radius: 4px; /* Bordes redondeados para el pulgar */
+  }
 
+  /* 
+    Clase .table-container: Mantenida por si es usada en algún lugar, 
+    pero .scrollable-content es la clase principal preferida para scroll horizontal.
+  */
+  .table-container {
+    @apply relative w-full overflow-x-auto;
+    scrollbar-width: thin; /* Para Firefox */
+    scrollbar-color: hsl(var(--border)) transparent; /* Para Firefox */
+  }
+  
+  .table-container::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .table-container::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .table-container::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 4px;
+  }
+}
+
+/* 
+  ==========================================================================
+  Efectos Visuales Personalizados (Navbar, Sidebar)
+  --------------------------------------------------------------------------
+  Estilos para efectos metálicos y animaciones.
+  ==========================================================================
+*/
 /* NAVBAR METALLIC CHROME EFFECT - Verde Oscuro y Negro Sutil */
 .navbar {
   background: linear-gradient(135deg,
@@ -143,7 +216,7 @@
   border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde inferior más integrado */
 
   position: relative; 
-  overflow: hidden; 
+  overflow: hidden; /* Necesario para que el ::after no se desborde visualmente */
 }
 
 .navbar::after {
@@ -185,7 +258,7 @@
     inset 1px 0 0 rgba(45, 90, 39, 0.2), 
     0 0 20px rgba(27, 67, 50, 0.15); 
 
-  overflow: hidden; 
+  overflow: hidden; /* Necesario para que el ::after no se desborde visualmente */
 }
 
 .sidebar-metallic-effect::after {
@@ -264,48 +337,4 @@
     inset 1px 0 0 rgba(45, 90, 39, 0.3), 
     0 0 30px rgba(27, 67, 50, 0.25);
    transition: box-shadow 0.3s ease;
-}
-
-
-@layer components {
-  .scrollable-content {
-    @apply relative w-full; 
-    overflow-x: auto;
-    overflow-y: hidden; 
-    max-width: 100%; 
-    -webkit-overflow-scrolling: touch; 
-  }
-  
-  .scrollable-content::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .scrollable-content::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .scrollable-content::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 4px;
-  }
-
-  /* .table-container se mantiene por si es usado, pero .scrollable-content es la clase principal ahora */
-  .table-container {
-    @apply relative w-full overflow-x-auto;
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-  }
-  
-  .table-container::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .table-container::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .table-container::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border));
-    border-radius: 4px;
-  }
 }
