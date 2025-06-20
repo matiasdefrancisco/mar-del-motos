@@ -13,7 +13,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
         <div className="flex min-h-screen bg-secondary"> {/* Contenedor A */}
           <DashboardSidebar />
           {/* Contenedor B: Columna Header Móvil + Main. */}
-          <div className="flex flex-1 flex-col w-full min-w-0 overflow-x-clip"> {/* Cambiado overflow-hidden a overflow-x-clip */}
+          <div className="flex flex-1 flex-col w-full min-w-0 overflow-hidden"> {/* Cambiado overflow-x-clip a overflow-hidden y se asegura min-w-0 */}
             {/* Mobile Header */}
             <header className="navbar sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden">
               {/* Left: Hamburger Menu */}
@@ -38,3 +38,4 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     </ProtectedRoute>
   );
 }
+
