@@ -10,7 +10,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm", // overflow-hidden fue eliminado previamente y se mantiene así
+      "rounded-lg border bg-card text-card-foreground shadow-sm", // Asegurarse que overflow-hidden no esté aquí
       className
     )}
     {...props}
