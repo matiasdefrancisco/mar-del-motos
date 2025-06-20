@@ -9,7 +9,7 @@ interface AppLogoProps {
   showText?: boolean;
 }
 
-const AppLogo = ({ className, iconSize = 36, textSize = "text-2xl", showText = true }: AppLogoProps) => {
+const AppLogo = ({ className, iconSize = 48, textSize = "text-xl", showText = true }: AppLogoProps) => {
   return (
     <Link href="/dashboard" className={`flex items-center gap-3 ${className}`}>
       <Image 
