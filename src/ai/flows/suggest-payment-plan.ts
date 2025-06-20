@@ -2,11 +2,11 @@
 'use server';
 
 /**
- * @fileOverview An AI agent to suggest payment plans for riders based on their debt history and current location.
+ * @fileOverview Un agente de IA para sugerir planes de pago a los riders basándose en su historial de deudas y ubicación actual.
  *
- * - suggestPaymentPlan - A function that suggests a payment plan.
- * - SuggestPaymentPlanInput - The input type for the suggestPaymentPlan function.
- * - SuggestPaymentPlanOutput - The return type for the suggestPaymentPlan function.
+ * - suggestPaymentPlan - Una función que sugiere un plan de pago.
+ * - SuggestPaymentPlanInput - El tipo de entrada para la función suggestPaymentPlan.
+ * - SuggestPaymentPlanOutput - El tipo de retorno para la función suggestPaymentPlan.
  */
 
 import {ai} from '@/ai/genkit';
@@ -15,20 +15,20 @@ import {z} from 'genkit';
 const SuggestPaymentPlanInputSchema = z.object({
   riderDebtHistory: z
     .string()
-    .describe('The rider debt history, including amounts, due dates, and payment records.'),
+    .describe('El historial de deudas del rider, incluyendo montos, fechas de vencimiento y registros de pago.'),
   riderCurrentLocation: z
     .string()
-    .describe('The current location of the rider.'),
+    .describe('La ubicación actual del rider.'),
 });
 export type SuggestPaymentPlanInput = z.infer<typeof SuggestPaymentPlanInputSchema>;
 
 const SuggestPaymentPlanOutputSchema = z.object({
   suggestedPaymentPlan: z
     .string()
-    .describe('A suggested payment plan for the rider, including payment amounts, due dates, and methods.'),
+    .describe('Un plan de pago sugerido para el rider, incluyendo montos de pago, fechas de vencimiento y métodos.'),
   reasoning: z
     .string()
-    .describe('The reasoning behind the suggested payment plan, including factors considered and trade-offs made.'),
+    .describe('El razonamiento detrás del plan de pago sugerido, incluyendo factores considerados y compensaciones realizadas.'),
 });
 export type SuggestPaymentPlanOutput = z.infer<typeof SuggestPaymentPlanOutputSchema>;
 
@@ -40,20 +40,20 @@ const suggestPaymentPlanPrompt = ai.definePrompt({
   name: 'suggestPaymentPlanPrompt',
   input: {schema: SuggestPaymentPlanInputSchema},
   output: {schema: SuggestPaymentPlanOutputSchema},
-  prompt: `You are an AI assistant that analyzes rider debt history and current location to suggest a personalized payment plan.
+  prompt: `Eres un asistente de IA que analiza el historial de deudas de un rider y su ubicación actual para sugerir un plan de pago personalizado.
 
-  Given the following rider debt history:
+  Dado el siguiente historial de deudas del rider:
   {{riderDebtHistory}}
 
-  And the rider's current location:
+  Y la ubicación actual del rider:
   {{riderCurrentLocation}}
 
-  Suggest a payment plan that helps the rider manage their debts effectively.
+  Sugiere un plan de pago que ayude al rider a gestionar sus deudas de forma eficaz.
 
-  Consider the rider's debt history, current location, and any other relevant factors.
+  Considera el historial de deudas del rider, su ubicación actual y cualquier otro factor relevante.
 
-  Provide a detailed payment plan with payment amounts, due dates, and methods.
-  Also include the reasoning behind the suggested payment plan, including factors considered and trade-offs made.`,
+  Proporciona un plan de pago detallado con los montos de pago, fechas de vencimiento y métodos.
+  También incluye el razonamiento detrás del plan de pago sugerido, incluyendo los factores considerados y las compensaciones realizadas.`,
 });
 
 const suggestPaymentPlanFlow = ai.defineFlow(

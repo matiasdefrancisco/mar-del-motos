@@ -47,8 +47,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const profile: UserProfile = {
           uid: user.uid,
           email: user.email,
-          displayName: user.displayName || user.email?.split('@')[0] || 'User',
-          photoURL: user.photoURL || `https://placehold.co/100x100.png?text=${(user.email || 'U').charAt(0).toUpperCase()}`,
+          displayName: user.displayName || user.email?.split('@')[0] || 'Usuario',
+          photoURL: user.photoURL || `https://placehold.co/100x100.png?text=${(user.email?.charAt(0).toUpperCase() || 'U')}`,
           role: role,
         };
         setCurrentUser({ ...user, profile });
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error('useAuth debe ser utilizado dentro de un AuthProvider');
   }
   return context;
 };

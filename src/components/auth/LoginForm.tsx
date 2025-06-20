@@ -30,7 +30,7 @@ export default function LoginForm() {
       await login(email, password);
       router.push('/dashboard');
     } catch (error: any) {
-      setFormError(error.message || 'Failed to login. Please check your credentials.');
+      setFormError(error.message || 'Error al iniciar sesión. Por favor, verifica tus credenciales.');
     } finally {
       setIsLoading(false);
     }
