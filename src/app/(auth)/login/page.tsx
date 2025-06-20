@@ -12,20 +12,19 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Card className="shadow-xl bg-secondary relative pt-12 border-0 border-t-4 border-accent w-full max-w-md">
+    <Card className="shadow-xl bg-secondary relative pt-16 border-0 border-t-4 border-accent w-full max-w-lg">
       
-      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 p-2 bg-secondary rounded-full shadow-lg ring-2 ring-accent flex items-center justify-center">
-        <AppLogo iconSize={50} showText={false} />
+      <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 p-3 bg-secondary rounded-full shadow-lg ring-2 ring-accent flex items-center justify-center">
+        <AppLogo iconSize={70} showText={false} />
       </div>
 
-      <CardHeader className="text-center pt-0 pb-3"> {/* Reduced padding */}
-        <CardTitle className="text-xl font-bold text-foreground">Iniciar Sesión</CardTitle>
-        {/* CardDescription removed as per request */}
+      <CardHeader className="text-center pb-6">
+        <CardTitle className="text-2xl font-semibold text-foreground">Ingresa a Mar del Motos</CardTitle>
       </CardHeader>
-      <CardContent className="px-6 pt-4 pb-4"> {/* Adjusted padding */}
+      <CardContent className="px-8 py-6">
         <LoginForm />
       </CardContent>
-      <CardFooter className="flex flex-col items-center space-y-1 pt-3 pb-4"> {/* Reduced padding and space */}
+      <CardFooter className="flex flex-col items-center space-y-2 pt-6 pb-8">
         <Link href="#" className="text-sm text-primary hover:underline">
           ¿Olvidaste tu contraseña?
         </Link>
