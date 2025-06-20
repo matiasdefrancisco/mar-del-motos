@@ -12,6 +12,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label'; // Importación añadida
+import { Textarea } from '@/components/ui/textarea'; // Importación añadida
 import { Users, ClipboardList, Bike, Bot, MoreHorizontal, Search, Filter, Eye, Edit, UserPlus, CreditCardIcon, ListOrdered, PlusCircle } from 'lucide-react';
 import type { Order, OrderStatus, Rider, Local } from '@/lib/types';
 // import { collection, query, where, onSnapshot, orderBy, Timestamp } from 'firebase/firestore';
@@ -443,4 +445,3 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
-
