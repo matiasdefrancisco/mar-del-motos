@@ -87,7 +87,7 @@ export default function DashboardSidebar() {
   const filteredNavItems = navItems.filter(item => userRole && item.roles.includes(userRole));
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar" side="left" className="border-r hidden md:flex"> {/* Ocultar en móvil, md:flex para mostrar en desktop */}
+    <Sidebar collapsible="icon" variant="sidebar" side="left"> {/* Clases 'hidden md:flex border-r' eliminadas */}
       <SidebarHeader className="p-4 border-b border-sidebar-border">
         <AppLogo />
       </SidebarHeader>
