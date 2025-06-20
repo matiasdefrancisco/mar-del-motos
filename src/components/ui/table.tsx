@@ -7,10 +7,10 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="scrollable-content"> {/* Aplicar .scrollable-content aquí */}
+  <div className="scrollable-content">
     <table
       ref={ref}
-      className={cn("w-full caption-bottom text-sm min-w-[600px]", className)} {/* Añadir min-w-* aquí */}
+      className={cn("w-full caption-bottom text-sm min-w-[600px]", className)}
       {...props}
     />
   </div>
