@@ -1,3 +1,4 @@
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -9,7 +10,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "card rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden", // Added .card class
+      "rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden",
       className
     )}
     {...props}
@@ -23,20 +24,20 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("card-header flex flex-col space-y-1.5 p-6", className)} // Added .card-header class
+    className={cn("flex flex-col space-y-1.5 p-6", className)}
     {...props}
   />
 ))
 CardHeader.displayName = "CardHeader"
 
 const CardTitle = React.forwardRef<
-  HTMLDivElement, // Corrected from HTMLParagraphElement to HTMLDivElement to match usage
-  React.HTMLAttributes<HTMLDivElement> // Corrected from HTMLHeadingElement to HTMLDivElement
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLHeadingElement>
 >(({ className, ...props }, ref) => (
-  <div // Changed from h3 to div to match typical CardTitle usage, new CSS targets .card-header .card-title or h3
+  <h3
     ref={ref}
     className={cn(
-      "card-title text-2xl font-semibold leading-none tracking-tight", // Added .card-title for easier targeting from new CSS
+      "text-2xl font-semibold leading-none tracking-tight",
       className
     )}
     {...props}
@@ -45,10 +46,10 @@ const CardTitle = React.forwardRef<
 CardTitle.displayName = "CardTitle"
 
 const CardDescription = React.forwardRef<
-  HTMLDivElement, // Corrected from HTMLParagraphElement
-  React.HTMLAttributes<HTMLDivElement> // Corrected from HTMLParagraphElement
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <div // Changed from p to div
+  <p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
     {...props}

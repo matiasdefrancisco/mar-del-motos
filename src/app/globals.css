@@ -3,185 +3,121 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== DESIGN SYSTEM COMPLETO: BLANCO, NEGRO, VERDE, AMARILLO ===== */
-
-/* COLOR PALETTE VARIABLES */
 :root {
-  /* New Design System Variables */
-  --primary-green: #2d5a27;
-  --primary-green-light: #4a7c59;
-  --primary-green-dark: #1a3d1a;
-  --accent-yellow: #f4a100;
-  --accent-yellow-light: #ffc107;
-  --accent-yellow-dark: #e68900;
-  --neutral-black: #000000;
-  --neutral-dark: #1a1a1a;
-  --neutral-gray: #333333;
-  --neutral-light-gray: #f5f5f5;
-  --neutral-white: #ffffff;
-  --success: var(--primary-green);
-  --warning: var(--accent-yellow);
-  --error: #dc3545; /* hsl(355, 71%, 52%) */
-  --info: #2d5a27;
-
-  /* Background Gradients from New DS */
-  --gradient-primary: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-light) 100%);
-  --gradient-accent: linear-gradient(135deg, var(--accent-yellow) 0%, var(--accent-yellow-light) 100%);
-  --gradient-dark: linear-gradient(135deg, var(--neutral-black) 0%, var(--neutral-dark) 100%);
-
-  /* Shadows from New DS */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
-  --shadow-xl: 0 12px 24px rgba(0, 0, 0, 0.25);
-
-  /* ShadCN Theme Variables - Mapped to New Design System */
-  --background: 0 0% 100%; /* --neutral-white */
-  --foreground: 0 0% 10%; /* --neutral-dark */
-
-  --card: 0 0% 100%; /* --neutral-white */
-  --card-foreground: 0 0% 10%; /* --neutral-dark */
-
-  --popover: 0 0% 100%; /* --neutral-white */
-  --popover-foreground: 0 0% 10%; /* --neutral-dark */
-
-  --primary: 115 35% 26%; /* --primary-green: #2d5a27 */
-  --primary-foreground: 0 0% 100%; /* --neutral-white */
-
-  --secondary: 0 0% 96%; /* --neutral-light-gray: #f5f5f5 */
-  --secondary-foreground: 0 0% 10%; /* --neutral-dark */
-
-  --muted: 0 0% 96%; /* --neutral-light-gray: #f5f5f5 */
-  --muted-foreground: 0 0% 20%; /* --neutral-gray: #333333 */
-
-  --accent: 39 100% 48%; /* --accent-yellow: #f4a100 */
-  --accent-foreground: 0 0% 0%; /* --neutral-black (for yellow accent) */
-
-  --destructive: 355 71% 52%; /* --error: #dc3545 */
-  --destructive-foreground: 0 0% 98%; /* Default light text for destructive */
-
-  --border: 0 0% 87%; /* Neutral light border, can be overridden by specific components */
-  --input: 0 0% 93%; /* Neutral light input background */
-  --ring: 39 100% 48%; /* --accent-yellow for focus rings */
-  
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 142.1 76.2% 36.3%; /* Original --primary-green: #1B4332 */
+  --primary-foreground: 355.7 100% 97.3%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 39 92% 56%; /* Original --accent-yellow: #F4A100; HSL: 39, 92%, 48% (changed to 56% L) */
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 142.1 76.2% 36.3%; /* Ring color to match new primary */
   --radius: 0.5rem;
 
-  /* Sidebar specific colors (ShadCN theming, will be largely influenced by .sidebar class) */
-  /* These might be less critical if .sidebar class fully dictates appearance */
-  --sidebar-background: 120 41% 17%; /* --primary-green-dark as a base if needed */
-  --sidebar-foreground: 0 0% 100%;   /* --neutral-white */
-  --sidebar-primary: 39 100% 48%;    /* --accent-yellow for active items */
-  --sidebar-primary-foreground: 0 0% 0%; /* --neutral-black */
-  --sidebar-accent: 135 25% 39%;     /* --primary-green-light for hover */
-  --sidebar-accent-foreground: 0 0% 100%; /* --neutral-white */
-  --sidebar-border: 39 100% 48%;     /* --accent-yellow for border like in .sidebar */
-  --sidebar-ring: 39 100% 48%;       /* --accent-yellow */
-  
-  /* Custom color for highlighted sections - Not directly in new DS, consider removing or remapping */
-  /* For now, let's use a subtle yellow highlight from the new DS */
-  --highlighted-section: 45 100% 95%; /* Very light yellow, derived from accent-yellow */
+  /* Custom color for highlighted sections */
+  --highlighted-section: 45 100% 95%; /* Very light yellow */
+
+  /* Sidebar specific colors (ShadCN theming) */
+  --sidebar-background: 142.1 76.2% 20%; /* Darker primary green */
+  --sidebar-foreground: 0 0% 100%;   /* White */
+  --sidebar-primary: 39 92% 56%;     /* Accent yellow for active items */
+  --sidebar-primary-foreground: 240 5.9% 10%; /* Black for text on yellow */
+  --sidebar-accent: 142.1 76.2% 30%;      /* Lighter primary green for hover */
+  --sidebar-accent-foreground: 0 0% 100%; /* White */
+  --sidebar-border: 39 92% 50%;      /* Accent yellow for border */
+  --sidebar-ring: 39 92% 56%;        /* Accent yellow */
 }
 
 .dark {
-  /* New Design System Variables - Dark Mode (example, can be adjusted) */
-  --primary-green: #4a7c59; /* Lighter green for dark mode */
-  --primary-green-light: #6a9c79;
-  --primary-green-dark: #2d5a27;
-  --accent-yellow: #ffc107; /* Lighter yellow for dark mode */
-  --accent-yellow-light: #ffd137;
-  --accent-yellow-dark: #f4a100;
-  --neutral-black: #f5f5f5; /* Inverted for text */
-  --neutral-dark: #e0e0e0;  /* Lighter gray text */
-  --neutral-gray: #b0b0b0;  /* Mid gray text */
-  --neutral-light-gray: #2a2a2a; /* Darker background */
-  --neutral-white: #1a1a1a;     /* Main dark background */
-  --error: #ff6b81; /* Lighter red for dark mode */
-
-  /* ShadCN Theme Variables - Dark Mode */
-  --background: 0 0% 10%; /* --neutral-white (inverted for dark) = #1a1a1a */
-  --foreground: 0 0% 96%; /* --neutral-black (inverted for dark) = #f5f5f5 */
-
-  --card: 0 0% 10%; /* --neutral-white (inverted) */
-  --card-foreground: 0 0% 96%; /* --neutral-black (inverted) */
-
-  --popover: 0 0% 10%; /* --neutral-white (inverted) */
-  --popover-foreground: 0 0% 96%; /* --neutral-black (inverted) */
-
-  --primary: 135 25% 39%; /* --primary-green (dark mode version #4a7c59) */
-  --primary-foreground: 0 0% 96%; /* Text on primary */
-
-  --secondary: 0 0% 16%; /* --neutral-light-gray (dark mode version #2a2a2a) */
-  --secondary-foreground: 0 0% 96%;
-
-  --muted: 0 0% 16%;
-  --muted-foreground: 0 0% 69%; /* --neutral-gray (dark mode version #b0b0b0) */
-
-  --accent: 45 100% 51%; /* --accent-yellow (dark mode version #ffc107) */
-  --accent-foreground: 0 0% 10%; /* Text on accent */
-
-  --destructive: 353 100% 71%; /* --error (dark mode version #ff6b81) */
-  --destructive-foreground: 0 0% 10%;
-
-  --border: 0 0% 20%; 
-  --input: 0 0% 16%;
-  --ring: 45 100% 51%; 
+  --background: 20 14.3% 4.1%;
+  --foreground: 0 0% 95%;
+  --card: 24 9.8% 10%;
+  --card-foreground: 0 0% 95%;
+  --popover: 0 0% 9%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 142.1 70.6% 45.3%; /* Adjusted for dark mode */
+  --primary-foreground: 355.7 100% 97.3%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 39 90% 60%; /* Adjusted for dark mode */
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 85.7% 97.3%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 142.1 70.6% 45.3%; /* Ring color to match new primary */
 
   --chart-1: 220 70% 50%;
   --chart-2: 160 60% 45%;
   --chart-3: 30 80% 55%;
   --chart-4: 280 65% 60%;
   --chart-5: 340 75% 55%;
-  
-  --sidebar-background: 0 0% 5%; 
-  --sidebar-foreground: 0 0% 96%;   
-  --sidebar-primary: 45 100% 51%;    
-  --sidebar-primary-foreground: 0 0% 10%; 
-  --sidebar-accent: 0 0% 16%;     
-  --sidebar-accent-foreground: 0 0% 96%; 
-  --sidebar-border: 45 100% 51%;     
-  --sidebar-ring: 45 100% 51%;
+
+  --sidebar-background: 142.1 76.2% 15%; /* Even Darker primary green */
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-primary: 39 90% 60%;
+  --sidebar-primary-foreground: 0 0% 9.8%;
+  --sidebar-accent: 142.1 76.2% 25%;
+  --sidebar-accent-foreground: 0 0% 98%;
+  --sidebar-border: 39 90% 55%;
+  --sidebar-ring: 39 90% 60%;
 
   --highlighted-section: 39 100% 15%; /* Darker subtle yellow highlight */
 }
 
-
 @layer base {
   * {
     @apply border-border;
-    box-sizing: border-box; /* Added from new DS suggestion */
   }
   body {
     @apply bg-background text-foreground font-body;
-    /* overflow-x-hidden and max-w-full were here, but new DS applies to specific containers if needed */
+    /* Added for viewport control */
+    overflow-x: hidden;
+    max-width: 100%;
   }
 }
 
-/* ===== SIDEBAR NAVIGATION CON EFECTO METALLIC ===== */
-.sidebar {
+/* NAVBAR METALLIC CHROME EFFECT - Verde Oscuro y Negro Sutil */
+.navbar {
   background: linear-gradient(135deg, 
-    var(--neutral-black) 0%, 
-    var(--neutral-dark) 20%, 
-    var(--primary-green-dark) 35%,
-    var(--accent-yellow) 45%, 
-    var(--neutral-white) 50%, 
-    var(--accent-yellow) 55%, 
-    var(--primary-green-dark) 65%,
-    var(--neutral-dark) 80%, 
-    var(--neutral-black) 100%
+    #000000 0%,  /* Negro */
+    #0a1a0f 20%, /* Verde muy oscuro casi negro */
+    #102a1a 35%, /* Verde oscuro */
+    #1B4332 45%, /* Verde primario del tema (ajustado) */
+    #2c5e3a 50%, /* Verde un poco más claro como reflejo principal */
+    #1B4332 55%, /* Verde primario */
+    #102a1a 65%, /* Verde oscuro */
+    #0a1a0f 80%, /* Verde muy oscuro casi negro */
+    #000000 100% /* Negro */
   );
   background-size: 400% 100%;
-  animation: metallic-shimmer 6s ease-in-out infinite;
-  color: var(--neutral-white);
-  border-right: 3px solid var(--accent-yellow);
+  animation: metallic-shimmer 7s ease-in-out infinite; /* Ligeramente más lento */
+  
   box-shadow: 
-    var(--shadow-lg),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 30px rgba(244, 161, 0, 0.2);
-  position: relative;
-  overflow: hidden;
+    0 3px 15px rgba(0, 0, 0, 0.4), /* Sombra más suave */
+    inset 0 1px 0 rgba(45, 90, 39, 0.2), /* Inset con tinte verde oscuro */
+    0 0 20px rgba(27, 67, 50, 0.15); /* Resplandor verde sutil */
+  
+  border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde verde oscuro */
+  
+  position: relative; /* Mantener para ::after */
+  overflow: hidden; /* Mantener para ::after */
 }
 
-.sidebar::after {
+.navbar::after {
   content: '';
   position: absolute;
   top: 0;
@@ -190,394 +126,16 @@
   height: 100%;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(244, 161, 0, 0.6) 50%, 
-    rgba(255, 255, 255, 0.1) 80%,
+    rgba(128, 150, 128, 0.05) 20%, /* Destello verde muy tenue */
+    rgba(173, 216, 173, 0.15) 50%, /* Destello principal verde claro, muy sutil (0.15 opacidad) */
+    rgba(128, 150, 128, 0.05) 80%, /* Destello verde muy tenue */
     transparent 100%
   );
-  animation: sweep-light 4s ease-in-out infinite;
+  animation: sweep-light 5s ease-in-out infinite; /* Ligeramente más lento */
   pointer-events: none;
 }
 
-.sidebar-header { /* Style for header within .sidebar */
-  background: var(--neutral-black);
-  color: var(--neutral-white);
-  border-bottom: 2px solid var(--accent-yellow);
-  padding: 1rem;
-}
-
-.sidebar-item { /* Style for items within .sidebar */
-  color: var(--neutral-white);
-  padding: 0.875rem 1rem;
-  border-left: 4px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.sidebar-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-left: 4px solid var(--accent-yellow);
-  color: var(--accent-yellow-light);
-}
-
-.sidebar-item.active {
-  background: var(--accent-yellow);
-  color: var(--neutral-black);
-  border-left: 4px solid var(--neutral-white);
-  font-weight: 600;
-}
-
-.sidebar-badge { /* Style for badges within .sidebar */
-  background: var(--accent-yellow);
-  color: var(--neutral-black);
-  border-radius: 12px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-/* ===== MAIN CONTENT AREA ===== */
-.main-content {
-  background: var(--neutral-light-gray);
-  min-height: 100vh;
-}
-
-.page-header {
-  background: var(--neutral-white);
-  border-bottom: 3px solid var(--primary-green);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
-}
-
-.page-title {
-  color: var(--neutral-black);
-  font-size: 1.875rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.page-subtitle {
-  color: var(--neutral-gray);
-  font-size: 1rem;
-}
-
-/* ===== CARDS SYSTEM CON EFECTO METALLIC ===== */
-.card { /* This class will be applied to ShadCN Card component */
-  background: var(--neutral-white);
-  border-radius: 12px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(45, 90, 39, 0.1);
-  /* overflow: hidden; is already in ShadCN Card, but good to have here if needed */
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-.card-header { /* This class will be applied to ShadCN CardHeader component */
-  background: linear-gradient(135deg, 
-    var(--primary-green-dark) 0%, 
-    var(--primary-green) 20%, 
-    var(--primary-green-light) 35%,
-    var(--accent-yellow) 45%, 
-    var(--neutral-white) 50%, 
-    var(--accent-yellow) 55%, 
-    var(--primary-green-light) 65%,
-    var(--primary-green) 80%, 
-    var(--primary-green-dark) 100%
-  );
-  background-size: 300% 100%;
-  animation: metallic-shimmer 8s ease-in-out infinite;
-  color: var(--neutral-white);
-  /* padding: 1rem; is handled by ShadCN CardHeader, ensure no conflict */
-  border-bottom: 2px solid var(--accent-yellow);
-  position: relative;
-  overflow: hidden; /* Important for pseudo-element */
-}
-
-.card-header::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(244, 161, 0, 0.4) 50%, 
-    rgba(255, 255, 255, 0.1) 80%,
-    transparent 100%
-  );
-  animation: sweep-light 5s ease-in-out infinite;
-  pointer-events: none;
-}
-
-/* ShadCN CardTitle is used for h3 inside CardHeader. Ensure its color is compatible. */
-/* This new CSS defines .card-header h3, but ShadCN uses its own CardTitle component. */
-/* We'll rely on --card-foreground being white when on .card-header bg. */
-.card-header .card-title { /* Targeting ShadCN CardTitle specifically if it's a child */
-  color: var(--neutral-white) !important; /* Ensure title text is white on metallic bg */
-}
-
-
-.card-body { /* This class is conceptual for content within Card, ShadCN uses CardContent */
-  padding: 1.5rem; /* ShadCN CardContent has its own padding, ensure consistency */
-}
-
-.card-highlight {
-  border-left: 4px solid var(--accent-yellow);
-  background: linear-gradient(90deg, rgba(244, 161, 0, 0.05) 0%, transparent 100%);
-}
-
-/* ===== STATISTICS CARDS ===== */
-.stat-card {
-  background: var(--neutral-white);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: var(--shadow-md);
-  border-top: 4px solid var(--primary-green);
-  transition: all 0.3s ease;
-}
-
-.stat-card:hover {
-  box-shadow: var(--shadow-lg);
-  border-top: 4px solid var(--accent-yellow);
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--primary-green);
-  line-height: 1;
-}
-
-.stat-label {
-  color: var(--neutral-gray);
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-top: 0.5rem;
-}
-
-.stat-highlight {
-  color: var(--accent-yellow);
-}
-
-/* ===== BUTTONS SYSTEM ===== */
-/* These classes can be used directly on <button> elements or <Button asChild> with <a> */
-.btn { /* Base button style if needed, can be combined with specifics */
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-sm);
-  border: none;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.btn-primary {
-  @apply btn; /* Hypothetical if using Tailwind's @apply, else copy base styles */
-  background: var(--gradient-primary);
-  color: var(--neutral-white);
-}
-
-.btn-primary:hover {
-  background: var(--primary-green-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-.btn-secondary {
-  @apply btn;
-  background: var(--accent-yellow);
-  color: var(--neutral-black);
-}
-
-.btn-secondary:hover {
-  background: var(--accent-yellow-dark);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
-}
-
-.btn-outline {
-  @apply btn;
-  background: transparent;
-  color: var(--primary-green);
-  border: 2px solid var(--primary-green);
-}
-
-.btn-outline:hover {
-  background: var(--primary-green);
-  color: var(--neutral-white);
-}
-
-
-/* ===== TABLES CON EFECTO METALLIC ===== */
-.table-container { /* This class will be applied to the div wrapping ShadCN Table */
-  background: var(--neutral-white);
-  border-radius: 12px;
-  overflow: hidden; /* Important for rounded corners with internal table */
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(45, 90, 39, 0.1);
-}
-
-.table-header { /* This class will be applied to ShadCN TableHeader (thead) */
-  background: linear-gradient(135deg, 
-    var(--primary-green-dark) 0%, 
-    var(--primary-green) 25%, 
-    var(--accent-yellow) 45%, 
-    var(--neutral-white) 50%, 
-    var(--accent-yellow) 55%, 
-    var(--primary-green) 75%, 
-    var(--primary-green-dark) 100%
-  );
-  background-size: 300% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite;
-  color: var(--neutral-white);
-  /* padding: 1rem; ShadCN TableHead cells have padding */
-  /* border-bottom: 2px solid var(--accent-yellow); Should apply to whole thead or individual th */
-  position: relative;
-  overflow: hidden; /* Important for pseudo-element */
-}
-
-.table-header::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    rgba(255, 255, 255, 0.1) 30%,
-    rgba(244, 161, 0, 0.5) 50%, 
-    rgba(255, 255, 255, 0.1) 70%,
-    transparent 100%
-  );
-  animation: sweep-light 6s ease-in-out infinite;
-  pointer-events: none;
-}
-
-/* Styling for <th> cells inside .table-header (ShadCN's TableHead) */
-.table-header th {
-  /* background: var(--primary-green-light); This is overridden by .table-header gradient */
-  color: var(--neutral-white) !important; /* Ensure text is white */
-  /* padding: 1rem; Handled by ShadCN TableHead */
-  text-align: left;
-  font-weight: 600;
-  border-bottom: 2px solid var(--accent-yellow); /* Applied to each th */
-}
-
-.table { /* Base table element, ShadCN uses this structure */
-  width: 100%;
-  border-collapse: collapse;
-}
-
-/* Styling for <td> cells (ShadCN's TableCell) */
-.table td {
-  padding: 1rem; /* Ensure this aligns with ShadCN TableCell padding */
-  border-bottom: 1px solid rgba(45, 90, 39, 0.1);
-  color: var(--neutral-gray);
-}
-
-.table tbody tr:hover {
-  background: rgba(244, 161, 0, 0.05);
-}
-
-.table tbody tr:nth-child(even) {
-  background: rgba(245, 245, 245, 0.5);
-}
-
-/* ===== STATUS BADGES ===== */
-.badge { /* Base badge style */
-  padding: 0.375rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  display: inline-block;
-}
-
-.badge-success {
-  @apply badge;
-  background: var(--primary-green);
-  color: var(--neutral-white);
-}
-
-.badge-warning {
-  @apply badge;
-  background: var(--accent-yellow);
-  color: var(--neutral-black);
-}
-
-.badge-pending {
-  @apply badge;
-  background: rgba(244, 161, 0, 0.1);
-  color: var(--accent-yellow-dark);
-  border: 1px solid var(--accent-yellow);
-}
-
-.badge-active {
-  @apply badge;
-  background: rgba(45, 90, 39, 0.1);
-  color: var(--primary-green-dark);
-  border: 1px solid var(--primary-green);
-}
-
-/* ===== FORMS ===== */
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  color: var(--neutral-gray);
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px solid rgba(45, 90, 39, 0.2);
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--primary-green);
-  box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
-}
-
-/* ===== ALERTS ===== */
-.alert {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  border-left: 4px solid;
-}
-
-.alert-success {
-  background: rgba(45, 90, 39, 0.1);
-  color: var(--primary-green-dark);
-  border-left-color: var(--primary-green);
-}
-
-.alert-warning {
-  background: rgba(244, 161, 0, 0.1);
-  color: var(--accent-yellow-dark);
-  border-left-color: var(--accent-yellow);
-}
-
-/* ===== KEYFRAME ANIMATIONS PARA EFECTOS METALLIC ===== */
+/* Keyframe animations (ya deben existir, verificar que no haya duplicados) */
 @keyframes metallic-shimmer {
   0%, 100% { 
     background-position: 0% 50%; 
@@ -593,7 +151,7 @@
     opacity: 0;
   }
   10% {
-    opacity: 1;
+    opacity: 1; /* Todavía visible para el efecto de barrido */
   }
   90% {
     opacity: 1;
@@ -604,55 +162,19 @@
   }
 }
 
-/* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
-  .sidebar.open { /* This requires .sidebar to have a class 'open' when mobile menu is shown */
-    transform: translateX(0);
+  .navbar {
+    animation-duration: 9s; /* Aún más lento en móvil */
   }
-  
-  /* Default state for mobile sidebar if it's part of the ui/sidebar.tsx which uses Sheet */
-  /* The Sheet component handles its own transform. These might not be needed if ui/sidebar.tsx handles it. */
-  /*
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+  .navbar::after {
+    animation-duration: 7s; /* Aún más lento en móvil */
   }
-  */
+}
 
-  /* Animation slowdowns for mobile */
-  .sidebar, .sidebar.open {
-    animation-duration: 8s !important; /* ensure these apply */
-  }
-  
-  .sidebar::after, .sidebar.open::after {
-    animation-duration: 6s !important;
-  }
-  
-  .card-header {
-    animation-duration: 10s !important;
-  }
-  
-  .card-header::after {
-    animation-duration: 7s !important;
-  }
-  
-  .table-header {
-    animation-duration: 9s !important;
-  }
-  
-  .table-header::after {
-    animation-duration: 8s !important;
-  }
-  
-  .stat-card {
-    padding: 1rem;
-  }
-  
-  .stat-number {
-    font-size: 2rem;
-  }
-  
-  .card-body { /* If ShadCN CardContent is used, its padding might need responsive adjustment too */
-    /* padding: 1rem; */ /* Example */
-  }
+.navbar:hover {
+  box-shadow: 
+    0 5px 25px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(45, 90, 39, 0.3),
+    0 0 30px rgba(27, 67, 50, 0.25);
+  transition: box-shadow 0.3s ease;
 }

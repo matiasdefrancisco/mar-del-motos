@@ -12,10 +12,9 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          <div className="flex flex-1 flex-col w-full min-w-0 overflow-x-hidden">
-            {/* Mobile Header - Removed 'navbar' class */}
-            <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden bg-background">
-              {/* bg-background provides a fallback if no other style is applied, can be adjusted later */}
+          <div className="flex flex-1 flex-col w-full min-w-0 overflow-x-hidden"> {/* Ensure this has overflow-x-hidden and min-w-0 */}
+            {/* Mobile Header - Apply .navbar class here */}
+            <header className="navbar sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden"> {/* bg-background could be overridden by .navbar */}
               <div className="flex items-center gap-3">
                 <SidebarTrigger />
                 <AppLogo iconSize={32} textSize="text-lg" />
