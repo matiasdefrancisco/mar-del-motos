@@ -50,22 +50,22 @@ const MOCK_LOCALS: Local[] = [
 const getStatusBadgeInfo = (status: OrderStatus): { variant: BadgeProps["variant"]; className?: string; label: string } => {
   switch (status) {
     case 'entregado_cliente':
-      return { variant: 'default', className: 'bg-primary text-primary-foreground', label: 'Entregado' }; // Usa el color primario del tema
+      return { variant: 'default', className: 'bg-primary text-primary-foreground', label: 'Entregado' };
     case 'en_camino_retiro':
     case 'retirado_local':
     case 'en_camino_entrega':
-      return { variant: 'outline', className: 'border-yellow-500 text-yellow-500', label: 'En Proceso' }; // Amarillo para estados en progreso
+      return { variant: 'default', className: 'bg-yellow-500 hover:bg-yellow-500/80 text-yellow-950', label: 'En Proceso' };
     case 'pendiente_asignacion':
       return { variant: 'outline', className: 'text-muted-foreground', label: 'Sin Asignar' };
     case 'asignado_rider':
-      return { variant: 'outline', className: 'border-blue-500 text-blue-500', label: 'Asignado' }; // Azul para asignado
+      return { variant: 'default', className: 'bg-blue-500 hover:bg-blue-500/80 text-blue-50', label: 'Asignado' };
     case 'pendiente_aceptacion_op':
-      return { variant: 'outline', className: 'border-accent text-accent', label: 'Nuevo Pedido' }; // Usa el color de acento (dorado)
+      return { variant: 'default', className: 'bg-accent hover:bg-accent/90 text-accent-foreground', label: 'Nuevo Pedido' };
     case 'cancelado':
-      return { variant: 'destructive', label: 'Cancelado' }; // Usa el color destructivo del tema (rojo)
+      return { variant: 'destructive', label: 'Cancelado' };
     default:
       const defaultLabel = status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      return { variant: 'secondary', label: defaultLabel }; // Usa el color secundario del tema
+      return { variant: 'secondary', label: defaultLabel };
   }
 };
 
@@ -224,54 +224,52 @@ export default function OperatorDashboardPage() {
         <CardHeader>
           <CardTitle>Gestión de Pedidos Pendientes</CardTitle>
           <CardDescription>Visualiza y gestiona los pedidos en tiempo real. Filtra y busca para encontrar pedidos específicos.</CardDescription>
-          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:flex-wrap">
-            <div className="relative flex-grow md:flex-grow-0 md:w-auto">
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:flex-wrap md:items-center">
+            <div className="relative w-full md:w-auto md:max-w-[300px] lg:max-w-[400px]">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input 
                 type="search" 
                 placeholder="Buscar ID, local, dirección, repartidor..." 
-                className="pl-8 w-full md:w-[300px] lg:w-[400px] bg-input"
+                className="pl-8 w-full bg-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-2 flex-wrap flex-grow justify-start md:justify-end">
-              <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as OrderStatus | 'todos')}>
-                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
-                  <SelectValue placeholder="Estado" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos los Estados</SelectItem>
-                  {uniqueOrderStatuses.map(status => {
-                    const statusInfo = getStatusBadgeInfo(status);
-                    return <SelectItem key={status} value={status}>{statusInfo.label}</SelectItem>;
-                  })}
-                </SelectContent>
-              </Select>
-              <Select value={localFilter} onValueChange={(value) => setLocalFilter(value as string)}>
-                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
-                  <SelectValue placeholder="Local" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos los Locales</SelectItem>
-                  {locals.map(local => (
-                    <SelectItem key={local.id} value={local.id}>{local.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-               <Select value={riderFilter} onValueChange={(value) => setRiderFilter(value as string)}>
-                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
-                  <SelectValue placeholder="Repartidor" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="todos">Todos los Repartidores</SelectItem>
-                  {riders.map(rider => (
-                    <SelectItem key={rider.id} value={rider.id}>{rider.name}</SelectItem>
-                  ))}
-                  <SelectItem value="no_asignado">No Asignado</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as OrderStatus | 'todos')}>
+              <SelectTrigger className="w-full md:w-[180px] bg-input">
+                <SelectValue placeholder="Estado" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos los Estados</SelectItem>
+                {uniqueOrderStatuses.map(status => {
+                  const statusInfo = getStatusBadgeInfo(status);
+                  return <SelectItem key={status} value={status}>{statusInfo.label}</SelectItem>;
+                })}
+              </SelectContent>
+            </Select>
+            <Select value={localFilter} onValueChange={(value) => setLocalFilter(value as string)}>
+              <SelectTrigger className="w-full md:w-[180px] bg-input">
+                <SelectValue placeholder="Local" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos los Locales</SelectItem>
+                {locals.map(local => (
+                  <SelectItem key={local.id} value={local.id}>{local.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={riderFilter} onValueChange={(value) => setRiderFilter(value as string)}>
+              <SelectTrigger className="w-full md:w-[180px] bg-input">
+                <SelectValue placeholder="Repartidor" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">Todos los Repartidores</SelectItem>
+                {riders.map(rider => (
+                  <SelectItem key={rider.id} value={rider.id}>{rider.name}</SelectItem>
+                ))}
+                <SelectItem value="no_asignado">No Asignado</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardHeader>
         <CardContent>
@@ -515,5 +513,3 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
-
-    
