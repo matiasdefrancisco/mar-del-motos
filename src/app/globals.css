@@ -4,78 +4,89 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 142.1 76.2% 36.3%; /* Original --primary-green: #1B4332 */
-  --primary-foreground: 355.7 100% 97.3%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95.9%;
-  --muted-foreground: 240 3.8% 46.1%;
-  --accent: 39 92% 56%; /* Original --accent-yellow: #F4A100; HSL: 39, 92%, 48% (changed to 56% L) */
-  --accent-foreground: 240 5.9% 10%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 90%;
-  --input: 240 5.9% 90%;
-  --ring: 142.1 76.2% 36.3%; /* Ring color to match new primary */
+  --background: 0 0% 100%; /* White */
+  --foreground: 150 6% 13%; /* Dark Gray/Near Black: HSL(150, 6%, 13%) from #1F2322 */
+  
+  --card: 0 0% 100%; /* White */
+  --card-foreground: 150 6% 13%; /* Dark Gray/Near Black */
+  
+  --popover: 0 0% 100%; /* White */
+  --popover-foreground: 150 6% 13%; /* Dark Gray/Near Black */
+  
+  --primary: 148 51% 31%; /* Dark Green: HSL for #1B4332 */
+  --primary-foreground: 0 0% 100%; /* White (para texto sobre verde oscuro) */
+  
+  --secondary: 120 5% 96%; /* Very Light Gray: HSL for #F3F5F3 (ajustado de #F5F5F5) */
+  --secondary-foreground: 150 6% 13%; /* Dark Gray/Near Black */
+  
+  --muted: 120 5% 96%; /* Very Light Gray */
+  --muted-foreground: 150 4% 40%; /* Medium Gray: HSL for #5F6766 (ajustado de #666666) */
+  
+  --accent: 40 100% 50%; /* Gold/Yellow: HSL for #FFBF00 (ajustado de #B8860B para más brillo) */
+  --accent-foreground: 150 6% 13%; /* Dark Gray/Near Black (para texto sobre amarillo) */
+  
+  --destructive: 0 84.2% 60.2%; /* Default ShadCN Red */
+  --destructive-foreground: 0 0% 98%; /* Default ShadCN Light */
+  
+  --border: 150 5% 88%; /* Light Gray Border: HSL for #DCE0DF */
+  --input: 150 5% 88%; /* Light Gray Input Background */
+  --ring: 148 51% 31%; /* Dark Green (matching primary) */
+  
   --radius: 0.5rem;
 
-  /* Custom color for highlighted sections */
-  --highlighted-section: 45 100% 95%; /* Very light yellow */
+  /* Custom color for highlighted sections (usando un verde muy claro) */
+  --highlighted-section: 147 40% 95%; /* Very light green: HSL for #E8F5E8 */
 
-  /* Sidebar specific colors (ShadCN theming) */
-  --sidebar-background: 142.1 76.2% 20%; /* Darker primary green */
-  --sidebar-foreground: 0 0% 100%;   /* White */
-  --sidebar-primary: 39 92% 56%;     /* Accent yellow for active items */
-  --sidebar-primary-foreground: 240 5.9% 10%; /* Black for text on yellow */
-  --sidebar-accent: 142.1 76.2% 30%;      /* Lighter primary green for hover */
-  --sidebar-accent-foreground: 0 0% 100%; /* White */
-  --sidebar-border: 0 0% 10%;      /* MODIFIED: Very Dark Gray/Near Black for border */
-  --sidebar-ring: 39 92% 56%;        /* Accent yellow */
+  /* Sidebar specific colors */
+  --sidebar-background: 148 51% 15%; /* Even Darker primary green for base metallic effect */
+  --sidebar-foreground: 0 0% 98%;   /* White/Very Light Gray for text */
+  --sidebar-primary: 40 100% 55%;     /* Accent yellow (Gold) for active items - slightly lighter */
+  --sidebar-primary-foreground: 150 6% 10%; /* Near Black for text on yellow */
+  --sidebar-accent: 148 51% 25%;      /* Lighter primary green for hover */
+  --sidebar-accent-foreground: 0 0% 98%; /* White/Very Light Gray */
+  --sidebar-border: 0 0% 10%; /* MODIFIED: Very Dark Gray/Near Black for border */
+  --sidebar-ring: 40 100% 55%;        /* Accent yellow (Gold) */
 }
 
 .dark {
-  --background: 20 14.3% 4.1%;
-  --foreground: 0 0% 95%;
-  --card: 24 9.8% 10%;
+  --background: 150 6% 13%; /* Dark Gray/Near Black */
+  --foreground: 0 0% 95%; /* Light Gray/White */
+
+  --card: 150 6% 10%; /* Darker Card Background */
   --card-foreground: 0 0% 95%;
-  --popover: 0 0% 9%;
+  
+  --popover: 150 6% 8%; /* Darker Popover */
   --popover-foreground: 0 0% 95%;
-  --primary: 142.1 70.6% 45.3%; /* Adjusted for dark mode */
-  --primary-foreground: 355.7 100% 97.3%;
-  --secondary: 240 3.7% 15.9%;
+  
+  --primary: 148 51% 45%; /* Adjusted Dark Green for dark mode */
+  --primary-foreground: 0 0% 98%;
+  
+  --secondary: 150 5% 20%; /* Darker Secondary Background */
   --secondary-foreground: 0 0% 98%;
-  --muted: 0 0% 15%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 39 90% 60%; /* Adjusted for dark mode */
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 85.7% 97.3%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 142.1 70.6% 45.3%; /* Ring color to match new primary */
+  
+  --muted: 150 5% 20%;
+  --muted-foreground: 150 4% 65%; /* Lighter Muted Foreground */
+  
+  --accent: 40 100% 60%; /* Adjusted Gold/Yellow for dark mode */
+  --accent-foreground: 150 6% 10%;
+  
+  --destructive: 0 72.2% 50.6%; /* Adjusted Destructive for dark mode */
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 150 5% 25%; /* Darker Border */
+  --input: 150 5% 25%;  /* Darker Input Background */
+  --ring: 148 51% 45%;
 
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
+  --highlighted-section: 148 51% 20%; /* Darker subtle green highlight for dark mode */
 
-  --sidebar-background: 142.1 76.2% 15%; /* Even Darker primary green */
-  --sidebar-foreground: 0 0% 98%;
-  --sidebar-primary: 39 90% 60%;
-  --sidebar-primary-foreground: 0 0% 9.8%;
-  --sidebar-accent: 142.1 76.2% 25%;
-  --sidebar-accent-foreground: 0 0% 98%;
-  --sidebar-border: 0 0% 15%; /* MODIFIED: Very Dark Gray/Near Black for border in dark mode */
-  --sidebar-ring: 39 90% 60%;
-
-  --highlighted-section: 39 100% 15%; /* Darker subtle yellow highlight */
+  --sidebar-background: 148 51% 10%; 
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 40 100% 60%;
+  --sidebar-primary-foreground: 150 6% 8%;
+  --sidebar-accent: 148 51% 20%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 0 0% 15%; 
+  --sidebar-ring: 40 100% 60%;
 }
 
 @layer base {
@@ -84,9 +95,8 @@
   }
   body {
     @apply bg-background text-foreground font-body;
-    /* Added for viewport control */
-    overflow-x: hidden;
-    max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal scroll on body */
+    max-width: 100%; /* Ensure body does not exceed viewport width */
   }
 }
 
@@ -96,7 +106,7 @@
     #000000 0%,  /* Negro */
     #0a1a0f 20%, /* Verde muy oscuro casi negro */
     #102a1a 35%, /* Verde oscuro */
-    #1B4332 45%, /* Verde primario del tema (ajustado) */
+    #1B4332 45%, /* Verde primario del tema (HSL: 148, 51%, 31%) */
     #2c5e3a 50%, /* Verde un poco más claro como reflejo principal */
     #1B4332 55%, /* Verde primario */
     #102a1a 65%, /* Verde oscuro */
@@ -107,14 +117,14 @@
   animation: metallic-shimmer 7s ease-in-out infinite;
 
   box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.4),
+    0 3px 15px rgba(0, 0, 0, 0.4), /* Sombra principal más oscura */
     inset 0 1px 0 rgba(45, 90, 39, 0.2), /* Tinte verdoso oscuro para el inset */
     0 0 20px rgba(27, 67, 50, 0.15); /* Sombra sutil con tinte verdoso */
 
   border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde inferior más integrado */
 
-  position: relative;
-  overflow: hidden;
+  position: relative; /* Necesario para el posicionamiento del pseudo-elemento ::after */
+  overflow: hidden; /* Necesario para que el destello no se salga */
 }
 
 .navbar::after {
@@ -127,7 +137,7 @@
   background: linear-gradient(90deg,
     transparent 0%,
     rgba(128, 150, 128, 0.05) 20%, /* Destello verdoso muy sutil */
-    rgba(173, 216, 173, 0.15) 50%, /* Destello verdoso más claro y sutil */
+    rgba(173, 216, 173, 0.15) 50%, /* Destello verdoso más claro y sutil, antes rgba(192, 192, 192, 0.3) */
     rgba(128, 150, 128, 0.05) 80%,
     transparent 100%
   );
@@ -135,14 +145,14 @@
   pointer-events: none;
 }
 
-/* METALLIC EFFECT FOR SIDEBAR (DESKTOP) */
+/* METALLIC EFFECT FOR SIDEBAR (DESKTOP & MOBILE SHEET) */
 .sidebar-metallic-effect {
   background: linear-gradient(135deg,
     #000000 0%,
     #0a1a0f 20%,
     #102a1a 35%,
-    #1B4332 45%,
-    #2c5e3a 50%,
+    #1B4332 45%, /* primary-green */
+    #2c5e3a 50%, /* lighter green for reflection */
     #1B4332 55%,
     #102a1a 65%,
     #0a1a0f 80%,
@@ -152,14 +162,13 @@
   animation: metallic-shimmer 7s ease-in-out infinite;
 
   box-shadow:
-    3px 0 15px rgba(0, 0, 0, 0.4), /* Adjusted for right side shadow */
+    3px 0 15px rgba(0, 0, 0, 0.4), /* Adjusted for right side shadow if sidebar is on left */
     inset 1px 0 0 rgba(45, 90, 39, 0.2), /* Adjusted for inset from left, tinte verdoso */
     0 0 20px rgba(27, 67, 50, 0.15); /* Sombra sutil con tinte verdoso */
 
-  border-right: 1px solid rgba(27, 67, 50, 0.4); /* Border on the right, más integrado */
-
-  position: relative;
-  overflow: hidden;
+  /* border-right: 1px solid rgba(27, 67, 50, 0.4); /* Border on the right, más integrado - Handled by Sidebar component border */
+  /* position: relative; /* REMOVED: Might conflict with 'fixed' positioning of SheetContent */
+  overflow: hidden; /* Kept: Necessary for pseudo-element sweep effect clipping */
 }
 
 .sidebar-metallic-effect::after {
@@ -171,8 +180,8 @@
   height: 100%;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(128, 150, 128, 0.05) 20%, /* Destello verdoso muy sutil */
-    rgba(173, 216, 173, 0.15) 50%, /* Destello verdoso más claro y sutil */
+    rgba(128, 150, 128, 0.05) 20%, 
+    rgba(173, 216, 173, 0.15) 50%, 
     rgba(128, 150, 128, 0.05) 80%,
     transparent 100%
   );
@@ -208,27 +217,34 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px) { /* md breakpoint */
   .navbar {
-    animation-duration: 9s;
+    animation-duration: 9s; /* Slower on mobile */
   }
   .navbar::after {
-    animation-duration: 7s;
+    animation-duration: 7s; /* Slower on mobile */
   }
-  /* Metallic effect for sidebar is typically desktop-only, so no specific mobile adjustment here unless sidebar is also visible and metallic on mobile */
+  .sidebar-metallic-effect {
+    animation-duration: 9s; /* Slower on mobile */
+  }
+  .sidebar-metallic-effect::after {
+    animation-duration: 7s; /* Slower on mobile */
+  }
 }
 
-.navbar:hover, .sidebar-metallic-effect:hover { /* Combined hover for consistency if needed */
+/* Optional Hover effects */
+.navbar:hover {
   box-shadow:
-    0 5px 25px rgba(0, 0, 0, 0.5), /* Default for navbar */
-    inset 0 1px 0 rgba(45, 90, 39, 0.3), /* Default for navbar */
-    0 0 30px rgba(27, 67, 50, 0.25); /* Default for navbar */
+    0 5px 25px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(45, 90, 39, 0.3),
+    0 0 30px rgba(27, 67, 50, 0.25);
   transition: box-shadow 0.3s ease;
 }
-/* Specific hover for sidebar if different shadow direction is needed */
+
 .sidebar-metallic-effect:hover {
    box-shadow:
     5px 0 25px rgba(0, 0, 0, 0.5), /* Adjusted for right side shadow */
     inset 1px 0 0 rgba(45, 90, 39, 0.3), /* Adjusted for inset from left */
     0 0 30px rgba(27, 67, 50, 0.25);
+   transition: box-shadow 0.3s ease;
 }
