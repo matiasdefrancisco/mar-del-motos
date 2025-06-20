@@ -17,7 +17,7 @@ import {
   SidebarMenuSubButton,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
-import AppLogo from '@/components/layout/AppLogo';
+// AppLogo ya no se importa aquí
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import type { UserRole } from '@/lib/types';
@@ -87,9 +87,9 @@ export default function DashboardSidebar() {
   const filteredNavItems = navItems.filter(item => userRole && item.roles.includes(userRole));
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar" side="left"> {/* Clases 'hidden md:flex border-r' eliminadas */}
+    <Sidebar collapsible="icon" variant="sidebar" side="left">
       <SidebarHeader className="p-4 border-b border-sidebar-border">
-        <AppLogo />
+        {/* AppLogo eliminado de aquí */}
       </SidebarHeader>
       <SidebarContent className="flex-1 p-2">
         <SidebarMenu>
@@ -125,7 +125,6 @@ export default function DashboardSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4 border-t border-sidebar-border">
-        {/* UserNav se movió al header móvil. Logout permanece aquí para la vista de escritorio. */}
         <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={logout}>
           <LogOut size={16} /> Salir
         </Button>
