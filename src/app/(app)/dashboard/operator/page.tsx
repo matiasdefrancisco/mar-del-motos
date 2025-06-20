@@ -12,9 +12,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label'; // Importación añadida
-import { Textarea } from '@/components/ui/textarea'; // Importación añadida
-import { Users, ClipboardList, Bike, Bot, MoreHorizontal, Search, Filter, Eye, Edit, UserPlus, CreditCardIcon, ListOrdered, PlusCircle } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Users, ClipboardList, Bike, Bot, MoreHorizontal, Search, Filter, Eye, Edit, UserPlus, CreditCardIcon, ListOrdered, PlusCircle, History } from 'lucide-react';
 import type { Order, OrderStatus, Rider, Local } from '@/lib/types';
 // import { collection, query, where, onSnapshot, orderBy, Timestamp } from 'firebase/firestore';
 // import { firestore } from '@/lib/firebase/config';
@@ -29,6 +29,8 @@ const MOCK_ORDERS: Order[] = [
   { id: 'ORD003', localId: 'L001', localName: 'Pizzería Don Pepito', deliveryAddress: 'San Martín 2020, Mar del Plata', status: 'retirado_local', assignedRiderId: 'R002', assignedRiderName: 'Ana Gómez', totalAmount: 1200, createdAt: new Date(Date.now() - 15 * 60 * 1000), operatorAcceptedAt: new Date(Date.now() - 13 * 60 * 1000), pickedUpByRiderAt: new Date(Date.now() - 5 * 60 * 1000) },
   { id: 'ORD004', localId: 'L003', localName: 'Hamburguesería El Crack', deliveryAddress: 'Rivadavia 3000, Mar del Plata', status: 'entregado_cliente', assignedRiderId: 'R001', assignedRiderName: 'Juan Pérez', totalAmount: 1800, createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), operatorAcceptedAt: new Date(Date.now() - 118 * 60 * 1000), pickedUpByRiderAt: new Date(Date.now() - 90 * 60 * 1000), deliveredToCustomerAt: new Date(Date.now() - 65 * 60 * 1000), paymentStatus: 'deuda_rider' },
   { id: 'ORD005', localId: 'L002', localName: 'Sushi Place', deliveryAddress: 'Moreno 1100, Mar del Plata', status: 'pendiente_aceptacion_op', totalAmount: 3200, createdAt: new Date(Date.now() - 5 * 60 * 1000) },
+  { id: 'ORD006', localId: 'L001', localName: 'Pizzería Don Pepito', deliveryAddress: 'Belgrano 4500, Mar del Plata', status: 'asignado_rider', assignedRiderId: 'R003', assignedRiderName: 'Carlos López', totalAmount: 950, createdAt: new Date(Date.now() - 40 * 60 * 1000), operatorAcceptedAt: new Date(Date.now() - 38 * 60 * 1000), assignedToRiderAt: new Date(Date.now() - 35 * 60 * 1000) },
+  { id: 'ORD007', localId: 'L003', localName: 'Hamburguesería El Crack', deliveryAddress: 'Independencia 900, Mar del Plata', status: 'en_camino_entrega', assignedRiderId: 'R001', assignedRiderName: 'Juan Pérez', totalAmount: 2200, createdAt: new Date(Date.now() - 25 * 60 * 1000), operatorAcceptedAt: new Date(Date.now() - 23 * 60 * 1000), pickedUpByRiderAt: new Date(Date.now() - 15 * 60 * 1000) },
 ];
 
 const MOCK_RIDERS: Rider[] = [
@@ -44,7 +46,7 @@ const MOCK_LOCALS: Local[] = [
 ];
 
 
-const getStatusBadgeVariant = (status: OrderStatus): { variant: "default" | "secondary" | "destructive" | "outline", className?: string, label: string } => {
+const getStatusBadgeInfo = (status: OrderStatus): { variant: "default" | "secondary" | "destructive" | "outline"; className?: string; label: string } => {
   switch (status) {
     case 'entregado_cliente':
       return { variant: 'default', className: 'bg-green-500 hover:bg-green-600 text-white', label: 'Entregado' };
@@ -61,7 +63,8 @@ const getStatusBadgeVariant = (status: OrderStatus): { variant: "default" | "sec
     case 'cancelado':
       return { variant: 'destructive', label: 'Cancelado' };
     default:
-      return { variant: 'outline', label: status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) };
+      const defaultLabel = status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      return { variant: 'outline', label: defaultLabel };
   }
 };
 
@@ -70,12 +73,13 @@ const calculateDuration = (startTime: Date | string | undefined): string => {
   try {
     return formatDistanceToNowStrict(new Date(startTime), { addSuffix: false, locale: es });
   } catch (error) {
+    console.error("Error calculating duration:", error);
     return '-';
   }
 };
 
 export default function OperatorDashboardPage() {
-  const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS.map(o => ({...o, duration: calculateDuration(o.operatorAcceptedAt)})));
+  const [orders, setOrders] = useState<Order[]>(MOCK_ORDERS.map(o => ({...o, duration: calculateDuration(o.operatorAcceptedAt || o.createdAt)})));
   const [riders, setRiders] = useState<Rider[]>(MOCK_RIDERS);
   const [locals, setLocals] = useState<Local[]>(MOCK_LOCALS);
 
@@ -93,11 +97,11 @@ export default function OperatorDashboardPage() {
   // Placeholder for Firestore listener effect
   // useEffect(() => { /* Firestore onSnapshot logic for orders, riders, locals */ }, []);
 
-  useEffect(() => {
+ useEffect(() => {
     const interval = setInterval(() => {
       setOrders(prevOrders => prevOrders.map(o => ({
         ...o,
-        duration: calculateDuration(o.operatorAcceptedAt)
+        duration: calculateDuration(o.operatorAcceptedAt || o.createdAt)
       })));
     }, 60000); // Update every minute
     return () => clearInterval(interval);
@@ -106,13 +110,15 @@ export default function OperatorDashboardPage() {
 
   const filteredOrders = useMemo(() => {
     return orders.filter(order => {
+      const searchLower = searchTerm.toLowerCase();
       const matchesSearch = searchTerm === '' || 
-                            order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            order.localName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            order.deliveryAddress.toLowerCase().includes(searchTerm.toLowerCase());
+                            order.id.toLowerCase().includes(searchLower) ||
+                            order.localName.toLowerCase().includes(searchLower) ||
+                            order.deliveryAddress.toLowerCase().includes(searchLower) ||
+                            (order.assignedRiderName && order.assignedRiderName.toLowerCase().includes(searchLower));
       const matchesStatus = statusFilter === 'todos' || order.status === statusFilter;
       const matchesLocal = localFilter === 'todos' || order.localId === localFilter;
-      const matchesRider = riderFilter === 'todos' || order.assignedRiderId === riderFilter;
+      const matchesRider = riderFilter === 'todos' || order.assignedRiderId === riderFilter || (riderFilter === 'no_asignado' && !order.assignedRiderId);
       return matchesSearch && matchesStatus && matchesLocal && matchesRider;
     });
   }, [orders, searchTerm, statusFilter, localFilter, riderFilter]);
@@ -132,28 +138,32 @@ export default function OperatorDashboardPage() {
     if (!orderToAssign || !selectedRiderForAssignment) return;
     // Firestore update logic here
     console.log(`Asignar pedido ${orderToAssign.id} al rider ${selectedRiderForAssignment}`);
-    setOrders(prev => prev.map(o => o.id === orderToAssign.id ? {...o, assignedRiderId: selectedRiderForAssignment, assignedRiderName: riders.find(r=>r.id === selectedRiderForAssignment)?.name, status: 'asignado_rider' as OrderStatus} : o));
+    const riderName = riders.find(r => r.id === selectedRiderForAssignment)?.name || 'Desconocido';
+    setOrders(prev => prev.map(o => 
+      o.id === orderToAssign.id 
+      ? {...o, assignedRiderId: selectedRiderForAssignment, assignedRiderName: riderName, status: 'asignado_rider' as OrderStatus} 
+      : o
+    ));
     setIsAssignModalOpen(false);
     setOrderToAssign(null);
+    setSelectedRiderForAssignment(null);
   };
   
-  // Unique statuses for filter dropdown
   const uniqueOrderStatuses = useMemo(() => {
     const statuses = new Set<OrderStatus>();
     MOCK_ORDERS.forEach(order => statuses.add(order.status));
-    return Array.from(statuses);
+    return Array.from(statuses).sort();
   }, []);
-
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-6">
       <PageTitle 
         title="Panel de Operador" 
         icon={Users} 
-        subtitle="Supervisa y gestiona las operaciones diarias."
+        subtitle="Supervisa y gestiona las operaciones diarias de Mar del Motos."
         actions={
           <Button asChild variant="default" className="bg-accent hover:bg-accent/90 text-accent-foreground">
-            <Link href="/dashboard/operator/ai-payment-plan"><Bot className="mr-2 h-4 w-4" />Sugerir Plan de Pago</Link>
+            <Link href="/dashboard/operator/ai-payment-plan"><Bot className="mr-2 h-4 w-4" />Sugerir Plan de Pago IA</Link>
           </Button>
         }
       />
@@ -166,9 +176,9 @@ export default function OperatorDashboardPage() {
             <ClipboardList className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{MOCK_ORDERS.length}</div>
+            <div className="text-2xl font-bold">{orders.length}</div>
             <p className="text-xs text-muted-foreground">
-              {MOCK_ORDERS.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length} pendientes
+              {orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length} pendientes
             </p>
           </CardContent>
         </Card>
@@ -191,7 +201,7 @@ export default function OperatorDashboardPage() {
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">
-                    {MOCK_ORDERS.filter(o => o.status === 'asignado_rider' || o.status === 'en_camino_retiro' || o.status === 'retirado_local').length}
+                    {orders.filter(o => o.status === 'asignado_rider' || o.status === 'en_camino_retiro' || o.status === 'retirado_local' || o.status === 'en_camino_entrega').length}
                 </div>
                 <p className="text-xs text-muted-foreground">Pedidos en curso</p>
             </CardContent>
@@ -202,7 +212,7 @@ export default function OperatorDashboardPage() {
                 <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold text-destructive">$1250.00</div>
+                <div className="text-2xl font-bold text-destructive">$1250.00</div> {/* Placeholder */}
                 <p className="text-xs text-muted-foreground">Total pendiente</p>
             </CardContent>
         </Card>
@@ -212,33 +222,34 @@ export default function OperatorDashboardPage() {
       <Card>
         <CardHeader>
           <CardTitle>Gestión de Pedidos Pendientes</CardTitle>
-          <CardDescription>Visualiza y gestiona los pedidos en tiempo real.</CardDescription>
-          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center">
-            <div className="relative flex-1">
+          <CardDescription>Visualiza y gestiona los pedidos en tiempo real. Filtra y busca para encontrar pedidos específicos.</CardDescription>
+          <div className="mt-4 flex flex-col gap-4 md:flex-row md:items-center md:flex-wrap">
+            <div className="relative flex-grow md:flex-grow-0 md:w-auto">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input 
                 type="search" 
-                placeholder="Buscar por ID, local, dirección..." 
-                className="pl-8 sm:w-full md:w-[300px] lg:w-[400px] bg-input"
+                placeholder="Buscar ID, local, dirección, repartidor..." 
+                className="pl-8 w-full md:w-[300px] lg:w-[400px] bg-input"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <div className="flex gap-2 flex-wrap">
+            <div className="flex gap-2 flex-wrap flex-grow justify-start md:justify-end">
               <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value as OrderStatus | 'todos')}>
-                <SelectTrigger className="w-full md:w-[180px] bg-input">
-                  <SelectValue placeholder="Filtrar por estado" />
+                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
+                  <SelectValue placeholder="Estado" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="todos">Todos los Estados</SelectItem>
-                  {uniqueOrderStatuses.map(status => (
-                    <SelectItem key={status} value={status}>{getStatusBadgeVariant(status).label}</SelectItem>
-                  ))}
+                  {uniqueOrderStatuses.map(status => {
+                    const statusInfo = getStatusBadgeInfo(status);
+                    return <SelectItem key={status} value={status}>{statusInfo.label}</SelectItem>;
+                  })}
                 </SelectContent>
               </Select>
               <Select value={localFilter} onValueChange={(value) => setLocalFilter(value as string)}>
-                <SelectTrigger className="w-full md:w-[180px] bg-input">
-                  <SelectValue placeholder="Filtrar por local" />
+                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
+                  <SelectValue placeholder="Local" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="todos">Todos los Locales</SelectItem>
@@ -248,8 +259,8 @@ export default function OperatorDashboardPage() {
                 </SelectContent>
               </Select>
                <Select value={riderFilter} onValueChange={(value) => setRiderFilter(value as string)}>
-                <SelectTrigger className="w-full md:w-[180px] bg-input">
-                  <SelectValue placeholder="Filtrar por repartidor" />
+                <SelectTrigger className="w-full sm:w-auto md:w-[180px] bg-input">
+                  <SelectValue placeholder="Repartidor" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="todos">Todos los Repartidores</SelectItem>
@@ -263,123 +274,146 @@ export default function OperatorDashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[80px]">ID</TableHead>
-                <TableHead>Local</TableHead>
-                <TableHead>Dirección</TableHead>
-                <TableHead>Repartidor</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Duración</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOrders.map((order) => {
-                const statusInfo = getStatusBadgeVariant(order.status);
-                return (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
-                    <TableCell>{order.localName}</TableCell>
-                    <TableCell>{order.deliveryAddress}</TableCell>
-                    <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
-                    <TableCell>
-                      <Badge variant={statusInfo.variant} className={statusInfo.className}>{statusInfo.label}</Badge>
-                      {order.paymentStatus === 'deuda_rider' && (
-                        <Badge variant="destructive" className="ml-2">Deuda</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>{order.duration}</TableCell>
-                    <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleViewDetails(order)}>
-                            <Eye className="mr-2 h-4 w-4" /> Ver / Editar
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
-                            <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
-                          </DropdownMenuItem>
-                           <DropdownMenuItem>
-                            <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[80px]">ID</TableHead>
+                  <TableHead>Local</TableHead>
+                  <TableHead>Dirección</TableHead>
+                  <TableHead>Repartidor</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Duración</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredOrders.map((order) => {
+                  const statusInfo = getStatusBadgeInfo(order.status);
+                  return (
+                    <TableRow key={order.id} className={order.status === 'pendiente_aceptacion_op' ? 'bg-orange-500/10' : ''}>
+                      <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
+                      <TableCell>{order.localName}</TableCell>
+                      <TableCell>{order.deliveryAddress}</TableCell>
+                      <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
+                      <TableCell>
+                        <Badge variant={statusInfo.variant} className={cn(statusInfo.className, 'cursor-default')}>
+                          {statusInfo.label}
+                        </Badge>
+                        {order.paymentStatus === 'deuda_rider' && (
+                          <Badge variant="destructive" className="ml-2 cursor-default">Deuda</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>{order.duration}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                              <MoreHorizontal className="h-4 w-4" />
+                              <span className="sr-only">Acciones del pedido</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleViewDetails(order)}>
+                              <Eye className="mr-2 h-4 w-4" /> Ver / Editar
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
+                              <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
+                            </DropdownMenuItem>
+                             <DropdownMenuItem> {/* Placeholder for debt view */}
+                              <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
           {filteredOrders.length === 0 && (
             <p className="text-center text-muted-foreground py-8">No se encontraron pedidos con los filtros actuales.</p>
           )}
         </CardContent>
       </Card>
 
-      {/* Placeholder: Sección de Asignación de Pedidos */}
+      {/* Sección de Asignación de Pedidos */}
       <Card>
         <CardHeader>
           <CardTitle>Asignación Rápida de Pedidos</CardTitle>
-          <CardDescription>Selecciona un repartidor para ver y asignar pedidos.</CardDescription>
+          <CardDescription>Selecciona un repartidor disponible y asígnale pedidos pendientes.</CardDescription>
         </CardHeader>
         <CardContent className="grid md:grid-cols-3 gap-6">
           <div className="md:col-span-1">
             <Label htmlFor="rider-select-assignment">Seleccionar Repartidor</Label>
             <Select>
               <SelectTrigger id="rider-select-assignment" className="mt-1 bg-input">
-                <SelectValue placeholder="Elige un repartidor" />
+                <SelectValue placeholder="Elige un repartidor online" />
               </SelectTrigger>
               <SelectContent>
                 {riders.filter(r => r.status === 'online').map(rider => (
                   <SelectItem key={rider.id} value={rider.id}>{rider.name} (Online)</SelectItem>
                 ))}
+                 {riders.filter(r => r.status === 'online').length === 0 && (
+                    <SelectItem value="no_online" disabled>No hay riders online</SelectItem>
+                )}
               </SelectContent>
             </Select>
           </div>
-          <div className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Card className="bg-secondary/50">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Pedidos Pendientes (Local X)</CardTitle>
+                <CardTitle className="text-base">Pedidos Pendientes de Asignar</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm">
                 <div className="space-y-2 max-h-60 overflow-y-auto p-1">
-                  {[1,2,3].map(i => (
-                    <div key={i} className="flex items-center gap-2 p-2 border rounded-md bg-background">
-                       <Checkbox id={`pending-assign-${i}`} /> <Label htmlFor={`pending-assign-${i}`}>Pedido #ORD00${i+5} - Sushi Place</Label>
+                  {orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').slice(0,5).map(order => ( // Limitar a 5 para demo
+                    <div key={order.id} className="flex items-center gap-2 p-2 border rounded-md bg-background shadow-sm">
+                       <Checkbox id={`pending-assign-${order.id}`} /> 
+                       <Label htmlFor={`pending-assign-${order.id}`} className="text-xs">#{order.id.slice(-4)} - {order.localName}</Label>
                     </div>
                   ))}
+                  {orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length === 0 && (
+                    <p className="text-muted-foreground text-xs">No hay pedidos pendientes de asignar.</p>
+                  )}
                 </div>
-                <Button size="sm" className="mt-4 w-full">Asignar Seleccionados</Button>
+                <Button size="sm" className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground" disabled={orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length === 0}>
+                  Asignar Seleccionados
+                </Button>
               </CardContent>
             </Card>
             <Card className="bg-secondary/50">
               <CardHeader className="pb-2">
-                <CardTitle className="text-base">Asignados a [Rider]</CardTitle>
+                <CardTitle className="text-base">Asignados a [Repartidor Sel.]</CardTitle>
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
-                <p>Lista de pedidos ya asignados al repartidor seleccionado.</p>
+                <p className="text-xs">Lista de pedidos ya asignados al repartidor seleccionado aparecerá aquí.</p>
+                 {/* Ejemplo: */}
+                 {/* <div className="space-y-1 mt-2">
+                    <p className="text-xs p-1 border rounded-md bg-background">#ORD123 - Pizzería</p>
+                    <p className="text-xs p-1 border rounded-md bg-background">#ORD456 - Sushi</p>
+                 </div> */}
               </CardContent>
             </Card>
           </div>
         </CardContent>
       </Card>
 
-      {/* Placeholder: Vista Resumen de Deudas */}
+      {/* Vista Resumen de Deudas */}
       <Card>
-        <CardHeader>
-          <CardTitle>Resumen de Deudas Pendientes</CardTitle>
-          <Button variant="outline" size="sm" asChild className="float-right">
-            <Link href="/dashboard/debts">Ver Todas las Deudas</Link>
+        <CardHeader className="flex flex-row items-center justify-between">
+          <div>
+            <CardTitle>Resumen de Deudas Pendientes</CardTitle>
+            <CardDescription>Deudas principales entre locales y repartidores.</CardDescription>
+          </div>
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/dashboard/debts"><ListOrdered className="mr-2 h-3 w-3" /> Ver Todas las Deudas</Link>
           </Button>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground">Tabla resumida de deudas entre locales y repartidores.</p>
+          <p className="text-muted-foreground">Una tabla resumida de deudas pendientes irá aquí.</p>
+          {/* Ejemplo: <Table>...</Table> */}
         </CardContent>
       </Card>
 
@@ -389,19 +423,60 @@ export default function OperatorDashboardPage() {
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
               <DialogTitle>Detalles del Pedido #{selectedOrder.id.slice(-4)}</DialogTitle>
-              <DialogDescription>Local: {selectedOrder.localName}</DialogDescription>
+              <DialogDescription>Local: {selectedOrder.localName} - Total: ${selectedOrder.totalAmount.toFixed(2)}</DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <p><strong>Dirección:</strong> {selectedOrder.deliveryAddress}</p>
-              <p><strong>Repartidor:</strong> {selectedOrder.assignedRiderName || 'No asignado'}</p>
-              <p><strong>Estado:</strong> <Badge variant={getStatusBadgeVariant(selectedOrder.status).variant} className={getStatusBadgeVariant(selectedOrder.status).className}>{getStatusBadgeVariant(selectedOrder.status).label}</Badge></p>
-              <p><strong>Monto:</strong> ${selectedOrder.totalAmount.toFixed(2)}</p>
-              <p><strong>Creado:</strong> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
-              {/* Historial de estados y observaciones irían aquí */}
-              <Textarea placeholder="Observaciones internas..." defaultValue={selectedOrder.internalNotes} className="bg-input" />
+            <div className="grid gap-4 py-4 max-h-[60vh] overflow-y-auto pr-2">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                <div><strong>Dirección:</strong> {selectedOrder.deliveryAddress}</div>
+                <div><strong>Cliente:</strong> {selectedOrder.customerName || 'N/A'}</div>
+                <div><strong>Teléfono Cliente:</strong> {selectedOrder.customerPhone || 'N/A'}</div>
+                <div><strong>Creado:</strong> {new Date(selectedOrder.createdAt).toLocaleString('es-AR')}</div>
+                <div><strong>Aceptado Op.:</strong> {selectedOrder.operatorAcceptedAt ? new Date(selectedOrder.operatorAcceptedAt).toLocaleString('es-AR') : 'N/A'}</div>
+                 <div><strong>Repartidor:</strong> {selectedOrder.assignedRiderName || 'No asignado'}</div>
+                <div><strong>Asignado Rider:</strong> {selectedOrder.assignedToRiderAt ? new Date(selectedOrder.assignedToRiderAt).toLocaleString('es-AR') : 'N/A'}</div>
+                <div><strong>Retirado Local:</strong> {selectedOrder.pickedUpByRiderAt ? new Date(selectedOrder.pickedUpByRiderAt).toLocaleString('es-AR') : 'N/A'}</div>
+                <div><strong>Entregado Cliente:</strong> {selectedOrder.deliveredToCustomerAt ? new Date(selectedOrder.deliveredToCustomerAt).toLocaleString('es-AR') : 'N/A'}</div>
+              </div>
+              
+              <div>
+                <strong>Estado Actual:</strong> <Badge variant={getStatusBadgeInfo(selectedOrder.status).variant} className={cn(getStatusBadgeInfo(selectedOrder.status).className, 'ml-1')}>{getStatusBadgeInfo(selectedOrder.status).label}</Badge>
+                 {selectedOrder.paymentStatus === 'deuda_rider' && <Badge variant="destructive" className="ml-2">Deuda Rider</Badge>}
+              </div>
+
+              {selectedOrder.items && selectedOrder.items.length > 0 && (
+                <div>
+                  <h4 className="font-medium mb-1">Items del Pedido:</h4>
+                  <ul className="list-disc list-inside pl-1 text-xs space-y-0.5">
+                    {selectedOrder.items.map((item, index) => (
+                      <li key={index}>{item.quantity}x {item.name} (${item.price.toFixed(2)} c/u)</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              <div>
+                 <h4 className="font-medium mb-1 mt-2">Historial de Estados:</h4>
+                 {/* Placeholder para historial de estados */}
+                 <p className="text-xs text-muted-foreground">(El historial de cambios de estado se mostrará aquí)</p>
+              </div>
+
+              <div className="mt-2">
+                <Label htmlFor="internalNotes">Observaciones Internas (Operador)</Label>
+                <Textarea 
+                  id="internalNotes" 
+                  placeholder="Añade notas visibles solo para operadores..." 
+                  defaultValue={selectedOrder.internalNotes} 
+                  className="bg-input mt-1 text-sm" 
+                  rows={3}
+                />
+              </div>
             </div>
-            <DialogFooter className="sm:justify-between">
-              <Button variant="outline">Marcar Entregado al Repartidor</Button>
+            <DialogFooter className="sm:justify-between flex-wrap gap-2">
+              <Button variant="outline" onClick={() => alert("Funcionalidad 'Marcar Entregado al Repartidor' pendiente.")} 
+                disabled={selectedOrder.status !== 'en_camino_entrega' && selectedOrder.status !== 'retirado_local'} /* Lógica de ejemplo para habilitar */
+              >
+                Marcar Entregado al Repartidor
+              </Button>
               <DialogClose asChild>
                 <Button type="button" variant="secondary">Cerrar</Button>
               </DialogClose>
@@ -416,18 +491,21 @@ export default function OperatorDashboardPage() {
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Asignar Repartidor al Pedido #{orderToAssign.id.slice(-4)}</DialogTitle>
-              <DialogDescription>Local: {orderToAssign.localName}</DialogDescription>
+              <DialogDescription>Local: {orderToAssign.localName} - Dirección: {orderToAssign.deliveryAddress}</DialogDescription>
             </DialogHeader>
             <div className="py-4">
-              <Label htmlFor="rider-select">Seleccionar Repartidor</Label>
-              <Select value={selectedRiderForAssignment || undefined} onValueChange={setSelectedRiderForAssignment}>
-                <SelectTrigger id="rider-select" className="w-full mt-1 bg-input">
-                  <SelectValue placeholder="Elige un repartidor" />
+              <Label htmlFor="rider-select-modal">Seleccionar Repartidor</Label>
+              <Select value={selectedRiderForAssignment || ""} onValueChange={setSelectedRiderForAssignment}>
+                <SelectTrigger id="rider-select-modal" className="w-full mt-1 bg-input">
+                  <SelectValue placeholder="Elige un repartidor disponible" />
                 </SelectTrigger>
                 <SelectContent>
                   {riders.filter(r => r.status === 'online').map(rider => (
-                    <SelectItem key={rider.id} value={rider.id}>{rider.name}</SelectItem>
+                    <SelectItem key={rider.id} value={rider.id}>{rider.name} (Online)</SelectItem>
                   ))}
+                  {riders.filter(r => r.status === 'online').length === 0 && (
+                    <SelectItem value="no_online_modal" disabled>No hay riders online</SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -435,8 +513,8 @@ export default function OperatorDashboardPage() {
                <DialogClose asChild>
                 <Button type="button" variant="outline">Cancelar</Button>
               </DialogClose>
-              <Button type="button" onClick={handleAssignRider} disabled={!selectedRiderForAssignment}>
-                Confirmar Asignación
+              <Button type="button" onClick={handleAssignRider} disabled={!selectedRiderForAssignment} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                <Bike className="mr-2 h-4 w-4" /> Confirmar Asignación
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -445,3 +523,5 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
+
+    
