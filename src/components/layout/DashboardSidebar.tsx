@@ -37,7 +37,7 @@ import {
   AreaChart,
   CreditCard,
   TestTube,
-  History, // Importado History
+  History, 
 } from 'lucide-react';
 
 interface NavItem {
@@ -67,7 +67,7 @@ const navItems: NavItem[] = [
     badge: 'Nuevo'
   },
   { href: '/dashboard/operator/ai-payment-plan', label: 'Plan de Pago IA', icon: Bot, roles: ['operator'] },
-  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] }, // Nuevo item de historial
+  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] }, 
   { href: '/dashboard/reports', label: 'Reportes', icon: AreaChart, roles: ['admin'] },
   { href: '/dashboard/user-management', label: 'Usuarios', icon: Users, roles: ['admin'] },
   { href: '/dashboard/settings', label: 'Configuración', icon: Settings, roles: ['admin', 'operator', 'rider', 'local'] },
@@ -87,7 +87,7 @@ export default function DashboardSidebar() {
   const filteredNavItems = navItems.filter(item => userRole && item.roles.includes(userRole));
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar" side="left" className="border-r">
+    <Sidebar collapsible="icon" variant="sidebar" side="left" className="border-r hidden md:flex"> {/* Ocultar en móvil, md:flex para mostrar en desktop */}
       <SidebarHeader className="p-4 border-b border-sidebar-border">
         <AppLogo />
       </SidebarHeader>
@@ -125,6 +125,7 @@ export default function DashboardSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter className="p-4 border-t border-sidebar-border">
+        {/* UserNav se movió al header móvil. Logout permanece aquí para la vista de escritorio. */}
         <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={logout}>
           <LogOut size={16} /> Salir
         </Button>

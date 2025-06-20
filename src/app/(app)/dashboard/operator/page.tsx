@@ -21,7 +21,7 @@ import type { Order, OrderStatus, Rider, Local } from '@/lib/types';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Link from 'next/link';
-import { cn } from '@/lib/utils'; // Importación añadida
+import { cn } from '@/lib/utils'; 
 
 // Mock Data - Reemplazar con Firestore
 const MOCK_ORDERS: Order[] = [
@@ -170,7 +170,7 @@ export default function OperatorDashboardPage() {
       />
 
       {/* Resumen de Métricas */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Pedidos Totales Hoy</CardTitle>
@@ -345,7 +345,7 @@ export default function OperatorDashboardPage() {
           <CardTitle>Asignación Rápida de Pedidos</CardTitle>
           <CardDescription>Selecciona un repartidor disponible y asígnale pedidos pendientes.</CardDescription>
         </CardHeader>
-        <CardContent className="grid md:grid-cols-3 gap-6">
+        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="md:col-span-1">
             <Label htmlFor="rider-select-assignment">Seleccionar Repartidor</Label>
             <Select>
@@ -524,6 +524,3 @@ export default function OperatorDashboardPage() {
     </div>
   );
 }
-
-    
-    
