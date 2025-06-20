@@ -20,7 +20,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               </div>
               <UserNav />
             </header>
-            <main className="flex-1 p-4 sm:p-6 lg:p-8 bg-background">
+            <main className="flex-1 bg-background pt-20 px-4 pb-4 md:p-6 lg:p-8">
               {children}
             </main>
           </div>
