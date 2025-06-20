@@ -1,0 +1,15 @@
+/* src/styles/layout-reset.css */
+html, body {
+  /* Attempt to restore natural browser overflow handling at the root.
+     'visible' means content that overflows will extend and potentially cause browser scrollbars. */
+  overflow: visible !important;
+}
+
+/* Ensure a consistent box-sizing model. Tailwind's preflight also handles this,
+   but this reinforces it and ensures it applies if preflight is modified. */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}

@@ -96,9 +96,7 @@
   }
   body {
     @apply bg-background text-foreground font-body;
-    max-width: 100vw;
-    overflow-x: auto;
-    position: relative;
+    /* Removed max-width, overflow-x, and position to allow layout-reset.css to take precedence */
   }
 }
 
@@ -269,5 +267,3 @@
     0 0 30px rgba(27, 67, 50, 0.25);
    transition: box-shadow 0.3s ease;
 }
-
-    
