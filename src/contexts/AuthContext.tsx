@@ -5,10 +5,10 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User as FirebaseUser, AuthError } from 'firebase/auth';
 import { onAuthStateChanged, signOut as firebaseSignOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth, firestore } from '@/lib/firebase/config'; // Importar firestore
-import { doc, setDoc, getDoc } from 'firebase/firestore'; // Importar funciones de Firestore
+import { auth, firestore } from '@/lib/firebase/config';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 import type { UserProfile, UserRole, AppUser } from '@/lib/types';
-import { Skeleton } from '@/components/ui/skeleton';
+// Eliminamos la importación de Skeleton aquí ya que no la usaremos directamente en este componente para la carga de página completa
 
 interface AuthContextType {
   currentUser: AppUser | null;
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           }
         } catch (err) {
           console.error("Error obteniendo/procesando perfil de usuario:", err);
-          userProfileData = { // Fallback en caso de error mayor
+          userProfileData = {
             uid: firebaseUser.uid,
             email: firebaseUser.email,
             displayName: firebaseUser.displayName || 'Usuario Anónimo',
@@ -118,7 +118,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.log("Registro simulado para usuarios @example.com. Inicia sesión con credenciales de prueba.");
         await new Promise(resolve => setTimeout(resolve, 500)); 
         setLoading(false);
-        // router.push('/login?registration=success'); // Opcional: Redirigir o mostrar mensaje
         return; 
       }
       
@@ -140,9 +139,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         createdAt: new Date(), 
       });
       
-      // onAuthStateChanged se encargará de actualizar currentUser y userRole
-      // usando la información de Firestore.
-
     } catch (err) {
       setError(err as AuthError);
       setLoading(false);
@@ -165,22 +161,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
   
-  if (loading && typeof window !== 'undefined' && window.location.pathname !== '/login' && window.location.pathname !== '/register') {
-     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-        <div className="w-full max-w-md p-8 space-y-8">
-          <div className="text-center">
-             <svg className="mx-auto h-12 w-auto text-primary" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            <h1 className="mt-6 text-3xl font-extrabold text-foreground">Mar del Motos</h1>
-            <p className="mt-2 text-muted-foreground">Cargando...</p>
-          </div>
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-full" />
-          <Skeleton className="h-10 w-1/2 mx-auto" />
-        </div>
-      </div>
-    );
-  }
+  // Eliminamos el bloque que renderizaba un esqueleto de página completa.
+  // Los componentes consumidores (como ProtectedRoute o páginas individuales)
+  // se encargarán de mostrar sus propios estados de carga basados en el prop `loading` del contexto.
 
   return (
     <AuthContext.Provider value={{ currentUser, loading, error, login, register, logout, userRole }}>
