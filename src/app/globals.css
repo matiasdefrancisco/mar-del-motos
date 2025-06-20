@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -112,17 +113,17 @@ body {
 /* NAVBAR METALLIC CHROME EFFECT - IMPLEMENTACIÓN COMPLETA */
 
 .navbar {
-  /* Base metallic gradient background */
+  /* Base metallic gradient background - Adjusted for Black and Dark Green */
   background: linear-gradient(135deg, 
-    #000000 0%, 
-    #1a1a1a 20%, 
-    #2a2a2a 35%,
-    #c0c0c0 45%, 
-    #ffffff 50%, 
-    #c0c0c0 55%, 
-    #2a2a2a 65%,
-    #1a1a1a 80%, 
-    #000000 100%
+    #000000 0%,       /* Black */
+    #0A1A0A 20%,      /* Very Dark Green (almost black) */
+    #1B4332 35%,      /* Dark Green (Primary Theme Color) */
+    #607D8B 45%,      /* Bluish Grey / Darker Silver (Subtle Highlight) */
+    #B0BEC5 50%,      /* Lighter Bluish Grey / Silver (Main Highlight) */
+    #607D8B 55%,      /* Bluish Grey / Darker Silver */
+    #1B4332 65%,      /* Dark Green (Primary Theme Color) */
+    #0A1A0A 80%,      /* Very Dark Green (almost black) */
+    #000000 100%      /* Black */
   );
   
   /* Animated gradient for shimmer effect */
@@ -132,20 +133,17 @@ body {
   /* Shadow and border effects */
   box-shadow: 
     0 4px 20px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1),
-    0 0 30px rgba(192, 192, 192, 0.2);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), /* Reduced highlight intensity */
+    0 0 30px rgba(27, 67, 50, 0.2); /* Shadow tinted with dark green */
   
-  border-bottom: 1px solid rgba(192, 192, 192, 0.3);
+  border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Border tinted with dark green */
   
   /* Positioning for pseudo-element */
   position: relative;
   overflow: hidden;
-  
-  /* Optional: Add backdrop blur if needed */
-  /* backdrop-filter: blur(5px); */ /* Kept commented as per original, can be enabled */
 }
 
-/* Sweep light effect */
+/* Sweep light effect - Made more subtle */
 .navbar::after {
   content: '';
   position: absolute;
@@ -155,9 +153,9 @@ body {
   height: 100%;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(255, 255, 255, 0.1) 20%,
-    rgba(192, 192, 192, 0.6) 50%, 
-    rgba(255, 255, 255, 0.1) 80%,
+    rgba(224, 240, 224, 0.05) 20%, /* Very subtle light green sheen */
+    rgba(200, 220, 200, 0.2) 50%,  /* More subtle highlight (was 0.6 silver) */
+    rgba(224, 240, 224, 0.05) 80%,
     transparent 100%
   );
   animation: sweep-light 4s ease-in-out infinite;
@@ -207,8 +205,10 @@ body {
 .navbar:hover {
   box-shadow: 
     0 6px 30px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 0 40px rgba(192, 192, 192, 0.4);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08), /* Reduced highlight intensity on hover */
+    0 0 40px rgba(27, 67, 50, 0.3); /* Shadow tinted with dark green on hover */
   
   transition: box-shadow 0.3s ease;
 }
+
+
