@@ -4,51 +4,7 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%; /* White */
-  --foreground: 150 6% 13%; /* Dark Gray/Near Black: HSL(150, 6%, 13%) from #1F2322 */
-  
-  --card: 0 0% 100%; /* White */
-  --card-foreground: 150 6% 13%; /* Dark Gray/Near Black */
-  
-  --popover: 0 0% 100%; /* White */
-  --popover-foreground: 150 6% 13%; /* Dark Gray/Near Black */
-  
-  --primary: 148 51% 31%; /* Dark Green: HSL for #1B4332 */
-  --primary-foreground: 0 0% 100%; /* White (para texto sobre verde oscuro) */
-  
-  --secondary: 120 5% 96%; /* Very Light Gray: HSL for #F3F5F3 (ajustado de #F5F5F5) */
-  --secondary-foreground: 150 6% 13%; /* Dark Gray/Near Black */
-  
-  --muted: 120 5% 96%; /* Very Light Gray */
-  --muted-foreground: 150 4% 40%; /* Medium Gray: HSL for #5F6766 (ajustado de #666666) */
-  
-  --accent: 40 100% 50%; /* Gold/Yellow: HSL for #FFBF00 (ajustado de #B8860B para más brillo) */
-  --accent-foreground: 150 6% 13%; /* Dark Gray/Near Black (para texto sobre amarillo) */
-  
-  --destructive: 0 84.2% 60.2%; /* Default ShadCN Red */
-  --destructive-foreground: 0 0% 98%; /* Default ShadCN Light */
-  
-  --border: 150 5% 88%; /* Light Gray Border: HSL for #DCE0DF */
-  --input: 150 5% 88%; /* Light Gray Input Background */
-  --ring: 148 51% 31%; /* Dark Green (matching primary) */
-  
-  --radius: 0.5rem;
-
-  /* Custom color for highlighted sections (usando un verde muy claro) */
-  --highlighted-section: 147 40% 95%; /* Very light green: HSL for #E8F5E8 */
-
-  /* Sidebar specific colors */
-  --sidebar-background: 148 51% 15%; /* Even Darker primary green for base metallic effect */
-  --sidebar-foreground: 0 0% 98%;   /* White/Very Light Gray for text */
-  --sidebar-primary: 40 100% 55%;     /* Accent yellow (Gold) for active items - slightly lighter */
-  --sidebar-primary-foreground: 150 6% 10%; /* Near Black for text on yellow */
-  --sidebar-accent: 148 51% 25%;      /* Lighter primary green for hover */
-  --sidebar-accent-foreground: 0 0% 98%; /* White/Very Light Gray */
-  --sidebar-border: 0 0% 10%; /* MODIFIED: Very Dark Gray/Near Black for border */
-  --sidebar-ring: 40 100% 55%;        /* Accent yellow (Gold) */
-}
-
-.dark {
+  /* Inverted: Defaulting to a dark theme */
   --background: 150 6% 13%; /* Dark Gray/Near Black */
   --foreground: 0 0% 95%; /* Light Gray/White */
 
@@ -68,16 +24,61 @@
   --muted-foreground: 150 4% 65%; /* Lighter Muted Foreground */
   
   --accent: 40 100% 60%; /* Adjusted Gold/Yellow for dark mode */
-  --accent-foreground: 150 6% 10%;
+  --accent-foreground: 150 6% 10%; /* Dark text on brighter yellow */
   
   --destructive: 0 72.2% 50.6%; /* Adjusted Destructive for dark mode */
   --destructive-foreground: 0 0% 98%;
   
   --border: 150 5% 25%; /* Darker Border */
   --input: 150 5% 25%;  /* Darker Input Background */
-  --ring: 148 51% 45%;
+  --ring: 148 51% 45%; /* Ring to match adjusted primary */
+  
+  --radius: 0.5rem;
 
   --highlighted-section: 148 51% 20%; /* Darker subtle green highlight for dark mode */
+
+  /* Sidebar specific colors (already dark-themed, values from original .dark block) */
+  --sidebar-background: 148 51% 10%; 
+  --sidebar-foreground: 0 0% 95%;
+  --sidebar-primary: 40 100% 60%;
+  --sidebar-primary-foreground: 150 6% 8%;
+  --sidebar-accent: 148 51% 20%;
+  --sidebar-accent-foreground: 0 0% 95%;
+  --sidebar-border: 0 0% 15%; 
+  --sidebar-ring: 40 100% 60%;
+}
+
+.dark {
+  /* This block now largely duplicates :root, can be adjusted if a separate light theme is re-introduced */
+  --background: 150 6% 13%; 
+  --foreground: 0 0% 95%; 
+
+  --card: 150 6% 10%; 
+  --card-foreground: 0 0% 95%;
+  
+  --popover: 150 6% 8%; 
+  --popover-foreground: 0 0% 95%;
+  
+  --primary: 148 51% 45%; 
+  --primary-foreground: 0 0% 98%;
+  
+  --secondary: 150 5% 20%; 
+  --secondary-foreground: 0 0% 98%;
+  
+  --muted: 150 5% 20%;
+  --muted-foreground: 150 4% 65%; 
+  
+  --accent: 40 100% 60%; 
+  --accent-foreground: 150 6% 10%;
+  
+  --destructive: 0 72.2% 50.6%; 
+  --destructive-foreground: 0 0% 98%;
+  
+  --border: 150 5% 25%; 
+  --input: 150 5% 25%;  
+  --ring: 148 51% 45%;
+
+  --highlighted-section: 148 51% 20%;
 
   --sidebar-background: 148 51% 10%; 
   --sidebar-foreground: 0 0% 95%;
@@ -123,8 +124,8 @@
 
   border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde inferior más integrado */
 
-  position: relative; /* Necesario para el posicionamiento del pseudo-elemento ::after */
-  overflow: hidden; /* Necesario para que el destello no se salga */
+  position: relative; 
+  overflow: hidden; 
 }
 
 .navbar::after {
@@ -136,8 +137,8 @@
   height: 100%;
   background: linear-gradient(90deg,
     transparent 0%,
-    rgba(128, 150, 128, 0.05) 20%, /* Destello verdoso muy sutil */
-    rgba(173, 216, 173, 0.15) 50%, /* Destello verdoso más claro y sutil, antes rgba(192, 192, 192, 0.3) */
+    rgba(128, 150, 128, 0.05) 20%, 
+    rgba(173, 216, 173, 0.15) 50%, 
     rgba(128, 150, 128, 0.05) 80%,
     transparent 100%
   );
@@ -162,20 +163,18 @@
   animation: metallic-shimmer 7s ease-in-out infinite;
 
   box-shadow:
-    3px 0 15px rgba(0, 0, 0, 0.4), /* Adjusted for right side shadow if sidebar is on left */
-    inset 1px 0 0 rgba(45, 90, 39, 0.2), /* Adjusted for inset from left, tinte verdoso */
-    0 0 20px rgba(27, 67, 50, 0.15); /* Sombra sutil con tinte verdoso */
+    3px 0 15px rgba(0, 0, 0, 0.4), 
+    inset 1px 0 0 rgba(45, 90, 39, 0.2), 
+    0 0 20px rgba(27, 67, 50, 0.15); 
 
-  /* border-right: 1px solid rgba(27, 67, 50, 0.4); /* Border on the right, más integrado - Handled by Sidebar component border */
-  /* position: relative; /* REMOVED: Might conflict with 'fixed' positioning of SheetContent */
-  overflow: hidden; /* Kept: Necessary for pseudo-element sweep effect clipping */
+  overflow: hidden; 
 }
 
 .sidebar-metallic-effect::after {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%; /* Shimmer comes from left to right */
+  left: -100%; 
   width: 100%;
   height: 100%;
   background: linear-gradient(90deg,
@@ -243,8 +242,9 @@
 
 .sidebar-metallic-effect:hover {
    box-shadow:
-    5px 0 25px rgba(0, 0, 0, 0.5), /* Adjusted for right side shadow */
-    inset 1px 0 0 rgba(45, 90, 39, 0.3), /* Adjusted for inset from left */
+    5px 0 25px rgba(0, 0, 0, 0.5), 
+    inset 1px 0 0 rgba(45, 90, 39, 0.3), 
     0 0 30px rgba(27, 67, 50, 0.25);
    transition: box-shadow 0.3s ease;
 }
+
