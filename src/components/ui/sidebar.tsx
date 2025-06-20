@@ -178,7 +178,7 @@ const Sidebar = React.forwardRef<
         <div
           className={cn(
             "flex h-full w-[--sidebar-width] flex-col text-sidebar-foreground",
-            variant === "sidebar" && "sidebar-metallic-effect", // Apply effect directly if not collapsible
+            variant === "sidebar" && "sidebar-metallic-effect", 
             className
           )}
           ref={ref}
@@ -195,7 +195,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             className={cn(
               "w-[--sidebar-width] p-0 [&>button]:hidden",
-              "sidebar-metallic-effect", // Apply metallic effect to mobile sheet
+              "sidebar-metallic-effect", 
               className
             )}
             style={
@@ -204,11 +204,11 @@ const Sidebar = React.forwardRef<
               } as React.CSSProperties
             }
             side={side}
-            data-sidebar="sidebar" // Keep data-sidebar for potential global styles
+            data-sidebar="sidebar" 
             data-mobile="true"
           >
             <SheetTitle className="sr-only">Navegación Principal</SheetTitle>
-            <div className="flex h-full w-full flex-col">{children}</div>
+            <div className="flex h-full w-full flex-col text-sidebar-foreground">{children}</div>
           </SheetContent>
         </Sheet>
       )
@@ -253,8 +253,8 @@ const Sidebar = React.forwardRef<
             data-sidebar="sidebar"
             className={cn(
               "flex h-full w-full flex-col text-sidebar-foreground",
-              variant === "sidebar" && "sidebar-metallic-effect", // Metallic effect for standard desktop sidebar
-              variant === "floating" && "rounded-lg border shadow bg-sidebar" // Floating retains its own look
+              variant === "sidebar" && "sidebar-metallic-effect", 
+              variant === "floating" && "rounded-lg border shadow bg-sidebar" 
             )}
           >
             {children}
@@ -763,3 +763,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
