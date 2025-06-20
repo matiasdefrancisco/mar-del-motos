@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } Rfrom "@/components/ui/button";
+import { Button } from "@/components/ui/button"; // Corregido: Rfrom -> from
 import {
   DropdownMenu,
   DropdownMenuContent,
