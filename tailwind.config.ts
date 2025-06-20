@@ -11,7 +11,7 @@ export default {
     extend: {
       fontFamily: {
         body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        headline: ['Inter', 'sans-serif'], // Puedes cambiar 'Inter' por otra fuente si la importas
         code: ['monospace', 'monospace'],
       },
       colors: {

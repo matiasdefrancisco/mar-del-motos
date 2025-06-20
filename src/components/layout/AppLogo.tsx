@@ -9,9 +9,9 @@ interface AppLogoProps {
   showText?: boolean;
 }
 
-const AppLogo = ({ className, iconSize = 24, textSize = "text-xl", showText = true }: AppLogoProps) => {
+const AppLogo = ({ className, iconSize = 36, textSize = "text-2xl", showText = true }: AppLogoProps) => {
   return (
-    <Link href="/dashboard" className={`flex items-center gap-2 ${className}`}>
+    <Link href="/dashboard" className={`flex items-center gap-3 ${className}`}>
       <Image 
         src={logoSrc} 
         alt="Mar del Motos Logo" 
@@ -19,7 +19,7 @@ const AppLogo = ({ className, iconSize = 24, textSize = "text-xl", showText = tr
         height={iconSize} 
         priority 
       />
-      {showText && <h1 className={`font-bold ${textSize} text-sidebar-foreground`}>Mar del Motos</h1>}
+      {showText && <h1 className={`font-headline font-bold ${textSize} text-sidebar-foreground`}>Mar del Motos</h1>}
     </Link>
   );
 };
