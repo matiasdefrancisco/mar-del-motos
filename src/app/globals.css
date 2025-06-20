@@ -43,9 +43,6 @@
   --highlighted-section: 142 76% 15%; /* Un verde muy oscuro y sutil para secciones destacadas */
 }
 
-/* Si se quiere mantener un modo .dark explícito, se duplican las variables aquí.
-   Dado que :root ya define un tema oscuro, esta sección puede ser redundante
-   a menos que se planee introducir un tema claro más adelante. */
 .dark {
   --background: 150 6% 13%; 
   --foreground: 0 0% 95%;
@@ -84,8 +81,6 @@
   * {
     @apply border-border;
   }
-  /* Configuración base para html y body para prevenir scroll horizontal global
-     y permitir que contenedores internos manejen su propio scroll. */
   html {
     overflow-x: hidden; /* Previene el scroll horizontal a nivel de la página */
     max-width: 100vw;   /* Asegura que html no exceda el ancho del viewport */
@@ -211,17 +206,12 @@
    transition: box-shadow 0.3s ease;
 }
 
-/* 
-  Clase para contenedores con contenido extenso que requieren scroll horizontal.
-  Ej: Tablas, listas anchas.
-  Asegura que el scroll sea solo horizontal y que la barra de scroll sea discreta.
-*/
 @layer components {
   .scrollable-content {
-    @apply relative w-full; /* Necesario para que el max-width funcione correctamente */
-    overflow-x: auto; /* Permite scroll horizontal */
-    overflow-y: hidden; /* Previene scroll vertical dentro de este contenedor */
-    max-width: 100%; /* Asegura que no exceda el contenedor padre */
+    @apply relative w-full;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
     -webkit-overflow-scrolling: touch; /* Mejora la experiencia de scroll en iOS */
   }
   
@@ -236,14 +226,5 @@
   .scrollable-content::-webkit-scrollbar-thumb {
     background-color: hsl(var(--border)); /* Color del pulgar de la barra de scroll */
     border-radius: 4px; /* Bordes redondeados para el pulgar */
-  }
-
-  /* 
-    Clase .table-container: Puede ser usada como alias de .scrollable-content 
-    o para estilos específicos de contenedores de tablas si es necesario.
-    Por ahora, .scrollable-content es la preferida.
-  */
-  .table-container {
-    @apply scrollable-content; /* Hereda de scrollable-content */
   }
 }
