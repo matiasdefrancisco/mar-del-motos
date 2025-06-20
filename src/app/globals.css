@@ -104,17 +104,17 @@
     #000000 100% /* Negro */
   );
   background-size: 400% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite; /* Ligeramente más lento */
+  animation: metallic-shimmer 7s ease-in-out infinite;
   
   box-shadow: 
-    0 3px 15px rgba(0, 0, 0, 0.4), /* Sombra más suave */
-    inset 0 1px 0 rgba(45, 90, 39, 0.2), /* Inset con tinte verde oscuro */
-    0 0 20px rgba(27, 67, 50, 0.15); /* Resplandor verde sutil */
+    0 3px 15px rgba(0, 0, 0, 0.4), 
+    inset 0 1px 0 rgba(45, 90, 39, 0.2), 
+    0 0 20px rgba(27, 67, 50, 0.15); 
   
-  border-bottom: 1px solid rgba(27, 67, 50, 0.4); /* Borde verde oscuro */
+  border-bottom: 1px solid rgba(27, 67, 50, 0.4); 
   
-  position: relative; /* Mantener para ::after */
-  overflow: hidden; /* Mantener para ::after */
+  position: relative; 
+  overflow: hidden; 
 }
 
 .navbar::after {
@@ -126,16 +126,62 @@
   height: 100%;
   background: linear-gradient(90deg, 
     transparent 0%, 
-    rgba(128, 150, 128, 0.05) 20%, /* Destello verde muy tenue */
-    rgba(173, 216, 173, 0.15) 50%, /* Destello principal verde claro, muy sutil (0.15 opacidad) */
-    rgba(128, 150, 128, 0.05) 80%, /* Destello verde muy tenue */
+    rgba(128, 150, 128, 0.05) 20%, 
+    rgba(173, 216, 173, 0.15) 50%, 
+    rgba(128, 150, 128, 0.05) 80%, 
     transparent 100%
   );
-  animation: sweep-light 5s ease-in-out infinite; /* Ligeramente más lento */
+  animation: sweep-light 5s ease-in-out infinite; 
   pointer-events: none;
 }
 
-/* Keyframe animations (ya deben existir, verificar que no haya duplicados) */
+/* METALLIC EFFECT FOR SIDEBAR (DESKTOP) */
+.sidebar-metallic-effect {
+  background: linear-gradient(135deg, 
+    #000000 0%,
+    #0a1a0f 20%, 
+    #102a1a 35%, 
+    #1B4332 45%, 
+    #2c5e3a 50%, 
+    #1B4332 55%, 
+    #102a1a 65%, 
+    #0a1a0f 80%, 
+    #000000 100% 
+  );
+  background-size: 400% 100%;
+  animation: metallic-shimmer 7s ease-in-out infinite;
+  
+  box-shadow: 
+    3px 0 15px rgba(0, 0, 0, 0.4), /* Adjusted for right side shadow */
+    inset 1px 0 0 rgba(45, 90, 39, 0.2), /* Adjusted for inset from left */
+    0 0 20px rgba(27, 67, 50, 0.15); 
+  
+  border-right: 1px solid rgba(27, 67, 50, 0.4); /* Border on the right */
+  
+  position: relative; 
+  overflow: hidden; 
+}
+
+.sidebar-metallic-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%; /* Shimmer comes from left to right */
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(128, 150, 128, 0.05) 20%, 
+    rgba(173, 216, 173, 0.15) 50%, 
+    rgba(128, 150, 128, 0.05) 80%, 
+    transparent 100%
+  );
+  animation: sweep-light 5s ease-in-out infinite; 
+  pointer-events: none;
+}
+
+
+/* Keyframe animations (reused by .navbar and .sidebar-metallic-effect) */
 @keyframes metallic-shimmer {
   0%, 100% { 
     background-position: 0% 50%; 
@@ -151,7 +197,7 @@
     opacity: 0;
   }
   10% {
-    opacity: 1; /* Todavía visible para el efecto de barrido */
+    opacity: 1; 
   }
   90% {
     opacity: 1;
@@ -164,17 +210,26 @@
 
 @media (max-width: 768px) {
   .navbar {
-    animation-duration: 9s; /* Aún más lento en móvil */
+    animation-duration: 9s; 
   }
   .navbar::after {
-    animation-duration: 7s; /* Aún más lento en móvil */
+    animation-duration: 7s; 
   }
+  /* Metallic effect for sidebar is typically desktop-only, so no specific mobile adjustment here unless sidebar is also visible and metallic on mobile */
 }
 
-.navbar:hover {
+.navbar:hover, .sidebar-metallic-effect:hover { /* Combined hover for consistency if needed */
   box-shadow: 
-    0 5px 25px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(45, 90, 39, 0.3),
-    0 0 30px rgba(27, 67, 50, 0.25);
+    0 5px 25px rgba(0, 0, 0, 0.5), /* Default for navbar */
+    inset 0 1px 0 rgba(45, 90, 39, 0.3), /* Default for navbar */
+    0 0 30px rgba(27, 67, 50, 0.25); /* Default for navbar */
   transition: box-shadow 0.3s ease;
 }
+/* Specific hover for sidebar if different shadow direction is needed */
+.sidebar-metallic-effect:hover {
+   box-shadow: 
+    5px 0 25px rgba(0, 0, 0, 0.5), /* Adjusted for right side shadow */
+    inset 1px 0 0 rgba(45, 90, 39, 0.3), /* Adjusted for inset from left */
+    0 0 30px rgba(27, 67, 50, 0.25);
+}
+

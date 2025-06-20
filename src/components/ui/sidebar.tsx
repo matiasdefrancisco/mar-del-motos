@@ -4,14 +4,14 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { PanelLeft } from "lucide-react"
+import { Menu } from "lucide-react" // Changed from PanelLeft to Menu
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet" // Added SheetTitle
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet" 
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -177,7 +177,8 @@ const Sidebar = React.forwardRef<
       return (
         <div
           className={cn(
-            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground",
+            "flex h-full w-[--sidebar-width] flex-col bg-sidebar text-sidebar-foreground", // Original classes
+            "sidebar-metallic-effect", // Added metallic effect class
             className
           )}
           ref={ref}
@@ -192,7 +193,7 @@ const Sidebar = React.forwardRef<
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
           <SheetContent
-            className={cn("w-[--sidebar-width] p-0 [&>button]:hidden", className)}
+            className={cn("w-[--sidebar-width] p-0 [&>button]:hidden", className)} // No metallic effect on mobile sheet by default
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -202,7 +203,6 @@ const Sidebar = React.forwardRef<
             data-sidebar="sidebar"
             data-mobile="true"
           >
-            {/* Added SheetTitle for accessibility */}
             <SheetTitle className="sr-only">Navegación Principal</SheetTitle>
             <div className="flex h-full w-full flex-col">{children}</div>
           </SheetContent>
@@ -228,6 +228,8 @@ const Sidebar = React.forwardRef<
               ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4))]"
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
             "group-data-[collapsible=offcanvas]:w-0",
+            // Removed border-r/border-l here to avoid conflict with metallic effect border
+            // variant === "sidebar" && (side === "left" ? "border-r" : "border-l") 
             "group-data-[side=right]:rotate-180"
           )}
         />
@@ -241,14 +243,17 @@ const Sidebar = React.forwardRef<
             variant === "floating" || variant === "inset"
               ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)_+_theme(spacing.4)_+2px)]"
               : "group-data-[collapsible=icon]:w-[--sidebar-width-icon]",
-            variant === "sidebar" && (side === "left" ? "border-r" : "border-l")
+            // Removed border here as metallic effect will provide its own
+            // variant === "sidebar" && (side === "left" ? "border-r" : "border-l") 
+            ""
           )}
         >
           <div
             data-sidebar="sidebar"
             className={cn(
-              "flex h-full w-full flex-col bg-sidebar text-sidebar-foreground",
-              variant === "floating" && "rounded-lg border shadow"
+              "flex h-full w-full flex-col bg-sidebar text-sidebar-foreground", // Base styles
+              variant === "sidebar" && "sidebar-metallic-effect", // Apply metallic effect for standard sidebar
+              variant === "floating" && "rounded-lg border shadow" // Floating retains its own look
             )}
           >
             {children}
@@ -272,14 +277,14 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7", className)} // Button size
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-      <PanelLeft />
+      <Menu className="h-5 w-5" /> {/* Changed icon and size */}
       <span className="sr-only">Alternar Barra Lateral</span>
     </Button>
   )
@@ -757,3 +762,4 @@ export {
   SidebarTrigger,
   useSidebar,
 }
+
