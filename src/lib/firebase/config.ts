@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
-// import { getFirestore, Firestore } from 'firebase/firestore';
+import { getFirestore, Firestore } from 'firebase/firestore'; // Descomentado
 // import { getStorage, FirebaseStorage } from 'firebase/storage';
 
 const firebaseConfig = {
@@ -14,21 +14,21 @@ const firebaseConfig = {
 
 let app: FirebaseApp;
 let auth: Auth;
-// let firestore: Firestore;
+let firestore: Firestore; // Descomentado
 // let storage: FirebaseStorage;
 
 if (typeof window !== 'undefined' && !getApps().length) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
-  // firestore = getFirestore(app);
+  firestore = getFirestore(app); // Descomentado
   // storage = getStorage(app);
 } else {
   // On the server or if already initialized
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig); // initialize if not already on server
   auth = getAuth(app);
-  // firestore = getFirestore(app);
+  firestore = getFirestore(app); // Descomentado
   // storage = getStorage(app);
 }
 
 
-export { app, auth /*, firestore, storage */ };
+export { app, auth, firestore /*, storage */ }; // Exportar firestore
