@@ -1,17 +1,19 @@
+
 import type { ReactNode } from 'react';
 import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'; 
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import AppLogo from '@/components/layout/AppLogo';
 import { UserNav } from '@/components/layout/UserNav';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute>
-      <SidebarProvider> 
+      <SidebarProvider>
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          <div className="flex flex-1 flex-col min-w-0"> {/* Added min-w-0 */}
+          {/* Added overflow-x-hidden to prevent horizontal scroll of the main content area */}
+          <div className="flex flex-1 flex-col min-w-0 overflow-x-hidden">
             {/* Mobile Header */}
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
               <div className="flex items-center gap-3">
