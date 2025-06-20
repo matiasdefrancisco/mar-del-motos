@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
+import { Badge, type BadgeProps } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -47,25 +47,25 @@ const MOCK_LOCALS: Local[] = [
 ];
 
 
-const getStatusBadgeInfo = (status: OrderStatus): { variant: "outline"; className?: string; label: string } => {
+const getStatusBadgeInfo = (status: OrderStatus): { variant: BadgeProps["variant"]; className?: string; label: string } => {
   switch (status) {
     case 'entregado_cliente':
-      return { variant: 'outline', className: 'text-green-500 border-transparent bg-transparent', label: 'Entregado' };
+      return { variant: 'default', className: 'bg-primary text-primary-foreground', label: 'Entregado' }; // Usa el color primario del tema
     case 'en_camino_retiro':
     case 'retirado_local':
     case 'en_camino_entrega':
-      return { variant: 'outline', className: 'text-yellow-500 border-transparent bg-transparent', label: 'En Proceso' };
+      return { variant: 'outline', className: 'border-yellow-500 text-yellow-500', label: 'En Proceso' }; // Amarillo para estados en progreso
     case 'pendiente_asignacion':
-      return { variant: 'outline', className: 'text-gray-500 border-transparent bg-transparent', label: 'Sin Asignar' };
+      return { variant: 'outline', className: 'text-muted-foreground', label: 'Sin Asignar' };
     case 'asignado_rider':
-      return { variant: 'outline', className: 'text-blue-500 border-transparent bg-transparent', label: 'Asignado' };
+      return { variant: 'outline', className: 'border-blue-500 text-blue-500', label: 'Asignado' }; // Azul para asignado
     case 'pendiente_aceptacion_op':
-      return { variant: 'outline', className: 'text-orange-500 border-transparent bg-transparent', label: 'Nuevo Pedido' };
+      return { variant: 'outline', className: 'border-accent text-accent', label: 'Nuevo Pedido' }; // Usa el color de acento (dorado)
     case 'cancelado':
-      return { variant: 'outline', className: 'text-red-500 border-transparent bg-transparent', label: 'Cancelado' };
+      return { variant: 'destructive', label: 'Cancelado' }; // Usa el color destructivo del tema (rojo)
     default:
       const defaultLabel = status.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      return { variant: 'outline', className: 'text-muted-foreground border-transparent bg-transparent', label: defaultLabel };
+      return { variant: 'secondary', label: defaultLabel }; // Usa el color secundario del tema
   }
 };
 
@@ -157,7 +157,7 @@ export default function OperatorDashboardPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6"> {/* Removed p-4 md:p-6 */}
+    <div className="flex flex-col gap-6"> 
       <PageTitle 
         title="Panel de Operador" 
         icon={Users} 
@@ -213,7 +213,7 @@ export default function OperatorDashboardPage() {
                 <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-                <div className="text-2xl font-bold text-destructive">$1250.00</div> {/* Placeholder */}
+                <div className="text-2xl font-bold text-destructive">$1250.00</div>
                 <p className="text-xs text-muted-foreground">Total pendiente</p>
             </CardContent>
         </Card>
@@ -291,7 +291,7 @@ export default function OperatorDashboardPage() {
               {filteredOrders.map((order) => {
                 const statusInfo = getStatusBadgeInfo(order.status);
                 return (
-                  <TableRow key={order.id} className={order.status === 'pendiente_aceptacion_op' ? 'bg-orange-500/10' : ''}>
+                  <TableRow key={order.id} className={cn(order.status === 'pendiente_aceptacion_op' ? 'bg-accent/10' : '')}>
                     <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
                     <TableCell>{order.localName}</TableCell>
                     <TableCell>{order.deliveryAddress}</TableCell>
@@ -301,7 +301,7 @@ export default function OperatorDashboardPage() {
                         {statusInfo.label}
                       </Badge>
                       {order.paymentStatus === 'deuda_rider' && (
-                        <Badge variant="outline" className="ml-2 cursor-default text-red-500 border-transparent bg-transparent">Deuda</Badge>
+                        <Badge variant="outline" className="ml-2 cursor-default text-destructive border-transparent bg-transparent">Deuda</Badge>
                       )}
                     </TableCell>
                     <TableCell>{order.duration}</TableCell>
@@ -320,7 +320,7 @@ export default function OperatorDashboardPage() {
                           <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
                             <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
                           </DropdownMenuItem>
-                           <DropdownMenuItem> {/* Placeholder for debt view */}
+                           <DropdownMenuItem> 
                             <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -367,7 +367,7 @@ export default function OperatorDashboardPage() {
               </CardHeader>
               <CardContent className="text-sm">
                 <div className="space-y-2 max-h-60 overflow-y-auto p-1">
-                  {orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').slice(0,5).map(order => ( // Limitar a 5 para demo
+                  {orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').slice(0,5).map(order => ( 
                     <div key={order.id} className="flex items-center gap-2 p-2 border rounded-md bg-background shadow-sm">
                        <Checkbox id={`pending-assign-${order.id}`} /> 
                        <Label htmlFor={`pending-assign-${order.id}`} className="text-xs">#{order.id.slice(-4)} - {order.localName}</Label>
@@ -388,11 +388,6 @@ export default function OperatorDashboardPage() {
               </CardHeader>
               <CardContent className="text-sm text-muted-foreground">
                 <p className="text-xs">Lista de pedidos ya asignados al repartidor seleccionado aparecerá aquí.</p>
-                 {/* Ejemplo: */}
-                 {/* <div className="space-y-1 mt-2">
-                    <p className="text-xs p-1 border rounded-md bg-background">#ORD123 - Pizzería</p>
-                    <p className="text-xs p-1 border rounded-md bg-background">#ORD456 - Sushi</p>
-                 </div> */}
               </CardContent>
             </Card>
           </div>
@@ -412,7 +407,6 @@ export default function OperatorDashboardPage() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">Una tabla resumida de deudas pendientes irá aquí.</p>
-          {/* Ejemplo: <Table>...</Table> */}
         </CardContent>
       </Card>
 
@@ -439,7 +433,7 @@ export default function OperatorDashboardPage() {
               
               <div>
                 <strong>Estado Actual:</strong> <Badge variant={getStatusBadgeInfo(selectedOrder.status).variant} className={cn(getStatusBadgeInfo(selectedOrder.status).className, 'ml-1')}>{getStatusBadgeInfo(selectedOrder.status).label}</Badge>
-                 {selectedOrder.paymentStatus === 'deuda_rider' && <Badge variant="outline" className="ml-2 text-red-500 border-transparent bg-transparent">Deuda Rider</Badge>}
+                 {selectedOrder.paymentStatus === 'deuda_rider' && <Badge variant="destructive" className="ml-2">Deuda Rider</Badge>}
               </div>
 
               {selectedOrder.items && selectedOrder.items.length > 0 && (
@@ -455,7 +449,6 @@ export default function OperatorDashboardPage() {
 
               <div>
                  <h4 className="font-medium mb-1 mt-2">Historial de Estados:</h4>
-                 {/* Placeholder para historial de estados */}
                  <p className="text-xs text-muted-foreground">(El historial de cambios de estado se mostrará aquí)</p>
               </div>
 
@@ -472,7 +465,7 @@ export default function OperatorDashboardPage() {
             </div>
             <DialogFooter className="sm:justify-between flex-wrap gap-2">
               <Button variant="outline" onClick={() => alert("Funcionalidad 'Marcar Entregado al Repartidor' pendiente.")} 
-                disabled={selectedOrder.status !== 'en_camino_entrega' && selectedOrder.status !== 'retirado_local'} /* Lógica de ejemplo para habilitar */
+                disabled={selectedOrder.status !== 'en_camino_entrega' && selectedOrder.status !== 'retirado_local'}
               >
                 Marcar Entregado al Repartidor
               </Button>
@@ -523,3 +516,4 @@ export default function OperatorDashboardPage() {
   );
 }
 
+    
