@@ -102,16 +102,6 @@ export default function LoginForm() {
           Iniciar Sesión
         </Button>
       </div>
-      <div className="mt-4 text-xs text-center text-muted-foreground/80 pt-4 border-t border-border">
-        <p className="font-semibold">Usuarios de prueba:</p>
-        <ul className="list-none">
-          <li>admin@example.com</li>
-          <li>operator@example.com</li>
-          <li>rider@example.com</li>
-          <li>local@example.com</li>
-        </ul>
-        <p>Contraseña para todos: <code className="font-semibold">password</code></p>
-      </div>
     </form>
   );
 }
