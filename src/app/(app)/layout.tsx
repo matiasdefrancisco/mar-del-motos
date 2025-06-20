@@ -24,7 +24,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <UserNav />
               </div>
             </header>
-            <main className="min-h-screen bg-background p-4 md:p-6 lg:p-8 overflow-auto w-full">
+            <main className="h-[80vh] bg-background p-4 md:p-6 lg:p-8 overflow-auto w-full">
               {children}
             </main>
           </div>
