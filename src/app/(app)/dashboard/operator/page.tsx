@@ -275,64 +275,62 @@ export default function OperatorDashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">ID</TableHead>
-                  <TableHead>Local</TableHead>
-                  <TableHead>Dirección</TableHead>
-                  <TableHead>Repartidor</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Duración</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredOrders.map((order) => {
-                  const statusInfo = getStatusBadgeInfo(order.status);
-                  return (
-                    <TableRow key={order.id} className={order.status === 'pendiente_aceptacion_op' ? 'bg-orange-500/10' : ''}>
-                      <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
-                      <TableCell>{order.localName}</TableCell>
-                      <TableCell>{order.deliveryAddress}</TableCell>
-                      <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
-                      <TableCell>
-                        <Badge variant={statusInfo.variant} className={cn(statusInfo.className, 'cursor-default')}>
-                          {statusInfo.label}
-                        </Badge>
-                        {order.paymentStatus === 'deuda_rider' && (
-                          <Badge variant="destructive" className="ml-2 cursor-default">Deuda</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>{order.duration}</TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Acciones del pedido</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleViewDetails(order)}>
-                              <Eye className="mr-2 h-4 w-4" /> Ver / Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
-                              <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
-                            </DropdownMenuItem>
-                             <DropdownMenuItem> {/* Placeholder for debt view */}
-                              <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[80px]">ID</TableHead>
+                <TableHead>Local</TableHead>
+                <TableHead>Dirección</TableHead>
+                <TableHead>Repartidor</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Duración</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredOrders.map((order) => {
+                const statusInfo = getStatusBadgeInfo(order.status);
+                return (
+                  <TableRow key={order.id} className={order.status === 'pendiente_aceptacion_op' ? 'bg-orange-500/10' : ''}>
+                    <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
+                    <TableCell>{order.localName}</TableCell>
+                    <TableCell>{order.deliveryAddress}</TableCell>
+                    <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusInfo.variant} className={cn(statusInfo.className, 'cursor-default')}>
+                        {statusInfo.label}
+                      </Badge>
+                      {order.paymentStatus === 'deuda_rider' && (
+                        <Badge variant="destructive" className="ml-2 cursor-default">Deuda</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>{order.duration}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Acciones del pedido</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewDetails(order)}>
+                            <Eye className="mr-2 h-4 w-4" /> Ver / Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
+                            <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
+                          </DropdownMenuItem>
+                           <DropdownMenuItem> {/* Placeholder for debt view */}
+                            <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
           {filteredOrders.length === 0 && (
             <p className="text-center text-muted-foreground py-8">No se encontraron pedidos con los filtros actuales.</p>
           )}
