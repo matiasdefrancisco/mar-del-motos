@@ -12,7 +12,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider>
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          <div className="flex flex-1 flex-col w-full min-w-0 overflow-x-hidden">
+          <div className="flex flex-1 flex-col w-full min-w-0"> {/* MODIFIED: Removed overflow-x-hidden */}
             {/* Mobile Header */}
             <header className="navbar sticky top-0 z-30 flex h-14 items-center justify-between border-b px-4 md:hidden">
               {/* Left: Hamburger Menu */}
