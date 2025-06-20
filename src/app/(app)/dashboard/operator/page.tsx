@@ -21,6 +21,7 @@ import type { Order, OrderStatus, Rider, Local } from '@/lib/types';
 import { formatDistanceToNowStrict } from 'date-fns';
 import { es } from 'date-fns/locale';
 import Link from 'next/link';
+import { cn } from '@/lib/utils'; // Importación añadida
 
 // Mock Data - Reemplazar con Firestore
 const MOCK_ORDERS: Order[] = [
@@ -524,4 +525,5 @@ export default function OperatorDashboardPage() {
   );
 }
 
+    
     
