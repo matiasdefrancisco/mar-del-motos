@@ -11,7 +11,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
       <SidebarProvider> 
         <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
-          <div className="flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col min-w-0"> {/* Added min-w-0 */}
             {/* Mobile Header */}
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background px-4 md:hidden">
               <div className="flex items-center gap-3">
