@@ -1,17 +1,14 @@
 import type { ReactNode } from 'react';
-import AppLogo from '@/components/layout/AppLogo';
+// AppLogo no se importa aquí, se moverá a la página de login si es necesario de forma específica.
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4"> {/* Changed bg-secondary to bg-background */}
-      <div className="mb-4 flex w-full justify-center"> {/* Reduced margin-bottom */}
-        {/* Reduced iconSize and hiding text */}
-        <AppLogo className="text-primary" iconSize={100} showText={false} />
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
+      {/* El AppLogo global se elimina de aquí. La página de login lo manejará. */}
       <div className="w-full max-w-md">
         {children}
       </div>
-      <footer className="mt-2 text-center text-sm text-muted-foreground"> {/* Reduced margin-top */}
+      <footer className="mt-2 text-center text-sm text-muted-foreground">
         <p>&copy; {new Date().getFullYear()} Mar del Motos. Todos los derechos reservados.</p>
       </footer>
     </div>
