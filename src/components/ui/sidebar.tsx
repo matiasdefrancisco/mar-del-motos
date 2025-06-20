@@ -195,7 +195,6 @@ const Sidebar = React.forwardRef<
           <SheetContent
             className={cn(
               "w-[--sidebar-width] p-0 [&>button]:hidden",
-              // "sidebar-metallic-effect", // Quitamos la clase de aquí
               className
             )}
             style={
@@ -208,7 +207,6 @@ const Sidebar = React.forwardRef<
             data-mobile="true"
           >
             <SheetTitle className="sr-only">Navegación Principal</SheetTitle>
-            {/* Aplicamos el efecto metálico y text-sidebar-foreground al div interno */}
             <div className="flex h-full w-full flex-col text-sidebar-foreground sidebar-metallic-effect"> 
               {children}
             </div>
@@ -281,7 +279,7 @@ const SidebarTrigger = React.forwardRef<
       data-sidebar="trigger"
       variant="ghost"
       size="icon"
-      className={cn("h-7 w-7", className)}
+      className={cn("h-7 w-7 text-sidebar-foreground", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
