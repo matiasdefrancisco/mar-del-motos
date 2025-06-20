@@ -25,9 +25,12 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 <UserNav />
               </div>
             </header>
-            {/* Main es ahora un flex item que maneja su propio scroll y padding */}
-            <main className="flex-1 w-full bg-background overflow-auto p-4 md:p-6 lg:p-8">
-              {children}
+            {/* Main es ahora un contenedor flex que delega el scroll a un hijo */}
+            <main className="flex-1 flex flex-col w-full bg-background">
+              {/* Este div interno maneja el scroll y el padding */}
+              <div className="flex-1 w-full overflow-auto p-4 md:p-6 lg:p-8">
+                {children}
+              </div>
             </main>
           </div>
         </div>
