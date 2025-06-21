@@ -371,7 +371,7 @@ export default function OperatorDashboardPage() {
                     <p className="text-muted-foreground text-xs">No hay pedidos pendientes de asignar.</p>
                   )}
                 </div>
-                <Button size="sm" className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground" disabled={orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length === 0}>
+                <Button size="sm" className="mt-4 w-full bg-primary hover:bg-primary/90 text-primary-foreground h-auto whitespace-normal" disabled={orders.filter(o => o.status === 'pendiente_asignacion' || o.status === 'pendiente_aceptacion_op').length === 0}>
                   Asignar Seleccionados
                 </Button>
               </CardContent>
