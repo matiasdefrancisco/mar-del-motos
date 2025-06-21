@@ -215,28 +215,3 @@
    box-shadow: 5px 0 25px rgba(0,0,0,0.5), inset 1px 0 0 hsla(var(--primary),0.3), 0 0 30px hsla(var(--primary),0.25);
    transition: box-shadow 0.3s ease;
 }
-
-@layer components {
-  /* Clase para contenedores que necesitan scroll horizontal */
-  .scrollable-content {
-    @apply relative w-full; /* Necesario para que los hijos puedan tener min-width */
-    overflow-x: auto; /* Habilita scroll horizontal si el contenido es más ancho */
-    overflow-y: hidden; /* Evita scroll vertical en este contenedor específico */
-    /* max-width: 100%; No es estrictamente necesario aquí si el padre lo controla, pero puede ser una salvaguarda */
-    -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
-  }
-  
-  /* Estilos para la barra de scroll en .scrollable-content */
-  .scrollable-content::-webkit-scrollbar {
-    height: 8px; /* Altura de la barra de scroll horizontal */
-  }
-  
-  .scrollable-content::-webkit-scrollbar-track {
-    background: transparent; /* Fondo del track de la barra de scroll */
-  }
-  
-  .scrollable-content::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--border)); /* Color del thumb de la barra de scroll */
-    border-radius: 4px; /* Bordes redondeados para el thumb */
-  }
-}
