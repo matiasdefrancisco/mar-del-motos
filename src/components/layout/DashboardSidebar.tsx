@@ -38,6 +38,7 @@ import {
   CreditCard,
   TestTube,
   History,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface NavItem {
@@ -50,7 +51,18 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, roles: ['admin', 'operator', 'rider', 'local'] },
+  {
+    href: '/dashboard',
+    label: 'Dashboards',
+    icon: LayoutDashboard,
+    roles: ['admin', 'operator', 'rider', 'local'],
+    subItems: [
+      { href: '/dashboard/admin', label: 'Admin', icon: ShieldCheck, roles: ['admin'] },
+      { href: '/dashboard/operator', label: 'Operator', icon: Users, roles: ['admin', 'operator'] },
+      { href: '/dashboard/local', label: 'Local', icon: Building, roles: ['admin', 'local'] },
+      { href: '/dashboard/rider', label: 'Rider', icon: Bike, roles: ['admin', 'rider'] },
+    ]
+  },
   {
     href: '/dashboard/orders',
     label: 'Pedidos',
