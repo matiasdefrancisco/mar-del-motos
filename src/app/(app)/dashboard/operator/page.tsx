@@ -270,64 +270,62 @@ export default function OperatorDashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="scrollable-content">
-            <Table className="min-w-[600px]"> {/* min-w asegura que la tabla pueda ser más ancha que el viewport */}
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">ID</TableHead>
-                  <TableHead>Local</TableHead>
-                  <TableHead>Dirección</TableHead>
-                  <TableHead>Repartidor</TableHead>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Duración</TableHead>
-                  <TableHead className="text-right">Acciones</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredOrders.map((order) => {
-                  const statusInfo = getStatusBadgeInfo(order.status);
-                  return (
-                    <TableRow key={order.id} className={cn(order.status === 'pendiente_aceptacion_op' ? 'bg-accent/10' : '')}>
-                      <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
-                      <TableCell>{order.localName}</TableCell>
-                      <TableCell>{order.deliveryAddress}</TableCell>
-                      <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
-                      <TableCell>
-                        <Badge variant={statusInfo.variant} className={cn(statusInfo.className, 'cursor-default')}>
-                          {statusInfo.label}
-                        </Badge>
-                        {order.paymentStatus === 'deuda_rider' && (
-                          <Badge variant="outline" className="ml-2 cursor-default text-destructive border-transparent bg-transparent">Deuda</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>{order.duration}</TableCell>
-                      <TableCell className="text-right">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Acciones del pedido</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleViewDetails(order)}>
-                              <Eye className="mr-2 h-4 w-4" /> Ver / Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
-                              <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
-                            </DropdownMenuItem>
-                             <DropdownMenuItem> 
-                              <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[80px]">ID</TableHead>
+                <TableHead>Local</TableHead>
+                <TableHead>Dirección</TableHead>
+                <TableHead>Repartidor</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Duración</TableHead>
+                <TableHead className="text-right">Acciones</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredOrders.map((order) => {
+                const statusInfo = getStatusBadgeInfo(order.status);
+                return (
+                  <TableRow key={order.id} className={cn(order.status === 'pendiente_aceptacion_op' ? 'bg-accent/10' : '')}>
+                    <TableCell className="font-medium">#{order.id.slice(-4)}</TableCell>
+                    <TableCell>{order.localName}</TableCell>
+                    <TableCell>{order.deliveryAddress}</TableCell>
+                    <TableCell>{order.assignedRiderName || <span className="text-muted-foreground italic">No asignado</span>}</TableCell>
+                    <TableCell>
+                      <Badge variant={statusInfo.variant} className={cn(statusInfo.className, 'cursor-default')}>
+                        {statusInfo.label}
+                      </Badge>
+                      {order.paymentStatus === 'deuda_rider' && (
+                        <Badge variant="outline" className="ml-2 cursor-default text-destructive border-transparent bg-transparent">Deuda</Badge>
+                      )}
+                    </TableCell>
+                    <TableCell>{order.duration}</TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Acciones del pedido</span>
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem onClick={() => handleViewDetails(order)}>
+                            <Eye className="mr-2 h-4 w-4" /> Ver / Editar
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleOpenAssignModal(order)} disabled={order.status === 'entregado_cliente' || order.status === 'cancelado'}>
+                            <Bike className="mr-2 h-4 w-4" /> Asignar Repartidor
+                          </DropdownMenuItem>
+                           <DropdownMenuItem> 
+                            <CreditCardIcon className="mr-2 h-4 w-4" /> Ver Deuda
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
           {filteredOrders.length === 0 && (
             <p className="text-center text-muted-foreground py-8">No se encontraron pedidos con los filtros actuales.</p>
           )}
