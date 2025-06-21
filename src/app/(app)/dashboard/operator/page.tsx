@@ -153,7 +153,7 @@ export default function OperatorDashboardPage() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-full overflow-x-hidden"> 
+    <div className="flex flex-col gap-6"> 
       <PageTitle 
         title="Panel de Operador" 
         icon={Users} 
