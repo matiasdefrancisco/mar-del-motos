@@ -10,8 +10,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <ProtectedRoute>
       <SidebarProvider>
-        {/* Contenedor Flex principal para sidebar y contenido */}
-        <div className="flex min-h-screen bg-secondary"> 
+        <div className="flex min-h-screen bg-secondary">
           <DashboardSidebar />
           {/* Contenedor para la columna de contenido principal */}
           <div className="flex-1 flex flex-col min-w-0">
