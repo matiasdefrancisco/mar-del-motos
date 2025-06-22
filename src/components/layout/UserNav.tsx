@@ -1,79 +1,58 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "../ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
-import { LogOut, User as UserIcon, Settings, CreditCard } from "lucide-react";
-import Link from "next/link";
+import { LogOut, Settings, User } from "lucide-react";
 
 export function UserNav() {
-  const { currentUser, logout, userRole } = useAuth();
+  const { currentUser, logout } = useAuth();
 
-  if (!currentUser || !currentUser.profile) {
-    return null;
-  }
-
-  const { displayName, email, photoURL, role } = currentUser.profile;
-  const fallbackName = displayName ? displayName.charAt(0).toUpperCase() : (email ? email.charAt(0).toUpperCase() : "U");
+  const initials = currentUser?.displayName
+    ?.split(" ")
+    .map(n => n[0])
+    .join("")
+    .toUpperCase() || "U";
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10">
-            <AvatarImage src={photoURL || `https://placehold.co/100x100.png?text=${fallbackName}`} alt={displayName || "Usuario"} data-ai-hint="avatar usuario" />
-            <AvatarFallback>{fallbackName}</AvatarFallback>
-          </Avatar>
-        </Button>
+        <Avatar className="h-8 w-8 cursor-pointer border border-[#333333] hover:border-[#ffd700]">
+          <AvatarFallback className="bg-[#1a1a1a] text-sm text-white">
+            {initials}
+          </AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
+      <DropdownMenuContent align="end" className="w-56 bg-[#1a1a1a] text-white">
+        <DropdownMenuLabel>
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{displayName}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {email}
-            </p>
-            <p className="text-xs leading-none text-muted-foreground capitalize pt-1">
-              Rol: {role}
-            </p>
+            <p className="text-sm font-medium">{currentUser?.displayName}</p>
+            <p className="text-xs text-gray-400">{currentUser?.email}</p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/dashboard/profile"> {/* Placeholder link */}
-              <UserIcon className="mr-2 h-4 w-4" />
-              <span>Perfil</span>
-            </Link>
-          </DropdownMenuItem>
-          {role === 'rider' && (
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/rider/debts"> {/* Placeholder link */}
-                <CreditCard className="mr-2 h-4 w-4" />
-                <span>Mis Deudas</span>
-              </Link>
-            </DropdownMenuItem>
-          )}
-          <DropdownMenuItem asChild>
-            <Link href="/dashboard/settings"> {/* Placeholder link */}
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Configuración</span>
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>
-          <LogOut className="mr-2 h-4 w-4" />
-          <span>Cerrar sesión</span>
+        <DropdownMenuSeparator className="bg-[#333333]" />
+        <DropdownMenuItem className="flex cursor-pointer items-center gap-2 text-sm hover:bg-[#333333]">
+          <User className="h-4 w-4" />
+          Perfil
+        </DropdownMenuItem>
+        <DropdownMenuItem className="flex cursor-pointer items-center gap-2 text-sm hover:bg-[#333333]">
+          <Settings className="h-4 w-4" />
+          Configuración
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-[#333333]" />
+        <DropdownMenuItem 
+          className="flex cursor-pointer items-center gap-2 text-sm text-red-500 hover:bg-[#333333] hover:text-red-400"
+          onClick={() => logout()}
+        >
+          <LogOut className="h-4 w-4" />
+          Cerrar Sesión
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

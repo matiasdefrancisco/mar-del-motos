@@ -1,6 +1,5 @@
-import Link from 'next/link';
-import Image from 'next/image';
-import logoSrc from '@/app/image.png'; // Importar el logo
+import { Bike } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface AppLogoProps {
   className?: string;
@@ -9,19 +8,17 @@ interface AppLogoProps {
   showText?: boolean;
 }
 
-const AppLogo = ({ className, iconSize = 48, textSize = "text-xl", showText = true }: AppLogoProps) => {
+export function AppLogo({ className, iconSize = 32, textSize = "text-lg", showText = true }: AppLogoProps) {
   return (
-    <Link href="/dashboard" className={`flex items-center gap-3 ${className}`}>
-      <Image 
-        src={logoSrc} 
-        alt="Mar del Motos Logo" 
-        width={iconSize} 
-        height={iconSize} 
-        priority 
-      />
-      {showText && <h1 className={`font-headline font-bold ${textSize} text-sidebar-foreground`}>Mar del Motos</h1>}
-    </Link>
+    <div className={cn("flex items-center gap-2", className)}>
+      <Bike size={iconSize} className="text-[#ffd700]" />
+      {showText && (
+        <span className={cn("font-semibold tracking-tight text-white", textSize)}>
+          Mar del Motos
+        </span>
+      )}
+    </div>
   );
-};
+}
 
 export default AppLogo;

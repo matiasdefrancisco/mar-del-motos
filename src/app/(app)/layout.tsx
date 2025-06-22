@@ -1,36 +1,57 @@
+'use client';
 
-import type { ReactNode } from 'react';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
-import ProtectedRoute from '@/components/auth/ProtectedRoute';
-import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import AppLogo from '@/components/layout/AppLogo';
-import { UserNav } from '@/components/layout/UserNav';
+import { useState } from 'react';
+import DashboardHeader from "@/components/layout/DashboardHeader";
+import DashboardSidebar from "@/components/layout/DashboardSidebar";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import { useAuth } from "@/contexts/AuthContext";
+import { usePathname } from "next/navigation";
+import { getAllowedRolesForPath } from "@/lib/auth-utils";
 
-export default function AppLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  const { userRole } = useAuth();
+  const pathname = usePathname();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Determinar los roles permitidos basados en la ruta actual usando utilidades centralizadas
+  const allowedRoles = getAllowedRolesForPath(pathname);
+
   return (
-    <ProtectedRoute>
-      <SidebarProvider>
-        <div className="flex h-screen w-full overflow-hidden bg-background">
-          <DashboardSidebar />
+    <ProtectedRoute allowedRoles={allowedRoles}>
+      <div className="min-h-screen bg-[#1a1a1a]">
+        {/* Overlay para móvil cuando el sidebar está abierto */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        
+        {/* Sidebar */}
+        <DashboardSidebar 
+          isOpen={sidebarOpen} 
+          onClose={() => setSidebarOpen(false)} 
+        />
+        
+        {/* Contenido principal */}
+        <div className="lg:pl-64">
+          {/* Header */}
+          <DashboardHeader 
+            onMenuClick={() => setSidebarOpen(true)} 
+          />
           
-          {/* Contenedor de la columna de contenido principal */}
-          <div className="flex flex-1 flex-col min-w-0">
-            {/* Header para vista móvil */}
-            <header className="flex h-14 flex-shrink-0 items-center justify-between border-b bg-card px-4 md:hidden">
-              <SidebarTrigger />
-              <div className="flex items-center gap-3">
-                <AppLogo iconSize={32} showText={false} />
-                <UserNav />
-              </div>
-            </header>
-
-            {/* Área de contenido principal con scroll vertical */}
-            <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {/* Main content */}
+          <main className="min-h-[calc(100vh-4rem)] p-4 sm:p-6 lg:p-8">
+            <div className="mx-auto max-w-7xl">
               {children}
-            </main>
-          </div>
+            </div>
+          </main>
         </div>
-      </SidebarProvider>
+      </div>
     </ProtectedRoute>
   );
 }

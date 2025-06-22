@@ -3,65 +3,36 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Skeleton } from '@/components/ui/skeleton';
+import { getDashboardPath } from '@/lib/auth-utils';
 import Image from 'next/image';
-import logoSrc from '@/app/image.png'; // Asegúrate que la ruta sea correcta desde esta ubicación
+import logoSrc from '@/app/image.png';
 
-export default function DashboardRedirectPage() {
-  const { userRole, loading: authLoading } = useAuth();
+export default function DashboardPage() {
+  const { userRole, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    // Esta página es ahora principalmente un fallback.
-    // La lógica principal de redirección está en HomePage.
-    if (!authLoading) {
-      if (userRole) {
-        let targetPath = '/login';
-        switch (userRole) {
-          case 'admin':
-            targetPath = '/dashboard/admin';
-            break;
-          case 'operator':
-            targetPath = '/dashboard/operator';
-            break;
-          case 'rider':
-            targetPath = '/dashboard/rider';
-            break;
-          case 'local':
-            targetPath = '/dashboard/local';
-            break;
-          default:
-            // Si alguien llega a /dashboard y el rol no es claro, login es un fallback seguro.
-            targetPath = '/login';
-        }
-        router.replace(targetPath);
-      } else {
-        router.replace('/login');
+    if (!loading && userRole) {
+      console.log('DashboardPage: Redirigiendo a dashboard específico:', userRole);
+      const dashboardPath = getDashboardPath(userRole);
+      if (dashboardPath !== '/dashboard') {
+        router.replace(dashboardPath);
       }
     }
-  }, [userRole, authLoading, router]);
+  }, [userRole, loading, router]);
 
-  // Siempre muestra un cargador de página completa, similar a HomePage,
-  // porque esta página no debería ser visible por mucho tiempo.
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-      <div className="w-full max-w-md p-8 space-y-8">
-        <div className="text-center">
-           <Image
-            src={logoSrc}
-            alt="Mar del Motos Logo"
-            width={48}
-            height={48}
-            priority
-            className="mx-auto"
-           />
-          <h1 className="mt-6 text-3xl font-extrabold text-foreground">Mar del Motos</h1>
-          <p className="mt-2 text-muted-foreground">Cargando panel...</p>
-        </div>
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-full" />
-        <Skeleton className="h-10 w-1/2 mx-auto" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#1a1a1a]">
+      <div className="relative w-32 h-32 animate-pulse">
+        <Image
+          src={logoSrc}
+          alt="Mar del Motos Logo"
+          fill
+          style={{ objectFit: 'contain' }}
+          priority
+        />
       </div>
+      <p className="mt-4 text-white text-opacity-80">Redirigiendo al panel correspondiente...</p>
     </div>
   );
 }

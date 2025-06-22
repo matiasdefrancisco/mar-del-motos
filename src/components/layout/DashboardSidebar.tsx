@@ -1,146 +1,214 @@
-
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import {
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarMenuBadge,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
-  SidebarSeparator,
-} from '@/components/ui/sidebar';
-// AppLogo ya no se importa aquí
-import { Button } from '@/components/ui/button';
-import { useAuth } from '@/contexts/AuthContext';
-import type { UserRole } from '@/lib/types';
-import {
-  LayoutDashboard,
-  Users,
-  ClipboardList,
-  Bike,
-  DollarSign,
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import { cn } from "@/lib/utils";
+import AppLogo from "@/components/layout/AppLogo";
+import type { UserRole } from "@/lib/types";
+import { 
+  Home,
+  Package,
+  Users, 
   Settings,
-  HelpCircle,
-  Bot,
   LogOut,
-  Building,
-  MapPin,
+  X,
+  BarChart3,
   FileText,
-  AreaChart,
-  CreditCard,
-  TestTube,
-  History,
-  ShieldCheck,
-} from 'lucide-react';
+  MapPin,
+  Clock,
+  DollarSign,
+  Truck,
+  CheckCircle,
+  AlertCircle
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+
+interface DashboardSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
 interface NavItem {
   href: string;
   label: string;
-  icon: React.ElementType;
-  roles: UserRole[];
-  subItems?: NavItem[];
-  badge?: string;
+  icon: any;
+  exact?: boolean;
 }
 
-const navItems: NavItem[] = [
-  {
-    href: '/dashboard',
-    label: 'Dashboards',
-    icon: LayoutDashboard,
-    roles: ['admin', 'operator', 'rider', 'local'],
-    subItems: [
-      { href: '/dashboard/admin', label: 'Admin', icon: ShieldCheck, roles: ['admin'] },
-      { href: '/dashboard/operator', label: 'Operator', icon: Users, roles: ['admin', 'operator'] },
-      { href: '/dashboard/local', label: 'Local', icon: Building, roles: ['admin', 'local'] },
-      { href: '/dashboard/rider', label: 'Rider', icon: Bike, roles: ['admin', 'rider'] },
-    ]
-  },
-  {
-    href: '/dashboard/orders',
-    label: 'Pedidos',
-    icon: ClipboardList,
-    roles: ['admin', 'operator', 'local'],
-  },
-  { href: '/dashboard/riders', label: 'Repartidores', icon: Bike, roles: ['admin', 'operator'] },
-  { href: '/dashboard/locals', label: 'Locales', icon: Building, roles: ['admin', 'operator'] },
-  {
-    href: '/dashboard/debts',
-    label: 'Deudas',
-    icon: CreditCard,
-    roles: ['admin', 'operator', 'rider'],
-    badge: 'Nuevo'
-  },
-  { href: '/dashboard/operator/ai-payment-plan', label: 'Plan de Pago IA', icon: Bot, roles: ['operator'] },
-  { href: '/dashboard/history', label: 'Historial', icon: History, roles: ['admin', 'operator'] },
-  { href: '/dashboard/reports', label: 'Reportes', icon: AreaChart, roles: ['admin'] },
-  { href: '/dashboard/user-management', label: 'Usuarios', icon: Users, roles: ['admin'] },
-  { href: '/dashboard/settings', label: 'Configuración', icon: Settings, roles: ['admin', 'operator', 'rider', 'local'] },
-  { href: '/dashboard/test', label: 'Dashboard Prueba', icon: TestTube, roles: ['admin', 'operator', 'rider', 'local'] },
-];
-
-
-export default function DashboardSidebar() {
+export default function DashboardSidebar({ isOpen, onClose }: DashboardSidebarProps) {
+  const { currentUser, logout } = useAuth();
   const pathname = usePathname();
-  const { userRole, logout, currentUser } = useAuth();
 
   const isActive = (href: string, exact: boolean = false) => {
     if (exact) return pathname === href;
     return pathname.startsWith(href);
   };
 
-  const filteredNavItems = navItems.filter(item => userRole && item.roles.includes(userRole));
+  const handleLogout = async () => {
+    try {
+      await logout();
+      onClose();
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
+
+  const getNavItems = (): NavItem[] => {
+    const role = currentUser?.profile.role;
+
+    switch (role) {
+      case "admin":
+        return [
+          { href: "/dashboard/admin", label: "Panel Principal", icon: Home, exact: true },
+          { href: "/dashboard/admin/usuarios", label: "Gestión de Usuarios", icon: Users },
+          { href: "/dashboard/admin/usuarios/crear", label: "Crear Usuario", icon: Users },
+          { href: "/dashboard/admin/reportes", label: "Reportes", icon: BarChart3 },
+          { href: "/dashboard/admin/configuracion", label: "Configuración", icon: Settings },
+        ];
+      
+      case "operator":
+        return [
+          { href: "/dashboard/operator", label: "Panel Principal", icon: Home, exact: true },
+          { href: "/dashboard/operator/pedidos", label: "Gestión de Pedidos", icon: Package },
+          { href: "/dashboard/operator/riders", label: "Repartidores", icon: Truck },
+          { href: "/dashboard/operator/ai-payment-plan", label: "Plan de Pagos IA", icon: DollarSign },
+        ];
+      
+      case "rider":
+        return [
+          { href: "/dashboard/rider", label: "Panel Principal", icon: Home, exact: true },
+          { href: "/dashboard/rider/pedidos", label: "Mis Pedidos", icon: Package },
+          { href: "/dashboard/rider/rutas", label: "Rutas", icon: MapPin },
+          { href: "/dashboard/rider/historial", label: "Historial", icon: Clock },
+          { href: "/dashboard/rider/deudas", label: "Mis Deudas", icon: DollarSign },
+        ];
+      
+      case "local":
+        return [
+          { href: "/dashboard/local", label: "Panel Principal", icon: Home, exact: true },
+          { href: "/dashboard/local/pedidos", label: "Mis Pedidos", icon: Package },
+          { href: "/dashboard/local/productos", label: "Productos", icon: FileText },
+          { href: "/dashboard/local/deudas", label: "Deudas", icon: DollarSign },
+        ];
+      
+      default:
+        return [
+          { href: "/dashboard", label: "Panel Principal", icon: Home, exact: true },
+        ];
+    }
+  };
+
+  const navItems = getNavItems();
+
+  const SidebarContent = () => (
+    <div className="flex h-full flex-col bg-[#1a1a1a] border-r border-[#333333]">
+      {/* Header */}
+      <div className="flex h-16 items-center justify-between px-6 border-b border-[#333333]">
+        <AppLogo />
+                <Button
+          variant="ghost"
+          size="sm"
+          onClick={onClose}
+          className="lg:hidden text-gray-400 hover:text-white hover:bg-[#2d2d2d]"
+        >
+          <X className="h-5 w-5" />
+                </Button>
+      </div>
+
+      {/* User Info */}
+      <div className="p-6 border-b border-[#333333]">
+        <div className="flex items-center space-x-3">
+          <div className="h-10 w-10 rounded-full bg-[#ffd700] flex items-center justify-center">
+            <span className="text-black font-semibold text-sm">
+              {currentUser?.profile?.displayName?.charAt(0).toUpperCase() || 
+               currentUser?.email?.charAt(0).toUpperCase() || 'U'}
+            </span>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-white truncate">
+              {currentUser?.profile?.displayName || currentUser?.email}
+            </p>
+            <p className="text-xs text-gray-400 capitalize">
+              {getRoleLabel(currentUser?.profile?.role || null)}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Navigation */}
+      <ScrollArea className="flex-1 px-3 py-4">
+        <nav className="space-y-1">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            const active = isActive(item.href, item.exact);
+            
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={onClose}
+                className={cn(
+                  "flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors",
+                  active
+                    ? "bg-[#ffd700]/10 text-[#ffd700] border border-[#ffd700]/20"
+                    : "text-gray-300 hover:text-white hover:bg-[#2d2d2d]"
+                )}
+              >
+                <Icon className={cn("mr-3 h-5 w-5", active ? "text-[#ffd700]" : "text-gray-400")} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+    </ScrollArea>
+
+      {/* Footer */}
+      <div className="p-4 border-t border-[#333333]">
+        <Button
+          variant="ghost"
+          onClick={handleLogout}
+          className="w-full justify-start text-gray-300 hover:text-white hover:bg-[#2d2d2d]"
+        >
+          <LogOut className="mr-3 h-5 w-5" />
+          Cerrar Sesión
+        </Button>
+      </div>
+    </div>
+  );
 
   return (
-    <Sidebar collapsible="icon" variant="sidebar" side="left">
-      <SidebarHeader className="p-4 border-b-2 border-sidebar-border">
-        {/* AppLogo eliminado de aquí */}
-      </SidebarHeader>
-      <SidebarContent className="flex-1 p-2">
-        <SidebarMenu>
-          {filteredNavItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton
-                asChild
-                isActive={isActive(item.href, item.href === '/dashboard')}
-                tooltip={{ children: item.label, className: "bg-popover text-popover-foreground" }}
-              >
-                <Link href={item.href}>
-                  <item.icon />
-                  <span>{item.label}</span>
-                  {item.badge && <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>}
-                </Link>
-              </SidebarMenuButton>
-              {item.subItems && isActive(item.href) && (
-                <SidebarMenuSub>
-                  {item.subItems.filter(sub => userRole && sub.roles.includes(userRole)).map(subItem => (
-                     <SidebarMenuSubItem key={subItem.href}>
-                       <SidebarMenuSubButton asChild isActive={isActive(subItem.href, true)}>
-                         <Link href={subItem.href}>
-                           <subItem.icon />
-                           <span>{subItem.label}</span>
-                         </Link>
-                       </SidebarMenuSubButton>
-                     </SidebarMenuSubItem>
-                  ))}
-                </SidebarMenuSub>
-              )}
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarContent>
-      <SidebarFooter className="p-4 border-t-2 border-sidebar-border">
-        <Button variant="ghost" className="w-full justify-start gap-2 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground" onClick={logout}>
-          <LogOut size={16} /> Salir
-        </Button>
-      </SidebarFooter>
-    </Sidebar>
+    <>
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+        <SidebarContent />
+      </div>
+
+      {/* Mobile Sidebar */}
+      <div className={cn(
+        "fixed inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:hidden",
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      )}>
+        <SidebarContent />
+      </div>
+    </>
   );
 }
+
+const getRoleLabel = (role: UserRole) => {
+  switch (role) {
+    case "admin":
+      return "Administrador";
+    case "operator":
+      return "Operador";
+    case "rider":
+      return "Repartidor";
+    case "local":
+      return "Local";
+    default:
+      return "Usuario";
+  }
+};
+
+export { DashboardSidebar };

@@ -1,7 +1,8 @@
-import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
-import { getAuth, Auth } from 'firebase/auth';
-import { getFirestore, Firestore } from 'firebase/firestore'; // Descomentado
-// import { getStorage, FirebaseStorage } from 'firebase/storage';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
+import { getAnalytics, isSupported } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -10,25 +11,54 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
-let app: FirebaseApp;
-let auth: Auth;
-let firestore: Firestore; // Descomentado
-// let storage: FirebaseStorage;
-
-if (typeof window !== 'undefined' && !getApps().length) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  firestore = getFirestore(app); // Descomentado
-  // storage = getStorage(app);
-} else {
-  // On the server or if already initialized
-  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig); // initialize if not already on server
-  auth = getAuth(app);
-  firestore = getFirestore(app); // Descomentado
-  // storage = getStorage(app);
+// Verificar que tenemos todas las variables de entorno necesarias
+if (!firebaseConfig.apiKey || !firebaseConfig.authDomain || !firebaseConfig.projectId) {
+  console.error('Firebase config error: Faltan variables de entorno requeridas');
+  console.log('Config actual:', {
+    apiKey: !!firebaseConfig.apiKey,
+    authDomain: !!firebaseConfig.authDomain,
+    projectId: !!firebaseConfig.projectId,
+    storageBucket: !!firebaseConfig.storageBucket,
+    messagingSenderId: !!firebaseConfig.messagingSenderId,
+    appId: !!firebaseConfig.appId
+  });
 }
 
+// Initialize Firebase
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+console.log('Firebase App inicializado');
 
-export { app, auth, firestore /*, storage */ }; // Exportar firestore
+// Initialize services
+const auth = getAuth(app);
+console.log('Firebase Auth inicializado');
+
+const firestore = getFirestore(app);
+console.log('Firebase Firestore inicializado');
+
+const storage = getStorage(app);
+console.log('Firebase Storage inicializado');
+
+// Set persistence to LOCAL
+setPersistence(auth, browserLocalPersistence)
+  .then(() => {
+    console.log('Firebase Auth persistence configurada a LOCAL');
+  })
+  .catch((error) => {
+    console.error('Error configurando persistencia de Auth:', error);
+  });
+
+// Initialize Analytics in production only
+let analytics = null;
+if (process.env.NODE_ENV === 'production') {
+  isSupported().then(yes => {
+    if (yes) {
+        analytics = getAnalytics(app);
+      console.log('Firebase Analytics inicializado');
+    }
+  });
+}
+
+export { app, auth, firestore, storage, analytics };

@@ -1,0 +1,99 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Funciones de ayuda
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+    }
+    
+    function isAdmin() {
+      return hasRole('admin');
+    }
+    
+    function isOperator() {
+      return hasRole('operator');
+    }
+    
+    function isRider() {
+      return hasRole('rider');
+    }
+    
+    function isLocal() {
+      return hasRole('local');
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidStatus(status) {
+      return [
+        'peticion_enviada',
+        'repartidor_en_camino',
+        'pedido_retirado',
+        'saldo_definido',
+        'entregado_repartidor',
+        'entregado_cliente',
+        'cancelado'
+      ].hasAny([status]);
+    }
+
+    // Reglas para usuarios
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin() || isOperator());
+      allow create: if isAdmin();
+      allow update: if isAdmin() || isOwner(userId);
+      allow delete: if isAdmin();
+    }
+
+    // Reglas para pedidos
+    match /orders/{orderId} {
+      allow read: if isAuthenticated();
+      allow create: if isLocal() || isOperator() || isAdmin();
+      allow update: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        (isLocal() && resource.data.localId == request.auth.uid) ||
+        (isRider() && resource.data.assignedRiderId == request.auth.uid)
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Reglas para deudas
+    match /debts/{debtId} {
+      allow read: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        (isRider() && resource.data.riderId == request.auth.uid) ||
+        (isLocal() && resource.data.localId == request.auth.uid)
+      );
+      allow create: if isOperator() || isAdmin();
+      allow update: if isOperator() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Reglas para asignaciones
+    match /assignments/{assignmentId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOperator() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Reglas para logs de auditoría
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false;
+    }
+
+    // Reglas para configuración
+    match /config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+} 

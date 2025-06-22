@@ -2,216 +2,220 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Paleta Mar del Motos - Tema Oscuro */
-  --background: 150 6% 10%; /* Negro/Gris muy oscuro para el fondo principal */
-  --foreground: 0 0% 95%; /* Blanco/Gris claro para texto principal */
-  
-  --card: 150 6% 13%; /* Ligeramente más claro que el fondo para cards */
-  --card-foreground: 0 0% 95%;
-  
-  --popover: 150 6% 12%;
-  --popover-foreground: 0 0% 95%;
-  
-  --primary: 150 41% 18.4%; /* Verde Oscuro #1B4332 */
-  --primary-foreground: 0 0% 98%; /* Blanco/gris muy claro para contraste con verde oscuro */
-  
-  --secondary: 150 6% 20%; /* Gris oscuro para elementos secundarios */
-  --secondary-foreground: 0 0% 95%;
-  
-  --muted: 150 6% 25%; /* Gris más claro para elementos silenciados */
-  --muted-foreground: 0 0% 65%; /* Gris medio para texto silenciado */
-  
-  --accent: 43 91% 36.1%; /* Dorado #B8860B - Para highlights y CTAs principales */
-  --accent-foreground: 0 0% 10%; /* Negro/gris muy oscuro para contraste con dorado */
-  
-  --destructive: 0 62% 40%; /* Rojo para acciones destructivas */
-  --destructive-foreground: 0 0% 98%;
-  
-  --border: 150 6% 22%; /* Gris para bordes */
-  --input: 150 6% 22%; /* Gris para fondos de input */
-  --ring: 43 91% 40.1%; /* Dorado (ligeramente más brillante) para anillos de foco */
-  
-  --radius: 0.75rem;
-  
-  --chart-1: 150 41% 25%; /* Verde oscuro para charts */
-  --chart-2: 43 91% 45%; /* Dorado para charts */
-  --chart-3: 197 37% 30%; /* Un azul/verde secundario */
-  --chart-4: 0 0% 60%;   /* Gris */
-  --chart-5: 27 87% 67%; /* Naranja/ámbar */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
 
-  /* Colores de sidebar (manteniendo consistencia con el tema oscuro) */
-  --sidebar-background: 150 6% 8%; /* Más oscuro que el fondo principal */
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 150 41% 22.4%; /* Verde primario para sidebar, un poco más brillante */
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 150 6% 18%; 
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-border: 150 6% 15%;
-  --sidebar-ring: 150 41% 22.4%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+ 
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+ 
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+ 
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+ 
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-  /* Sección destacada para tema oscuro */
-  --highlighted-section: 150 41% 15.4%; /* Verde muy oscuro y sutil para secciones destacadas */
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+ 
+    --radius: 0.5rem;
+  }
+ 
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+ 
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+ 
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
 }
-
-.dark {
-  --background: 150 6% 10%;
-  --foreground: 0 0% 95%;
-  --card: 150 6% 13%;
-  --card-foreground: 0 0% 95%;
-  --popover: 150 6% 12%;
-  --popover-foreground: 0 0% 95%;
-  --primary: 150 41% 18.4%;
-  --primary-foreground: 0 0% 98%;
-  --secondary: 150 6% 20%;
-  --secondary-foreground: 0 0% 95%;
-  --muted: 150 6% 25%;
-  --muted-foreground: 0 0% 65%;
-  --accent: 43 91% 36.1%;
-  --accent-foreground: 0 0% 10%;
-  --destructive: 0 62% 40%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 150 6% 22%;
-  --input: 150 6% 22%;
-  --ring: 43 91% 40.1%;
-  
-  --sidebar-background: 150 6% 8%;
-  --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 150 41% 22.4%;
-  --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 150 6% 18%;
-  --sidebar-accent-foreground: 0 0% 95%;
-  --sidebar-border: 150 6% 15%;
-  --sidebar-ring: 150 41% 22.4%;
-
-  --highlighted-section: 150 41% 15.4%;
-}
-
 
 @layer base {
   * {
     @apply border-border;
   }
-  html {
-    overflow-x: hidden;
-    max-width: 100vw;
-  }
   body {
-    @apply bg-background text-foreground font-body;
-    min-height: 100vh;
-    position: relative;
+    @apply bg-background text-foreground;
   }
 }
 
-/* Estilos para navbar y sidebar (efectos metálicos) - Mantenidos según diseño original */
-.navbar {
-  background: linear-gradient(135deg,
-    #000000 0%, /* Negro puro */
-    hsl(var(--primary) / 0.6) 20%, /* Verde primario muy oscuro, casi negro */
-    hsl(var(--primary) / 0.8) 35%, /* Verde primario oscuro */
-    hsl(var(--primary)) 45%, /* Verde primario del tema */
-    hsl(var(--primary) / 1.2) 50%, /* Verde un poco más claro como reflejo principal */
-    hsl(var(--primary)) 55%, /* Verde primario */
-    hsl(var(--primary) / 0.8) 65%,
-    hsl(var(--primary) / 0.6) 80%,
-    #000000 100%
-  );
-  background-size: 400% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite;
-
-  box-shadow:
-    0 3px 15px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 hsla(var(--primary), 0.2), 
-    0 0 20px hsla(var(--primary), 0.15); 
-
-  border-bottom: 1px solid hsla(var(--primary), 0.4); 
-
-  position: relative; 
-  overflow: hidden; /* Importante para contener el ::after y asegurar que no cause overflow */
+/* Ajustes de espaciado vertical */
+@layer utilities {
+  .h-svh {
+    height: 100svh;
+  }
+  
+  .min-h-svh {
+    min-height: 100svh;
+  }
+  
+  .max-h-svh {
+    max-height: 100svh;
+  }
 }
 
-.navbar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    hsla(var(--primary-foreground), 0.05) 20%, 
-    hsla(var(--primary-foreground), 0.15) 50%, 
-    hsla(var(--primary-foreground), 0.05) 80%,
-    transparent 100%
+/* Estilos para navbar y sidebar */
+.navbar {
+  background: linear-gradient(
+    180deg,
+    hsl(147 45% 18%) 0%,  /* #1B4332 */
+    hsl(147 45% 15%) 100%  /* Slightly darker */
   );
-  animation: sweep-light 5s ease-in-out infinite;
-  pointer-events: none;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+}
+
+.dark .navbar {
+  background: linear-gradient(to right, #1B4332 0%, #153025 100%);
+  box-shadow: 
+    0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-metallic-effect {
-  background: linear-gradient(135deg,
-    hsl(var(--sidebar-background) / 0.7) 0%, /* Sidebar bg muy oscuro */
-    hsl(var(--sidebar-background) / 0.85) 20%,
-    hsl(var(--sidebar-background)) 35%,
-    hsl(var(--sidebar-background)) 45%, 
-    hsl(var(--sidebar-primary) / 0.7) 50%, /* Reflejo con sidebar primary más sutil */
-    hsl(var(--sidebar-background)) 55%,
-    hsl(var(--sidebar-background)) 65%,
-    hsl(var(--sidebar-background) / 0.85) 80%,
-    hsl(var(--sidebar-background) / 0.7) 100%
+  background: linear-gradient(
+    135deg,
+    hsl(147 45% 18%) 0%,  /* #1B4332 */
+    hsl(147 45% 15%) 100%  /* Slightly darker */
   );
-  background-size: 400% 100%;
-  animation: metallic-shimmer 7s ease-in-out infinite;
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  color: white;
+}
+
+.dark .sidebar-metallic-effect {
+  background: linear-gradient(145deg, #1B4332 0%, #153025 100%);
   box-shadow:
-    3px 0 15px rgba(0, 0, 0, 0.4), 
-    inset 1px 0 0 hsla(var(--primary), 0.15), 
-    0 0 20px hsla(var(--primary), 0.1); 
-  overflow: hidden; /* Importante para contener el ::after y asegurar que no cause overflow */
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+    inset 2px 2px 4px rgba(255, 255, 255, 0.05);
 }
 
-.sidebar-metallic-effect::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%; 
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    hsla(var(--sidebar-foreground), 0.03) 20%, 
-    hsla(var(--sidebar-foreground), 0.1) 50%, 
-    hsla(var(--sidebar-foreground), 0.03) 80%,
-    transparent 100%
-  );
-  animation: sweep-light 5s ease-in-out infinite;
-  pointer-events: none;
+/* Efectos de hover y activo para elementos de navegación */
+.nav-item {
+  transition: all 0.2s ease;
 }
 
-@keyframes metallic-shimmer {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
-@keyframes sweep-light {
-  0% { left: -100%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  100% { left: 100%; opacity: 0; }
+.nav-item.active {
+  background: rgba(184, 134, 11, 0.2);  /* #B8860B con opacidad */
+  border-left: 3px solid #B8860B;
 }
 
-@media (max-width: 768px) { /* md breakpoint */
-  .navbar { animation-duration: 9s; }
-  .navbar::after { animation-duration: 7s; }
-  .sidebar-metallic-effect { animation-duration: 9s; }
-  .sidebar-metallic-effect::after { animation-duration: 7s; }
+/* Estilos para cards y secciones */
+.card {
+  background: white;
+  border: 1px solid #E5E5E5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.navbar:hover {
-  box-shadow: 0 5px 25px rgba(0,0,0,0.5), inset 0 1px 0 hsla(var(--primary),0.3), 0 0 30px hsla(var(--primary),0.25);
-  transition: box-shadow 0.3s ease;
+.dark .card {
+  background: #1A1A1A;
+  border-color: #333333;
 }
 
-.sidebar-metallic-effect:hover {
-   box-shadow: 5px 0 25px rgba(0,0,0,0.5), inset 1px 0 0 hsla(var(--primary),0.3), 0 0 30px hsla(var(--primary),0.25);
-   transition: box-shadow 0.3s ease;
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.highlighted-section {
+  background: #E8F5E8;
+  border: 1px solid #C8E6C9;
+}
+
+.dark .highlighted-section {
+  background: rgba(27, 67, 50, 0.2);  /* #1B4332 con opacidad */
+  border-color: #1B4332;
+}
+
+/* Estilos para botones y elementos interactivos */
+.btn-primary {
+  background: #1B4332;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #153025;
+}
+
+.btn-accent {
+  background: #B8860B;
+  color: white;
+}
+
+.btn-accent:hover {
+  background: #96690A;
+}
+
+/* Estilos para scrollbar personalizado */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(27, 67, 50, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1B4332;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #153025;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(27, 67, 50, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #B8860B;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #96690A;
 }

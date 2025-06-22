@@ -1,0 +1,75 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Funciones de ayuda
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == role;
+    }
+    
+    function isAdmin() {
+      return hasRole('admin');
+    }
+    
+    function isOperator() {
+      return hasRole('operator');
+    }
+    
+    function isRider() {
+      return hasRole('rider');
+    }
+    
+    function isLocal() {
+      return hasRole('local');
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Reglas para imágenes de perfil
+    match /profile_images/{userId}/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // Reglas para documentos de pedidos
+    match /order_documents/{orderId}/{fileName} {
+      allow read: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        firestore.get(/databases/(default)/documents/orders/$(orderId)).data.localId == request.auth.uid ||
+        firestore.get(/databases/(default)/documents/orders/$(orderId)).data.assignedRiderId == request.auth.uid
+      );
+      allow write: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        firestore.get(/databases/(default)/documents/orders/$(orderId)).data.localId == request.auth.uid
+      );
+    }
+
+    // Reglas para comprobantes de pago
+    match /payment_proofs/{debtId}/{fileName} {
+      allow read: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        firestore.get(/databases/(default)/documents/debts/$(debtId)).data.riderId == request.auth.uid ||
+        firestore.get(/databases/(default)/documents/debts/$(debtId)).data.localId == request.auth.uid
+      );
+      allow write: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        firestore.get(/databases/(default)/documents/debts/$(debtId)).data.riderId == request.auth.uid
+      );
+    }
+
+    // Reglas para archivos del sistema
+    match /system/{fileName} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+  }
+} 

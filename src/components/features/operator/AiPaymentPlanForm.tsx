@@ -41,10 +41,10 @@ export default function AiPaymentPlanForm() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Bot className="h-6 w-6 text-primary" />
-          <CardTitle className="text-2xl font-headline">Sugerencia de Plan de Pago IA</CardTitle>
+          <CardTitle className="text-2xl font-headline">Asistente de Gestión de Deudas</CardTitle>
         </div>
         <CardDescription>
-          Introduce el historial de deudas y la ubicación actual del rider para obtener un plan de pago sugerido.
+          Obtén sugerencias sobre cómo gestionar el registro de deudas y seguimiento de pagos pendientes. Esta herramienta es solo informativa y no procesa pagos reales.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
@@ -62,19 +62,19 @@ export default function AiPaymentPlanForm() {
               id="riderDebtHistory"
               value={riderDebtHistory}
               onChange={(e) => setRiderDebtHistory(e.target.value)}
-              placeholder="Ej: Debe $50 vencido hace 1 semana, $30 vence en 2 días. Ha pagado puntualmente en el pasado."
+              placeholder="Ej: Tiene registro de deuda de $500 del pedido #123 pendiente desde hace 1 semana, y un registro histórico de cumplimiento puntual en entregas anteriores."
               rows={5}
               required
               className="bg-input"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="riderCurrentLocation">Ubicación Actual del Rider</Label>
+            <Label htmlFor="riderCurrentLocation">Zona de Operación del Rider</Label>
             <Input
               id="riderCurrentLocation"
               value={riderCurrentLocation}
               onChange={(e) => setRiderCurrentLocation(e.target.value)}
-              placeholder="Ej: Mar del Plata, zona céntrica"
+              placeholder="Ej: Mar del Plata, zona céntrica - Para contextualizar las sugerencias de gestión"
               required
               className="bg-input"
             />
