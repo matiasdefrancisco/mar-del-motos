@@ -1,4 +1,5 @@
 import type {NextConfig} from 'next';
+import path from 'path';
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -9,9 +10,10 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
   webpack: (config, { isServer }) => {
-    // Excluir archivos de AI que causan problemas en el build
+    // Configurar alias para path mapping
     config.resolve.alias = {
       ...config.resolve.alias,
+      '@': path.resolve(__dirname, './src'),
     };
     
     // Ignorar módulos problemáticos de OpenTelemetry y Handlebars
