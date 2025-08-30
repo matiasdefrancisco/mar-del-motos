@@ -1,13 +1,14 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Funciones de ayuda
+    // Funciones de ayuda optimizadas
     function isAuthenticated() {
       return request.auth != null;
     }
     
+    // OPTIMIZACIÓN: Usar custom claims en lugar de get() costoso
     function hasRole(role) {
-      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+      return isAuthenticated() && request.auth.token.role == role;
     }
     
     function isAdmin() {
@@ -42,58 +43,112 @@ service cloud.firestore {
       ].hasAny([status]);
     }
 
-    // Reglas para usuarios
-    match /users/{userId} {
-      allow read: if isAuthenticated() && (isOwner(userId) || isAdmin() || isOperator());
-      allow create: if isAdmin();
-      allow update: if isAdmin() || isOwner(userId);
-      allow delete: if isAdmin();
+    // OPTIMIZACIÓN: Cache de roles por usuario
+    function getUserRole() {
+      return request.auth.token.role;
     }
 
-    // Reglas para pedidos
-    match /orders/{orderId} {
-      allow read: if isAuthenticated();
-      allow create: if isLocal() || isOperator() || isAdmin();
-      allow update: if isAuthenticated() && (
+    // Reglas para usuarios - OPTIMIZADO
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (
+        isOwner(userId) || 
         isAdmin() || 
-        isOperator() || 
-        (isLocal() && resource.data.localId == request.auth.uid) ||
-        (isRider() && resource.data.assignedRiderId == request.auth.uid)
+        isOperator() ||
+        // Permitir lectura del propio documento aunque no tenga custom claims configurados
+        (request.auth.uid == userId)
+      );
+      allow create: if isAdmin();
+      allow update: if isAdmin() || (
+        isOwner(userId) && 
+        // Solo permitir actualizar campos seguros
+        !('role' in request.resource.data.diff(resource.data).affectedKeys()) &&
+        !('status' in request.resource.data.diff(resource.data).affectedKeys())
       );
       allow delete: if isAdmin();
     }
 
-    // Reglas para deudas
+    // Reglas para pedidos - OPTIMIZADO para tiempo real
+    match /orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() ||
+        (isLocal() && request.auth.uid == resource.data.localId) ||
+        (isRider() && request.auth.uid == resource.data.assignedRiderId)
+      );
+      allow create: if isLocal() || isOperator() || isAdmin();
+      allow update: if isAuthenticated() && (
+        isAdmin() || 
+        isOperator() || 
+        (isLocal() && request.auth.uid == resource.data.localId) ||
+        (isRider() && request.auth.uid == resource.data.assignedRiderId &&
+         // Repartidores solo pueden actualizar status y location
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'location', 'updatedAt']))
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Reglas para tracking en tiempo real - NUEVO
+    match /tracking/{trackingId} {
+      allow read: if isAuthenticated() && (
+        isOperator() || 
+        isAdmin() ||
+        (isRider() && request.auth.uid == resource.data.riderId)
+      );
+      allow write: if isRider() && request.auth.uid == resource.data.riderId;
+    }
+
+    // Reglas para deudas - OPTIMIZADO
     match /debts/{debtId} {
       allow read: if isAuthenticated() && (
         isAdmin() || 
         isOperator() || 
-        (isRider() && resource.data.riderId == request.auth.uid) ||
-        (isLocal() && resource.data.localId == request.auth.uid)
+        (isRider() && request.auth.uid == resource.data.riderId) ||
+        (isLocal() && request.auth.uid == resource.data.localId)
       );
       allow create: if isOperator() || isAdmin();
       allow update: if isOperator() || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Reglas para asignaciones
+    // Reglas para asignaciones - OPTIMIZADO
     match /assignments/{assignmentId} {
-      allow read: if isAuthenticated();
+      allow read: if isAuthenticated() && (
+        isOperator() || 
+        isAdmin() ||
+        request.auth.uid == resource.data.riderId
+      );
       allow create, update: if isOperator() || isAdmin();
       allow delete: if isAdmin();
     }
 
-    // Reglas para logs de auditoría
+    // Reglas para logs de auditoría - OPTIMIZADO
     match /audit_logs/{logId} {
       allow read: if isAdmin();
       allow create: if isAuthenticated();
       allow update, delete: if false;
     }
 
-    // Reglas para configuración
+    // Reglas para configuración - OPTIMIZADO
     match /config/{configId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
+    }
+
+    // NUEVO: Reglas para cache de métricas en tiempo real
+    match /metrics/{metricId} {
+      allow read: if isAuthenticated();
+      allow write: if isOperator() || isAdmin();
+    }
+
+    // NUEVO: Reglas para notificaciones push
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && (
+        isAdmin() ||
+        request.auth.uid == resource.data.userId
+      );
+      allow create: if isAdmin() || isOperator();
+      allow update: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow delete: if isAdmin();
     }
   }
 } 
